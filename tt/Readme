@@ -1,0 +1,3 @@
+cd xtt_cards
+combineTool.py -M T2W -i */cmb/* -o workspace.root --parallel 4
+nohup combineTool.py -M Asymptotic -d */cmb/*/workspace.root  --noFitAsimov there -n .limit --parallel 4 &
