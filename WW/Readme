@@ -1,0 +1,5 @@
+The datacard with all the signal mass points for 2HDM model is	
+
+    datacards/monoH_Alberto_comb/events/datacard.txt.pruned.txt
+
+It will be split soon in order to have one datacard for each mass point
