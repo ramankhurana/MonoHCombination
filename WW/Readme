@@ -1,0 +1,8 @@
+Datacards are in:
+
+datacards/monoH_Alberto_comb/events/
+
+rootfiles exploited in shape evaluation of systematics are in:
+
+DF: datacards/monoH_Alberto_em/events/shapes/
+SF: SameFlavour/datacards/monoH_Alberto_sf/events/shapes/
