@@ -23,7 +23,7 @@
 #include <TSystem.h>
 #include <string>
 #include <sstream>
-#include "../0808/setNCUStyle.C"
+#include "../setNCUStyle.C"
 #include<TH2.h>
 #include "TLine.h"
 #include "TF1.h"
@@ -589,13 +589,15 @@ void smallDrawTGragh(string outputName,TH2D* th1[],int option=0){
 	//ts->cd();
 	
 	//setFPStyle();
+	double massZ[8]={600,800,1000,1200,1400,1700,2000,2500};
+	/*
 	double db1[8]={0};
 	double db2[8]={0};
 	double db3[7]={0};
 	double db4[7]={0};
 	double db5[5]={0};
 	double db6[6]={0};
-	double massZ[8]={600,800,1000,1200,1400,1700,2000,2500};
+	
 	double massZ2[7]={800,1000,1200,1400,1700,2000,2500};
 	double massZ3[6]={1000,1200,1400,1700,2000,2500};
 	double massZ4[5]={1200,1400,1700,2000,2500};
@@ -629,10 +631,66 @@ void smallDrawTGragh(string outputName,TH2D* th1[],int option=0){
 		for(int j=0;j<6;j++)db25[j]=th1[0]->GetBinContent(j+3,5);
 		for(int j=0;j<6;j++)db26[j]=th1[0]->GetBinContent(j+3,6);
 	}
+	*/
+	
+	double db1[6][8];
+	double db2[6][8];
+	for(int i=0;i<6;i++){
+		for(int j=0;j<8;j++){
+			db1[i][j]=th1[0]->GetBinContent(j+1,i+1);
+			//cout<<i+1<<","<<j+1<<","<<th1[0]->GetBinContent(j+1,i+1)<<endl;
+			db2[i][j]=th1[0]->GetBinContent(j+1,i+1);
+			if(option ==2)db2[i][j]=th1[1]->GetBinContent(j+1,i+1);
+		}
+	}
 	
 	
 	TGraph* tg1[6],* tg2[6];
 	
+	for(int i=0; i<6;i++){
+		tg1[i]=new TGraph(8,massZ,db1[i]);
+		tg2[i]=new TGraph(8,massZ,db2[i]);
+		
+		for(int j=0;j<8;j++){
+			double x,temp=10;
+			tg1[i]->GetPoint(j,x,temp);
+			if(temp<0.01){
+				tg1[i]->RemovePoint(j);
+			}
+			if(option==2){
+				temp=10;
+				tg2[i]->GetPoint(j,x,temp);
+				if(temp<0.01)tg2[i]->RemovePoint(j);
+			}
+		}
+		for(int j=0;j<8;j++){
+			double x,temp=10;
+			tg1[i]->GetPoint(j,x,temp);
+			if(temp<0.01){
+				tg1[i]->RemovePoint(j);
+			}
+			if(option==2){
+				temp=10;
+				tg2[i]->GetPoint(j,x,temp);
+				if(temp<0.01)tg2[i]->RemovePoint(j);
+			}
+		}
+		for(int j=0;j<8;j++){
+			double x,temp=10;
+			tg1[i]->GetPoint(j,x,temp);
+			if(temp<0.01){
+				tg1[i]->RemovePoint(j);
+			}
+			if(option==2){
+				temp=10;
+				tg2[i]->GetPoint(j,x,temp);
+				if(temp<0.01)tg2[i]->RemovePoint(j);
+			}
+		}
+	}
+	
+	
+	/*
 	tg1[0]=new TGraph(8,massZ,db1);
 	tg1[1]=new TGraph(8,massZ,db2);
 	tg1[2]=new TGraph(7,massZ2,db3);
@@ -646,7 +704,7 @@ void smallDrawTGragh(string outputName,TH2D* th1[],int option=0){
 	tg2[3]=new TGraph(7,massZ2,db24);
 	tg2[4]=new TGraph(6,massZ3,db25);
 	tg2[5]=new TGraph(6,massZ3,db26);
-	
+	*/
 	tg1[0]->Draw("APL");
 	c1->Print("dump.pdf");
 	
@@ -1100,8 +1158,8 @@ void small0803(){
 	
 	
 	TH2D* th2,*th3,*th4;
-	th2=small0706Base("CombinedMonoHDatacard","limit_combination",0,2);
-	th3=small0706Base("CombinedMonoHDatacard","limit_combination",0,3);
+	th2=small0706Base("../../Combination","limit_combination",0,2);
+	th3=small0706Base("../../Combination","limit_combination",0,3);
 	//th2=small0706Compare(in,"limit_compare",1,2);
 	
 	TGraph* tg1,*tg2;
@@ -1133,11 +1191,11 @@ void small0803(){
 	
 	//draw limit 2 sigma
 	TH2D* th_sigma[5];
-	th_sigma[0]=getSigmaLimit("CombinedMonoHDatacard",0);
-	th_sigma[1]=getSigmaLimit("CombinedMonoHDatacard",1);
-	th_sigma[2]=getSigmaLimit("CombinedMonoHDatacard",2);
-	th_sigma[3]=getSigmaLimit("CombinedMonoHDatacard",3);
-	th_sigma[4]=getSigmaLimit("CombinedMonoHDatacard",4);
+	th_sigma[0]=getSigmaLimit("../../Combination",0);
+	th_sigma[1]=getSigmaLimit("../../Combination",1);
+	th_sigma[2]=getSigmaLimit("../../Combination",2);
+	th_sigma[3]=getSigmaLimit("../../Combination",3);
+	th_sigma[4]=getSigmaLimit("../../Combination",4);
 	
 	TGraph* tg_sigma[5];
 	tg_sigma[0]=excludeLimit(th_sigma[0]);
