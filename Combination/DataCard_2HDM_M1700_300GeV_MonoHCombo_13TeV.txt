@@ -1,0 +1,4 @@
+Traceback (most recent call last):
+  File "/afs/hep.wisc.edu/cms/khurana/MonoH2016MCProduction/MonoHEfficiency/CMSSW_7_4_7/bin/slc6_amd64_gcc491/combineCards.py", line 50, in <module>
+    file = open(fname, "r")
+IOError: [Errno 2] No such file or directory: 'bb/resolved/ZprimeToA0hToA0chichihbb_2HDM_MZp1700_MA0300_13TeVmadgraphDatacards/ZprimeToA0hToA0chichihbb_2HDM_MZp1700_MA0300_13TeVmadgraph_comb_v2.txt'
