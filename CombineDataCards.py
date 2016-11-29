@@ -24,8 +24,6 @@ for iargv in range(0,nargv):
         if sys.argv[iargv+2] != 'obs':
             regions.append(sys.argv[iargv+2])
     
-#regions = ['signal', 'zj', 'wt']
-
 print regions
 massvec=['600','800','1000','1200','1400','1700','2000','2500']
 a0massvec=['300']#,'400','500','600','700','800']
@@ -33,7 +31,6 @@ a0massvec=['300']#,'400','500','600','700','800']
 
 
 
-#os.system('mkdir -p oneplustwo')
 for imass in range(len(massvec)):
     for ia0mass in a0massvec:
         datacards={
