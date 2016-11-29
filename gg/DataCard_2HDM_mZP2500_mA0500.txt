@@ -1,0 +1,33 @@
+#MonoHgg Datacard for C&C Limit Setting, 34.700000 fb-1 
+# Lumi =  34.700000 fb-1
+imax 1 
+jmax * 
+kmax * 
+------------------------------------
+bin 1
+observation 0
+------------------------------------
+bin	    1	1	1	1	1	1
+process	   MonoH_2500	b	GGH	VBF	VH	TTH
+process	   0	1	2	3	4	5
+rate	   15.252804	17.860000	0.006812	0.000000	0.767732	0.305262
+ 
+------------------------------------
+#MC related
+lumi_13TeV	    lnN	1.027	-	1.027	1.027	1.027	1.027
+CMS_MonoH_TrigEff	  lnN -		1.01      -   -   -   -
+CMS_MonoH_eff	  lnN 1.020   -       1.020   1.020   1.020   1.020
+CMS_MonoH_higg_BR     lnN -		-	0.953/1.050	0.953/1.050	0.953/1.050	0.953/1.050
+CMS_MonoH_higg_alphas lnN -		-	0.940/0.965	0.940/0.965	0.940/0.965	0.940/0.965
+CMS_MonoH_PDFs        lnN -		-	1.05		1.05		1.05		1.05
+CMS_MonoH_JetEnUp     lnN 1.005           -       -		-		1.005		-
+CMS_MonoH_JetEnDown   lnN 1.005           -       -		-		1.005		-
+CMS_MonoH_PhoEnUp     lnN 1.005           -       -		-		1.005		-
+CMS_MonoH_PhoEnDown   lnN 1.005           -       -		-		1.005		-
+CMS_MonoH_UnclEnUp    lnN 1.005           -       -               -               1.005           -
+CMS_MonoH_UnclEnDown  lnN 1.005           -       -               -               1.005           -
+CMS_MonoH_FakeMet     lnN -               -		0.1/1.9         0.1/1.9		-		0.1/1.9 
+------------------------------------
+#background related 
+bg_lept	    gmN	94	-	0.190000	-	-	-	-
+alpha lnN - 1.2 - - - -
