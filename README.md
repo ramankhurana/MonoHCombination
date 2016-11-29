@@ -19,3 +19,10 @@ git clone git@github.com:ramankhurana/MonoHCombination.git
 or if you already have the code just update the cards in case they have changed. 
 
 git pull --rebase
+
+
+## Full grid for the 2HDM Model
+
+## For Z' Baryonic model we can try to have following points for the combo: 
+Mchi=1, 150, 500 GeV for MZp=500 GeV
+Mchi=1, 150, 1000 GeV for MZp=1000 GeV
