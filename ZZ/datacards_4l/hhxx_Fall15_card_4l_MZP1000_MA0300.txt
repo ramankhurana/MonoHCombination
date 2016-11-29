@@ -3,9 +3,9 @@ imax 3 number of bins
 jmax 37 number of processes minus 1
 kmax 27 number of nuisance parameters
 ----------------------------------------------------------------------------------------------------------------------------------
-shapes *    ch1  datacards_4mu/ZZ/datacards_4mu/f4mu.root bin4mu/$PROCESS
-shapes *    ch2  datacards_4e/ZZ/datacards_4e/f4e.root bin4e/$PROCESS
-shapes *    ch3  datacards_2e2mu/ZZ/datacards_2e2mu/f2e2mu.root bin2e2mu/$PROCESS
+shapes *    ch1  ZZ/datacards_4mu/f4mu.root bin4mu/$PROCESS
+shapes *    ch2  ZZ/datacards_4e/f4e.root bin4e/$PROCESS
+shapes *    ch3  ZZ/datacards_2e2mu/f2e2mu.root bin2e2mu/$PROCESS
 ----------------------------------------------------------------------------------------------------------------------------------
 bin          ch1            ch2            ch3          
 observation  49.0           15.0           40.0         
