@@ -34,8 +34,8 @@ a0massvec=['300']#,'400','500','600','700','800']
 for imass in range(len(massvec)):
     for ia0mass in a0massvec:
         datacards={
-            'WW': 'WW/Datacards.txt ',
-            'gg': 'gg/Datacards.txt ',
+            'WW': 'WW/datacards/monoH_Alberto_comb/events/datacard_monoHWW'+str(massvec[imass])+'_'+str(ia0mass)+'.txt ',
+            'gg': 'gg/DataCard_2HDM_mZP'+str(massvec[imass])+'_mA0'+str(ia0mass)+'.txt ',
             'tt': 'tt/xtt_cards/Zprime'+str(massvec[imass])+'A'+str(ia0mass)+'/cmb/'+str(ia0mass)+'/DataCard_2HDM_M'+str(massvec[imass])+'_'+str(ia0mass)+'GeV_MonoHTauTau_13TeV.txt ',
             'bb': 'bb/resolved/ZprimeToA0hToA0chichihbb_2HDM_MZp'+str(massvec[imass])+'_MA0'+str(ia0mass)+'_13TeVmadgraphDatacards/ZprimeToA0hToA0chichihbb_2HDM_MZp'+str(massvec[imass])+'_MA0'+str(ia0mass)+'_13TeVmadgraph_comb_v2.txt ', 
             'ZZ': 'ZZ/Datacards.txt '
@@ -55,7 +55,7 @@ for imass in range(len(massvec)):
         tmpdcard = 'tmpcard.txt'
         if (len(sys.argv) >= 2) & (not ('runlimit' in sys.argv )) :
             
-            os.system('combineCards.py  '+allcards+' >& '+datacardnamefit)
+            os.system('combineCards.py  -S '+allcards+' >& '+datacardnamefit)
             #os.system('cat '+tmpdcard+' '+rateparm+' >& '+  datacardnamefit)
             
         nargv = len(sys.argv)

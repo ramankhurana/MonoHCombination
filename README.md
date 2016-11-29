@@ -26,3 +26,7 @@ git pull --rebase
 ## For Z' Baryonic model we can try to have following points for the combo: 
 Mchi=1, 150, 500 GeV for MZp=500 GeV
 Mchi=1, 150, 1000 GeV for MZp=1000 GeV
+
+
+## How to combine cards
+python CombineDataCards.py Combination tt bb WW gg
