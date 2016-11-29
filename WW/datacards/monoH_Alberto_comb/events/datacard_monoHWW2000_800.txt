@@ -1,12 +1,12 @@
-Combination of datacards/monoH_Alberto_em/events/datacard_monoHWW2000_800.txt  SameFlavour/datacards/monoH_Alberto_sf/events/datacard_monoHWW2000_800.txt
+Combination of WW/datacards/monoH_Alberto_em/events/datacard_monoHWW2000_800.txt  WW/SameFlavour/datacards/monoH_Alberto_sf/events/datacard_monoHWW2000_800.txt
 imax 2 number of bins
 jmax 15 number of processes minus 1
 kmax 29 number of nuisance parameters
 ----------------------------------------------------------------------------------------------------------------------------------
-shapes *         ch1       datacards/monoH_Alberto_em/events/shapes/histos_monoH_Alberto_em.root histo_$PROCESS histo_$PROCESS_$SYSTEMATIC
-shapes data_obs  ch1       datacards/monoH_Alberto_em/events/shapes/histos_monoH_Alberto_em.root histo_Data
-shapes *         ch2       SameFlavour/datacards/monoH_Alberto_sf/events/shapes/histos_monoH_Alberto_sf.root histo_$PROCESS histo_$PROCESS_$SYSTEMATIC
-shapes data_obs  ch2       SameFlavour/datacards/monoH_Alberto_sf/events/shapes/histos_monoH_Alberto_sf.root histo_Data
+shapes *         ch1       WW/datacards/monoH_Alberto_em/events/shapes/histos_monoH_Alberto_em.root histo_$PROCESS histo_$PROCESS_$SYSTEMATIC
+shapes data_obs  ch1       WW/datacards/monoH_Alberto_em/events/shapes/histos_monoH_Alberto_em.root histo_Data
+shapes *         ch2       WW/SameFlavour/datacards/monoH_Alberto_sf/events/shapes/histos_monoH_Alberto_sf.root histo_$PROCESS histo_$PROCESS_$SYSTEMATIC
+shapes data_obs  ch2       WW/SameFlavour/datacards/monoH_Alberto_sf/events/shapes/histos_monoH_Alberto_sf.root histo_Data
 ----------------------------------------------------------------------------------------------------------------------------------
 bin          ch1    ch2  
 observation  4.0    14.0 
