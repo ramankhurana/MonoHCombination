@@ -44,7 +44,10 @@ for imass in range(len(massvec)):
         allregions=[]
         for iregion in regions:
             os.system('cp '+datacards[iregion]+' '+iregion+'.txt')
-            tmpname = iregion+'='+iregion+'.txt '
+            if (str(iregion) == 'WW') | (str(iregion) == 'tt') :
+                tmpname = iregion+'='+iregion+'.txt '
+            if (str(iregion) == 'ZZ') | (str(iregion) == 'bb') | (str(iregion) == 'gg'):
+                tmpname = iregion+'='+datacards[iregion]+' '
             print (massvec[imass], ia0mass, tmpname)
             allregions.append(tmpname)
         
