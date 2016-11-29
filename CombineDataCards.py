@@ -25,7 +25,7 @@ for iargv in range(0,nargv):
             regions.append(sys.argv[iargv+2])
     
 print regions
-massvec=['600','800','1000','1200','1400','1700','2000','2500']
+massvec=['600']#,'800','1000','1200','1400','1700','2000','2500']
 a0massvec=['300']#,'400','500','600','700','800']
 
 
@@ -43,7 +43,8 @@ for imass in range(len(massvec)):
         
         allregions=[]
         for iregion in regions:
-            tmpname = iregion+'='+datacards[iregion]
+            os.system('cp '+datacards[iregion]+' '+iregion+'.txt')
+            tmpname = iregion+'='+iregion+'.txt '
             print (massvec[imass], ia0mass, tmpname)
             allregions.append(tmpname)
         
