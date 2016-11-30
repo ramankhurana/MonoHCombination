@@ -38,15 +38,15 @@ for imass in range(len(massvec)):
             'gg': 'gg/DataCard_2HDM_mZP'+str(massvec[imass])+'_mA0'+str(ia0mass)+'.txt ',
             'tt': 'tt/xtt_cards/Zprime'+str(massvec[imass])+'A'+str(ia0mass)+'/cmb/'+str(ia0mass)+'/DataCard_2HDM_M'+str(massvec[imass])+'_'+str(ia0mass)+'GeV_MonoHTauTau_13TeV.txt ',
             'bb': 'bb/resolved/ZprimeToA0hToA0chichihbb_2HDM_MZp'+str(massvec[imass])+'_MA0'+str(ia0mass)+'_13TeVmadgraphDatacards/ZprimeToA0hToA0chichihbb_2HDM_MZp'+str(massvec[imass])+'_MA0'+str(ia0mass)+'_13TeVmadgraph_comb_v2.txt ', 
-            'ZZ': 'ZZ/Datacards.txt '
+            'ZZ': 'ZZ/datacards_4l/hhxx_Fall15_card_4l_MZP'+str(massvec[imass])+'_MA0'+str(ia0mass)+'.txt'
             }
         
         allregions=[]
         for iregion in regions:
             os.system('cp '+datacards[iregion]+' '+iregion+'.txt')
-            if (str(iregion) == 'WW') | (str(iregion) == 'tt') :
+            if (str(iregion) == 'ZZ') | (str(iregion) == 'WW') | (str(iregion) == 'tt') :
                 tmpname = iregion+'='+iregion+'.txt '
-            if (str(iregion) == 'ZZ') | (str(iregion) == 'bb') | (str(iregion) == 'gg'):
+            if  (str(iregion) == 'bb') | (str(iregion) == 'gg'):
                 tmpname = iregion+'='+datacards[iregion]+' '
             print (massvec[imass], ia0mass, tmpname)
             allregions.append(tmpname)
