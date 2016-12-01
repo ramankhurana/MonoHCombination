@@ -1,0 +1,40 @@
+imax          1     number of channels
+jmax 8 number of backgrounds 
+kmax          *     number of nuisance parameters (sources of systematical uncertainties)
+------------
+bin bin2e2mu
+observation 0
+------------
+bin bin2e2mu bin2e2mu bin2e2mu bin2e2mu bin2e2mu bin2e2mu bin2e2mu bin2e2mu bin2e2mu 
+process output_MonoHZZ4l_ZpBaryonic_MZp-10000_MChi-150_13TeV-madgraph output_GluGluHToZZTo4L_M125_13TeV_powheg2_minloHJJ_JHUgenV6_pythia8 output_TTTo2L2Nu_13TeV-powheg output_VBF_HToZZTo4L_M125_13TeV_powheg2_JHUgenV6_pythia8 output_WminusH_HToZZTo4L_M125_13TeV_powheg2-minlo-HWJ_JHUgenV6_pythia8 output_WplusH_HToZZTo4L_M125_13TeV_powheg2-minlo-HWJ_JHUgenV6_pythia8 output_ZH_HToZZ_4LFilter_M125_13TeV_powheg2-minlo-HZJ_JHUgenV6_pythia8 output_ZZTo4L_13TeV_powheg_pythia8 output_ttH_HToZZ_4LFilter_M125_13TeV_powheg2_JHUgenV6_pythia8 
+process 0 1 2 3 4 5 6 7 8 
+rate 2884.18050349 83.0908645384 8.39945089817 3.2663081424 0.391993609908 0.619551300988 2.01717163721 618.684354473 0.392812572114 
+------------
+sig_unc lnN 1.0130744086 - - - - - - - - 
+bkg_unc lnN - 1.00599649825 1.27735009811 1.00565730726 1.00984564108 1.00805038811 1.00610403248 1.00353918812 1.00695047498 
+lumi_13TeV lnN 1.023 1.023 1.023 1.023 1.023 1.023 1.023 1.023 1.023 
+CMS_trig lnN 1.02 1.02 1.02 1.02 1.02 1.02 1.02 1.02 1.02 
+CMS_eff_m lnN 1.02 1.02 1.02 1.02 1.02 1.02 1.02 1.02 1.02 
+CMS_eff_e lnN 1.059 1.059 1.059 1.059 1.059 1.059 1.059 1.059 1.059 
+JES lnN 0.998 0.998 0.998 0.998 0.998 0.998 0.998 0.998 0.998 
+BRhiggs_hzz4l lnN - 1.02 - 1.02 1.02 1.02 1.02 - 1.02 
+QCDscale_qqH lnN - - - 0.997/1.004 - - - - - 
+QCDscale_ggZH lnN - - - - - - 0.970/1.038 - - 
+QCDscale_ttH lnN - - - - - - - - 0.908/1.058 
+QCDscale_ggVV lnN - - - - - - - - - 
+QCDscale_ggH lnN - 0.919/1.076 - - - - - - - 
+QCDscale_ggH lnN - 0.919/1.076 - - - - - - - 
+QCDscale_VV lnN - 1.0285 - 1.0285 1.0285 1.0285 - 1.0285 - 
+QCDscale_VH lnN - - - - 0.993/1.005 0.993/1.005 0.993/1.005 - - 
+QCDscale_qqZZ2in_vbf lnN - 0.994 - 0.994 0.994 0.994 - 0.994 - 
+pdf_qq lnN - 1.034 - 1.034 1.034 1.034 - 1.034 - 
+pdf_Higgs_ttH lnN - - - - - - - - 1.036 
+pdf_Higgs_qq lnN - - - 1.021 1.021 1.021 1.021 - - 
+pdf_Higgs_gg lnN - 1.031 - - - - - - - 
+CMS_zz4l_ttH_vbf lnN - - - - - - - - 0.996 
+CMS_zz4l_qqHVH_vbf lnN - - - 0.999 0.999 0.999 0.999 - - 
+CMS_zz4l_bkg_kdShape param 0.0 1 [-3,3]
+CMS_zz4l_scale_4e param 0 3 [-15,15]
+CMS_zz4l_resol_4e param 0 0.2 [-1,1]
+CMS_zz4l_scale_4mu param 0 1 [-5,5]
+CMS_zz4l_resol_4mu param 0 0.1 [-0.5,0.5]
