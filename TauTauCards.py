@@ -10,7 +10,7 @@ a0massvec=['300','400','500','600','700','800']
 #os.system('mkdir -p oneplustwo')
 for imass in range(len(massvec)):
     for ia0mass in a0massvec:
-        basename='tt/xtt_cards/Zprime'+(str(massvec[imass]))+'A'+ia0mass+'/cmb/'+ia0mass+'/'
+        basename='tt/tt_update_negbinfix/Zprime'+(str(massvec[imass]))+'A'+ia0mass+'/cmb/'+ia0mass+'/'
         if not bool(os.path.exists(basename)): continue 
         datacards={
             'et':basename+'xtt_et_1_13TeV.txt ',

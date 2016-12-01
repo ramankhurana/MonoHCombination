@@ -39,27 +39,38 @@ def MakebbDecision(threshold, Zpmass, A0Mass):     ## > threshold is boosted ana
     print (threshold, Zpmass, A0Mass,bb)
     return bb
 
-massvec=['600']#,'800','1000','1200','1400','1700','2000','2500']
+massvec=['600','800','1000','1200','1400','1700','2000','2500']
 a0massvec=['300']#,'400','500','600','700','800']
-
-
-
-
 
 
 for imass in range(len(massvec)):
     for ia0mass in a0massvec:
+        threshold_ = 1000
+        if ia0mass == 300:             threshold_ = 1000
+        if ia0mass == 400:             threshold_ = 1200
+        if ia0mass == 500:             threshold_ = 1200
+        if ia0mass == 600:             threshold_ = 1200
+        if ia0mass == 700:             threshold_ = 1200
+        if ia0mass == 800:             threshold_ = 1400
+
         datacards={
             'WW': 'WW/datacards/monoH_Alberto_comb/events/datacard_monoHWW'+str(massvec[imass])+'_'+str(ia0mass)+'.txt ',
             'gg': 'gg/DataCard_2HDM_mZP'+str(massvec[imass])+'_mA0'+str(ia0mass)+'.txt ',
-            'tt': 'tt/tt_update/Zprime'+str(massvec[imass])+'A'+str(ia0mass)+'/cmb/'+str(ia0mass)+'/DataCard_2HDM_M'+str(massvec[imass])+'_'+str(ia0mass)+'GeV_MonoHTauTau_13TeV.txt ',
+            'tt': 'tt/tt_update_negbinfix/Zprime'+str(massvec[imass])+'A'+str(ia0mass)+'/cmb/'+str(ia0mass)+'/DataCard_2HDM_M'+str(massvec[imass])+'_'+str(ia0mass)+'GeV_MonoHTauTau_13TeV.txt ',
             #'bb': 'bb/resolved/ZprimeToA0hToA0chichihbb_2HDM_MZp'+str(massvec[imass])+'_MA0'+str(ia0mass)+'_13TeVmadgraphDatacards/ZprimeToA0hToA0chichihbb_2HDM_MZp'+str(massvec[imass])+'_MA0'+str(ia0mass)+'_13TeVmadgraph_comb_v2.txt ', 
-            'bb': MakebbDecision(1000,str(massvec[imass]), str(ia0mass)),
-            'ZZ': 'ZZ/datacards_4l/hhxx_Fall15_card_4l_MZP'+str(massvec[imass])+'_MA0'+str(ia0mass)+'.txt'
+            'bb': MakebbDecision(threshold_,str(massvec[imass]), str(ia0mass)),
+   
+            #hhxx_Fall15_card_4l_ZprimeToA0hToA0chichihZZTo4l_2HDM_MZp-1200_MA0-300_13TeV-madgraph.txt
+            'ZZ': 'ZZ/datacards_4l_2016/hhxx_Fall15_card_4l_ZprimeToA0hToA0chichihZZTo4l_2HDM_MZp-'+str(massvec[imass])+'_MA0-'+str(ia0mass)+'_13TeV-madgraph.txt'
             }
         
         allregions=[]
         for iregion in regions:
+            print ('region =',iregion, str(datacards[iregion]) )
+            datacard_name_ = str(datacards[iregion]).replace(' ','')
+            if not bool(os.path.exists(datacard_name_)) : continue
+            print ['statu = ',bool(os.path.exists(datacard_name_))]
+            print (iregion, ' is added')
             os.system('cp '+str(datacards[iregion])+' '+str(iregion)+'.txt')
             if (str(iregion) == 'ZZ') | (str(iregion) == 'WW') | (str(iregion) == 'tt') :
                 tmpname = iregion+'='+iregion+'.txt '
@@ -76,7 +87,16 @@ for imass in range(len(massvec)):
         tmpdcard = 'tmpcard.txt'
         if (len(sys.argv) >= 2) & (not ('runlimit' in sys.argv )) :
             
-            os.system('combineCards.py  -S '+allcards+' >& '+datacardnamefit)
+            os.system('combineCards.py  -S '+allcards+' >& tmpcard.txt')
+            
+            outcard = open(datacardnamefit,'w')
+            card_ = open('tmpcard.txt')
+
+            for line in card_:
+                line = line.replace('DataCards_AllRegions', '')
+                outcard.write(line)
+            outcard.close()
+
             #os.system('cat '+tmpdcard+' '+rateparm+' >& '+  datacardnamefit)
             
         nargv = len(sys.argv)
