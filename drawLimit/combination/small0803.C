@@ -158,8 +158,8 @@ TH2D* small0706Base(string inputDir,string outputName,int option=0,int retrunexp
        latex->SetTextFont(42);
 	latex->DrawLatex(0.15, 0.81,"Z'#rightarrow DM+H");
       latex->DrawLatex(0.15, 0.77," (2HDM)");
-      latex->DrawLatex(0.15, 0.73," H#rightarrowbb #plus H#rightarrow#gamma#gamma");
-		 latex->DrawLatex(0.15, 0.92, Form("                                                                                        %.1f fb^{-1} ( 13 TeV )", 2.32));
+      latex->DrawLatex(0.15, 0.73," Mono-H Combo");
+		 latex->DrawLatex(0.15, 0.92, Form("                                                                                        %.1f fb^{-1} ( 13 TeV )", 12.9));
      
 	c1->Print(Form("plot/%s.pdf",outputName.data()));
 	c1->SaveAs(Form("plot/%s.png",outputName.data()));
@@ -397,7 +397,7 @@ TH2D* small0706Compare(string inputDir[],string outputName,int option=0,int retr
     latex->SetNDC(kTRUE);                                                                                                                        
 	latex->SetTextSize(0.06);    
 	//latex->SetTextFont(42);
-    latex->DrawLatex(0.15, 0.92, Form("CMS                         %.1f fb^{-1} ( 13 TeV )", 2.32));//latex->DrawLatex(0.18, 0.885, );
+    latex->DrawLatex(0.15, 0.92, Form("CMS                         %.1f fb^{-1} ( 13 TeV )", 12.9));//latex->DrawLatex(0.18, 0.885, );
 	
 	c1->Print(Form("plot/%s.pdf",outputName.data()));
 	c1->SaveAs(Form("plot/%s.png",outputName.data()));
@@ -819,13 +819,13 @@ void smallDrawTGragh(string outputName,TH2D* th1[],int option=0){
      latex->DrawLatex(0.15, 0.87,"CMS");
       latex->SetTextFont(42);
      latex->DrawLatex(0.15, 0.84,"Z'#rightarrow DM+H(2HDM)");
-     latex->DrawLatex(0.15, 0.81," H#rightarrowbb #plus H#rightarrow#gamma#gamma");
+     latex->DrawLatex(0.15, 0.81,"Mono-H Combo");
      latex->DrawLatex(0.15, 0.77," g_{Z'}=0.8");
-     latex->DrawLatex(0.15, 0.92, Form("                                                                             %.1f fb^{-1} ( 13 TeV )", 2.32));
+     latex->DrawLatex(0.15, 0.92, Form("                                                                             %.1f fb^{-1} ( 13 TeV )", 12.9));
      
     } 
 	
-	else  latex->DrawLatex(0.15, 0.92, Form("CMS                    %.1f fb^{-1} ( 13 TeV )", 2.32));
+	else  latex->DrawLatex(0.15, 0.92, Form("CMS                    %.1f fb^{-1} ( 13 TeV )", 12.9));
 	
 	
 	//
