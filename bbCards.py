@@ -3,21 +3,26 @@ import os
 
 massvec=['600','800','1000','1200','1400','1700','2000','2500']
 a0massvec=['300','400','500','600','700','800']
-
+basename = 'bb/combined'
 
 
 
 #os.system('mkdir -p oneplustwo')
 for imass in range(len(massvec)):
     for ia0mass in a0massvec:
-        basename='tt/xtt_cards/Zprime'+(str(massvec[imass]))+'A'+ia0mass+'/cmb/'+ia0mass+'/'
-        if not bool(os.path.exists(basename)): continue 
-        datacards={
-            'et':basename+'xtt_et_1_13TeV.txt ',
-            'mt':basename+'xtt_mt_1_13TeV.txt ',
-            'tt':basename+'xtt_tt_1_13TeV.txt '}
+        basename_res='bb/resolved/ZprimeToA0hToA0chichihbb_2HDM_MZp'+(str(massvec[imass]))+'_MA0'+str(ia0mass)+'_13TeVmadgraphDatacards/ZprimeToA0hToA0chichihbb_2HDM_MZp'+(str(massvec[imass]))+'_MA0'+str(ia0mass)+'_13TeVmadgraph_comb_v2.txt'
+        basename_boost='bb/boostedAK8/DataCard_S_Plus_B_M'+(str(massvec[imass]))+'_'+str(ia0mass)+'GeV_MonoHbb_13TeV.txt'
         
-        regions = ['et','mt','tt']
+        print basename_res
+        print basename_boost
+        if not bool(os.path.exists(basename_res)): continue 
+        if not bool(os.path.exists(basename_boost)): continue 
+        
+        datacards={
+            'res': basename_res+' ',
+            'boost': basename_boost+' '}
+        
+        regions = ['res','boost']
         allregions=[]
         for iregion in regions:
             tmpname = iregion+'='+datacards[iregion]
@@ -28,14 +33,13 @@ for imass in range(len(massvec)):
         allcards = ''.join(allregions)
         print allcards
         splusbFitdir = basename
-        datacardnamefit=splusbFitdir+'/DataCard_2HDM_M'+(str(massvec[imass]))+'_'+ia0mass+'GeV_MonoHTauTau_13TeV.txt'
+        datacardnamefit=splusbFitdir+'/DataCard_2HDM_M'+(str(massvec[imass]))+'_'+ia0mass+'GeV_MonoHbb_13TeV.txt'
         os.system ('combineCards.py  '+allcards+' >& tmpcard.txt')
         
-        print(os.path.exists(basename))
         outcard = open(datacardnamefit,'w')
         card_ = open('tmpcard.txt')
         
         for line in card_:
-            line = line.replace('$MASS', str(ia0mass))
+            line = line.replace('DataCards_AllRegions', '')
             outcard.write(line)
         outcard.close()

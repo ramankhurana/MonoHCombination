@@ -25,8 +25,24 @@ for iargv in range(0,nargv):
             regions.append(sys.argv[iargv+2])
     
 print regions
+
+
+
+def MakebbDecision(threshold, Zpmass, A0Mass):     ## > threshold is boosted analysis
+    threshold = float(threshold)
+    bb=''
+    if float(Zpmass) > threshold:
+        bb='bb/boostedAK8/DataCard_S_Plus_B_M'+str(Zpmass)+'_'+str(A0Mass)+'GeV_MonoHbb_13TeV.txt'
+    if float(Zpmass) <= threshold:
+        bb= 'bb/resolved/ZprimeToA0hToA0chichihbb_2HDM_MZp'+str(Zpmass)+'_MA0'+str(A0Mass)+'_13TeVmadgraphDatacards/ZprimeToA0hToA0chichihbb_2HDM_MZp'+str(Zpmass)+'_MA0'+str(A0Mass)+'_13TeVmadgraph_comb_v2.txt '
+                
+    print (threshold, Zpmass, A0Mass,bb)
+    return bb
+
 massvec=['600']#,'800','1000','1200','1400','1700','2000','2500']
 a0massvec=['300']#,'400','500','600','700','800']
+
+
 
 
 
@@ -36,14 +52,15 @@ for imass in range(len(massvec)):
         datacards={
             'WW': 'WW/datacards/monoH_Alberto_comb/events/datacard_monoHWW'+str(massvec[imass])+'_'+str(ia0mass)+'.txt ',
             'gg': 'gg/DataCard_2HDM_mZP'+str(massvec[imass])+'_mA0'+str(ia0mass)+'.txt ',
-            'tt': 'tt/xtt_cards/Zprime'+str(massvec[imass])+'A'+str(ia0mass)+'/cmb/'+str(ia0mass)+'/DataCard_2HDM_M'+str(massvec[imass])+'_'+str(ia0mass)+'GeV_MonoHTauTau_13TeV.txt ',
-            'bb': 'bb/resolved/ZprimeToA0hToA0chichihbb_2HDM_MZp'+str(massvec[imass])+'_MA0'+str(ia0mass)+'_13TeVmadgraphDatacards/ZprimeToA0hToA0chichihbb_2HDM_MZp'+str(massvec[imass])+'_MA0'+str(ia0mass)+'_13TeVmadgraph_comb_v2.txt ', 
+            'tt': 'tt/tt_update/Zprime'+str(massvec[imass])+'A'+str(ia0mass)+'/cmb/'+str(ia0mass)+'/DataCard_2HDM_M'+str(massvec[imass])+'_'+str(ia0mass)+'GeV_MonoHTauTau_13TeV.txt ',
+            #'bb': 'bb/resolved/ZprimeToA0hToA0chichihbb_2HDM_MZp'+str(massvec[imass])+'_MA0'+str(ia0mass)+'_13TeVmadgraphDatacards/ZprimeToA0hToA0chichihbb_2HDM_MZp'+str(massvec[imass])+'_MA0'+str(ia0mass)+'_13TeVmadgraph_comb_v2.txt ', 
+            'bb': MakebbDecision(1000,str(massvec[imass]), str(ia0mass)),
             'ZZ': 'ZZ/datacards_4l/hhxx_Fall15_card_4l_MZP'+str(massvec[imass])+'_MA0'+str(ia0mass)+'.txt'
             }
         
         allregions=[]
         for iregion in regions:
-            os.system('cp '+datacards[iregion]+' '+iregion+'.txt')
+            os.system('cp '+str(datacards[iregion])+' '+str(iregion)+'.txt')
             if (str(iregion) == 'ZZ') | (str(iregion) == 'WW') | (str(iregion) == 'tt') :
                 tmpname = iregion+'='+iregion+'.txt '
             if  (str(iregion) == 'bb') | (str(iregion) == 'gg'):
