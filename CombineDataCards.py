@@ -45,7 +45,7 @@ a0massvec=['300']#,'400','500','600','700','800']
 
 for imass in range(len(massvec)):
     for ia0mass in a0massvec:
-        threshold_ = 1000
+        threshold_ = 800
         if ia0mass == 300:             threshold_ = 1000
         if ia0mass == 400:             threshold_ = 1200
         if ia0mass == 500:             threshold_ = 1200
