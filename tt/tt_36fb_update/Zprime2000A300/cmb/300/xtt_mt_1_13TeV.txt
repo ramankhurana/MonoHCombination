@@ -1,0 +1,122 @@
+# Datacard produced by CombineHarvester with git status: analysis-HIG-16-006-freeze-080416-150-gae4a035-dirty
+imax    1 number of bins
+jmax    9 number of processes minus 1
+kmax    * number of nuisance parameters
+--------------------------------------------------------------------------------
+shapes * xtt_mt_1_13TeV ../xtt_mt.input_13TeV.root xtt_mt_1_13TeV/$PROCESS xtt_mt_1_13TeV/$PROCESS_$SYSTEMATIC
+shapes Zprime2000A xtt_mt_1_13TeV ../xtt_mt.input_13TeV.root xtt_mt_1_13TeV/Zprime2000A$MASS xtt_mt_1_13TeV/Zprime2000A$MASS_$SYSTEMATIC
+--------------------------------------------------------------------------------
+bin          xtt_mt_1_13TeV  
+observation  2597.0          
+--------------------------------------------------------------------------------
+bin                                               xtt_mt_1_13TeV  xtt_mt_1_13TeV  xtt_mt_1_13TeV  xtt_mt_1_13TeV  xtt_mt_1_13TeV  xtt_mt_1_13TeV  xtt_mt_1_13TeV  xtt_mt_1_13TeV  xtt_mt_1_13TeV  xtt_mt_1_13TeV  
+process                                           ZTT             W               QCD             ZL              ZJ              TT              VV              ZVV             SMH             Zprime2000A     
+process                                           1               2               3               4               5               6               7               8               9               0               
+rate                                              988.359         926.181         240             1.61302         130.385         662.32          260.509         0.933976        31.0922         26.8638         
+--------------------------------------------------------------------------------
+CMS_QCD_Syst                              lnN     -               -               1.3             -               -               -               -               -               -               -               
+CMS_eff_m                                 lnN     1.02            1.02            -               1.02            1.02            1.02            1.02            -               1.02            1.02            
+CMS_eff_t                                 lnN     1.08            -               -               -               -               1.08            1.08            -               1.08            1.08            
+CMS_lumi                                  lnN     1.062           1.062           -               1.062           1.062           1.062           1.062           1.062           1.062           1.062           
+CMS_norm_TT_btag                          lnN     -               -               -               -               -               1.12            -               -               -               -               
+CMS_norm_W                                lnN     -               1.2             -               -               -               -               -               -               -               -               
+CMS_scale_m_mt_13TeV                      shape   1               1               -               1               1               1               1               1               1               1               
+CMS_scale_t_mt_13TeV                      shape   1               -               -               -               -               1               1               -               1               1               
+CMS_xtt_dyShape_13TeV                     shape   1               -               -               1               1               -               -               -               -               -               
+CMS_xtt_mt_mt_inclusive_13TeV_QCD_bin_10  shape   -               -               1               -               -               -               -               -               -               -               
+CMS_xtt_mt_mt_inclusive_13TeV_QCD_bin_11  shape   -               -               1               -               -               -               -               -               -               -               
+CMS_xtt_mt_mt_inclusive_13TeV_QCD_bin_12  shape   -               -               1               -               -               -               -               -               -               -               
+CMS_xtt_mt_mt_inclusive_13TeV_QCD_bin_14  shape   -               -               1               -               -               -               -               -               -               -               
+CMS_xtt_mt_mt_inclusive_13TeV_QCD_bin_15  shape   -               -               1               -               -               -               -               -               -               -               
+CMS_xtt_mt_mt_inclusive_13TeV_QCD_bin_19  shape   -               -               1               -               -               -               -               -               -               -               
+CMS_xtt_mt_mt_inclusive_13TeV_QCD_bin_2   shape   -               -               1               -               -               -               -               -               -               -               
+CMS_xtt_mt_mt_inclusive_13TeV_QCD_bin_21  shape   -               -               1               -               -               -               -               -               -               -               
+CMS_xtt_mt_mt_inclusive_13TeV_QCD_bin_23  shape   -               -               1               -               -               -               -               -               -               -               
+CMS_xtt_mt_mt_inclusive_13TeV_QCD_bin_26  shape   -               -               1               -               -               -               -               -               -               -               
+CMS_xtt_mt_mt_inclusive_13TeV_QCD_bin_28  shape   -               -               1               -               -               -               -               -               -               -               
+CMS_xtt_mt_mt_inclusive_13TeV_QCD_bin_35  shape   -               -               1               -               -               -               -               -               -               -               
+CMS_xtt_mt_mt_inclusive_13TeV_QCD_bin_36  shape   -               -               1               -               -               -               -               -               -               -               
+CMS_xtt_mt_mt_inclusive_13TeV_QCD_bin_37  shape   -               -               1               -               -               -               -               -               -               -               
+CMS_xtt_mt_mt_inclusive_13TeV_QCD_bin_38  shape   -               -               1               -               -               -               -               -               -               -               
+CMS_xtt_mt_mt_inclusive_13TeV_QCD_bin_4   shape   -               -               1               -               -               -               -               -               -               -               
+CMS_xtt_mt_mt_inclusive_13TeV_QCD_bin_40  shape   -               -               1               -               -               -               -               -               -               -               
+CMS_xtt_mt_mt_inclusive_13TeV_QCD_bin_41  shape   -               -               1               -               -               -               -               -               -               -               
+CMS_xtt_mt_mt_inclusive_13TeV_QCD_bin_42  shape   -               -               1               -               -               -               -               -               -               -               
+CMS_xtt_mt_mt_inclusive_13TeV_QCD_bin_45  shape   -               -               1               -               -               -               -               -               -               -               
+CMS_xtt_mt_mt_inclusive_13TeV_QCD_bin_46  shape   -               -               1               -               -               -               -               -               -               -               
+CMS_xtt_mt_mt_inclusive_13TeV_QCD_bin_48  shape   -               -               1               -               -               -               -               -               -               -               
+CMS_xtt_mt_mt_inclusive_13TeV_QCD_bin_49  shape   -               -               1               -               -               -               -               -               -               -               
+CMS_xtt_mt_mt_inclusive_13TeV_QCD_bin_5   shape   -               -               1               -               -               -               -               -               -               -               
+CMS_xtt_mt_mt_inclusive_13TeV_QCD_bin_50  shape   -               -               1               -               -               -               -               -               -               -               
+CMS_xtt_mt_mt_inclusive_13TeV_QCD_bin_51  shape   -               -               1               -               -               -               -               -               -               -               
+CMS_xtt_mt_mt_inclusive_13TeV_QCD_bin_52  shape   -               -               1               -               -               -               -               -               -               -               
+CMS_xtt_mt_mt_inclusive_13TeV_QCD_bin_6   shape   -               -               1               -               -               -               -               -               -               -               
+CMS_xtt_mt_mt_inclusive_13TeV_QCD_bin_64  shape   -               -               1               -               -               -               -               -               -               -               
+CMS_xtt_mt_mt_inclusive_13TeV_QCD_bin_69  shape   -               -               1               -               -               -               -               -               -               -               
+CMS_xtt_mt_mt_inclusive_13TeV_QCD_bin_7   shape   -               -               1               -               -               -               -               -               -               -               
+CMS_xtt_mt_mt_inclusive_13TeV_QCD_bin_78  shape   -               -               1               -               -               -               -               -               -               -               
+CMS_xtt_mt_mt_inclusive_13TeV_QCD_bin_8   shape   -               -               1               -               -               -               -               -               -               -               
+CMS_xtt_mt_mt_inclusive_13TeV_QCD_bin_9   shape   -               -               1               -               -               -               -               -               -               -               
+CMS_xtt_mt_mt_inclusive_13TeV_QCD_bin_92  shape   -               -               1               -               -               -               -               -               -               -               
+CMS_xtt_mt_mt_inclusive_13TeV_SMH_bin_103 shape   -               -               -               -               -               -               -               -               1               -               
+CMS_xtt_mt_mt_inclusive_13TeV_SMH_bin_53  shape   -               -               -               -               -               -               -               -               1               -               
+CMS_xtt_mt_mt_inclusive_13TeV_SMH_bin_55  shape   -               -               -               -               -               -               -               -               1               -               
+CMS_xtt_mt_mt_inclusive_13TeV_SMH_bin_57  shape   -               -               -               -               -               -               -               -               1               -               
+CMS_xtt_mt_mt_inclusive_13TeV_SMH_bin_59  shape   -               -               -               -               -               -               -               -               1               -               
+CMS_xtt_mt_mt_inclusive_13TeV_SMH_bin_60  shape   -               -               -               -               -               -               -               -               1               -               
+CMS_xtt_mt_mt_inclusive_13TeV_SMH_bin_62  shape   -               -               -               -               -               -               -               -               1               -               
+CMS_xtt_mt_mt_inclusive_13TeV_SMH_bin_68  shape   -               -               -               -               -               -               -               -               1               -               
+CMS_xtt_mt_mt_inclusive_13TeV_SMH_bin_70  shape   -               -               -               -               -               -               -               -               1               -               
+CMS_xtt_mt_mt_inclusive_13TeV_SMH_bin_72  shape   -               -               -               -               -               -               -               -               1               -               
+CMS_xtt_mt_mt_inclusive_13TeV_SMH_bin_75  shape   -               -               -               -               -               -               -               -               1               -               
+CMS_xtt_mt_mt_inclusive_13TeV_SMH_bin_76  shape   -               -               -               -               -               -               -               -               1               -               
+CMS_xtt_mt_mt_inclusive_13TeV_SMH_bin_80  shape   -               -               -               -               -               -               -               -               1               -               
+CMS_xtt_mt_mt_inclusive_13TeV_SMH_bin_81  shape   -               -               -               -               -               -               -               -               1               -               
+CMS_xtt_mt_mt_inclusive_13TeV_TT_bin_54   shape   -               -               -               -               -               1               -               -               -               -               
+CMS_xtt_mt_mt_inclusive_13TeV_VV_bin_39   shape   -               -               -               -               -               -               1               -               -               -               
+CMS_xtt_mt_mt_inclusive_13TeV_VV_bin_43   shape   -               -               -               -               -               -               1               -               -               -               
+CMS_xtt_mt_mt_inclusive_13TeV_VV_bin_47   shape   -               -               -               -               -               -               1               -               -               -               
+CMS_xtt_mt_mt_inclusive_13TeV_VV_bin_61   shape   -               -               -               -               -               -               1               -               -               -               
+CMS_xtt_mt_mt_inclusive_13TeV_VV_bin_84   shape   -               -               -               -               -               -               1               -               -               -               
+CMS_xtt_mt_mt_inclusive_13TeV_W_bin_10    shape   -               1               -               -               -               -               -               -               -               -               
+CMS_xtt_mt_mt_inclusive_13TeV_W_bin_11    shape   -               1               -               -               -               -               -               -               -               -               
+CMS_xtt_mt_mt_inclusive_13TeV_W_bin_12    shape   -               1               -               -               -               -               -               -               -               -               
+CMS_xtt_mt_mt_inclusive_13TeV_W_bin_13    shape   -               1               -               -               -               -               -               -               -               -               
+CMS_xtt_mt_mt_inclusive_13TeV_W_bin_14    shape   -               1               -               -               -               -               -               -               -               -               
+CMS_xtt_mt_mt_inclusive_13TeV_W_bin_15    shape   -               1               -               -               -               -               -               -               -               -               
+CMS_xtt_mt_mt_inclusive_13TeV_W_bin_16    shape   -               1               -               -               -               -               -               -               -               -               
+CMS_xtt_mt_mt_inclusive_13TeV_W_bin_17    shape   -               1               -               -               -               -               -               -               -               -               
+CMS_xtt_mt_mt_inclusive_13TeV_W_bin_18    shape   -               1               -               -               -               -               -               -               -               -               
+CMS_xtt_mt_mt_inclusive_13TeV_W_bin_19    shape   -               1               -               -               -               -               -               -               -               -               
+CMS_xtt_mt_mt_inclusive_13TeV_W_bin_2     shape   -               1               -               -               -               -               -               -               -               -               
+CMS_xtt_mt_mt_inclusive_13TeV_W_bin_20    shape   -               1               -               -               -               -               -               -               -               -               
+CMS_xtt_mt_mt_inclusive_13TeV_W_bin_21    shape   -               1               -               -               -               -               -               -               -               -               
+CMS_xtt_mt_mt_inclusive_13TeV_W_bin_22    shape   -               1               -               -               -               -               -               -               -               -               
+CMS_xtt_mt_mt_inclusive_13TeV_W_bin_23    shape   -               1               -               -               -               -               -               -               -               -               
+CMS_xtt_mt_mt_inclusive_13TeV_W_bin_24    shape   -               1               -               -               -               -               -               -               -               -               
+CMS_xtt_mt_mt_inclusive_13TeV_W_bin_25    shape   -               1               -               -               -               -               -               -               -               -               
+CMS_xtt_mt_mt_inclusive_13TeV_W_bin_26    shape   -               1               -               -               -               -               -               -               -               -               
+CMS_xtt_mt_mt_inclusive_13TeV_W_bin_27    shape   -               1               -               -               -               -               -               -               -               -               
+CMS_xtt_mt_mt_inclusive_13TeV_W_bin_28    shape   -               1               -               -               -               -               -               -               -               -               
+CMS_xtt_mt_mt_inclusive_13TeV_W_bin_29    shape   -               1               -               -               -               -               -               -               -               -               
+CMS_xtt_mt_mt_inclusive_13TeV_W_bin_3     shape   -               1               -               -               -               -               -               -               -               -               
+CMS_xtt_mt_mt_inclusive_13TeV_W_bin_30    shape   -               1               -               -               -               -               -               -               -               -               
+CMS_xtt_mt_mt_inclusive_13TeV_W_bin_31    shape   -               1               -               -               -               -               -               -               -               -               
+CMS_xtt_mt_mt_inclusive_13TeV_W_bin_32    shape   -               1               -               -               -               -               -               -               -               -               
+CMS_xtt_mt_mt_inclusive_13TeV_W_bin_33    shape   -               1               -               -               -               -               -               -               -               -               
+CMS_xtt_mt_mt_inclusive_13TeV_W_bin_34    shape   -               1               -               -               -               -               -               -               -               -               
+CMS_xtt_mt_mt_inclusive_13TeV_W_bin_4     shape   -               1               -               -               -               -               -               -               -               -               
+CMS_xtt_mt_mt_inclusive_13TeV_W_bin_44    shape   -               1               -               -               -               -               -               -               -               -               
+CMS_xtt_mt_mt_inclusive_13TeV_W_bin_5     shape   -               1               -               -               -               -               -               -               -               -               
+CMS_xtt_mt_mt_inclusive_13TeV_W_bin_56    shape   -               1               -               -               -               -               -               -               -               -               
+CMS_xtt_mt_mt_inclusive_13TeV_W_bin_6     shape   -               1               -               -               -               -               -               -               -               -               
+CMS_xtt_mt_mt_inclusive_13TeV_W_bin_7     shape   -               1               -               -               -               -               -               -               -               -               
+CMS_xtt_mt_mt_inclusive_13TeV_W_bin_73    shape   -               1               -               -               -               -               -               -               -               -               
+CMS_xtt_mt_mt_inclusive_13TeV_W_bin_8     shape   -               1               -               -               -               -               -               -               -               -               
+CMS_xtt_mt_mt_inclusive_13TeV_W_bin_9     shape   -               1               -               -               -               -               -               -               -               -               
+CMS_xtt_mt_mt_inclusive_13TeV_ZJ_bin_3    shape   -               -               -               -               1               -               -               -               -               -               
+CMS_xtt_mt_mt_inclusive_13TeV_ZTT_bin_1   shape   1               -               -               -               -               -               -               -               -               -               
+CMS_xtt_tjXsec_13TeV                      lnN     -               -               -               -               -               1.06            -               -               -               -               
+CMS_xtt_ttbarShape_13TeV                  shape   -               -               -               -               -               1               -               -               -               -               
+CMS_xtt_vvXsec_13TeV                      lnN     -               -               -               -               -               -               1.05            -               -               -               
+CMS_xtt_zjXsec_13TeV                      lnN     1.1             -               -               1.1             1.1             -               -               -               -               -               
