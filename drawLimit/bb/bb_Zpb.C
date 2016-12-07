@@ -305,6 +305,7 @@ void smallDrawTGragh(string outputName,TH2D* th1[],int option=0){
 		//tg1[i]->GetYaxis()->SetFontSize(0.03);
 		
 		if(i==0){
+			tg1[i]->GetXaxis()->SetRangeUser(10,2000);
 			tg1[i]->Draw("APL");
 			if(option==2)tg2[i]->Draw("PL.same");
 			tg1[i]->GetXaxis()->SetTitle("m_{Z'}[GeV]");
@@ -391,8 +392,8 @@ void smallDrawTGragh(string outputName,TH2D* th1[],int option=0){
 	c1->SetLogy(1);
 	
 
-	 Float_t x0 = 600;
-  Float_t x1 = 10000;
+	 Float_t x0 = 10;
+  Float_t x1 = 2000;
   Float_t y0 = 1.;
   Float_t y1 = 1.;
 	TLine* one = new TLine(x0,y0,x1,y1);
