@@ -305,6 +305,7 @@ void smallDrawTGragh(string outputName,TH2D* th1[],int option=0){
 		//tg1[i]->GetYaxis()->SetFontSize(0.03);
 		
 		if(i==0){
+			tg1[i]->GetXaxis()->SetNdivisions(508);
 			tg1[i]->GetXaxis()->SetRangeUser(10,2000);
 			tg1[i]->Draw("APL");
 			if(option==2)tg2[i]->Draw("PL.same");
