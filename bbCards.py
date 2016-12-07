@@ -10,7 +10,7 @@ basename = 'bb/combined'
 #os.system('mkdir -p oneplustwo')
 for imass in range(len(massvec)):
     for ia0mass in a0massvec:
-        basename_res='bb/resolved/ZprimeToA0hToA0chichihbb_2HDM_MZp'+(str(massvec[imass]))+'_MA0'+str(ia0mass)+'_13TeVmadgraphDatacards/ZprimeToA0hToA0chichihbb_2HDM_MZp'+(str(massvec[imass]))+'_MA0'+str(ia0mass)+'_13TeVmadgraph_comb_v2.txt'
+        basename_res='bb/resolvedNoOverlapWithAK08/ZprimeToA0hToA0chichihbb_2HDM_MZp'+(str(massvec[imass]))+'_MA0'+str(ia0mass)+'_13TeVmadgraphDatacards/ZprimeToA0hToA0chichihbb_2HDM_MZp'+(str(massvec[imass]))+'_MA0'+str(ia0mass)+'_13TeVmadgraph_comb_v2.txt'
         basename_boost='bb/boostedAK8/DataCard_S_Plus_B_M'+(str(massvec[imass]))+'_'+str(ia0mass)+'GeV_MonoHbb_13TeV.txt'
         
         print basename_res
@@ -40,6 +40,6 @@ for imass in range(len(massvec)):
         card_ = open('tmpcard.txt')
         
         for line in card_:
-            line = line.replace('DataCards_AllRegions', '')
+            line = line.replace('AnalysisHistograms_MergedSkimmedV12_Puppi_V1/DataCards_AllRegions', '')
             outcard.write(line)
         outcard.close()
