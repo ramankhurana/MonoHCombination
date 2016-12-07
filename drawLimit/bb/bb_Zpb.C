@@ -259,7 +259,7 @@ void smallDrawTGragh(string outputName,TH2D* th1[],int option=0){
 	tg1[0]->Draw("APL");
 	c1->Print("dump.pdf");
 	
-	for(int i=0;i<6;i++){
+	for(int i=0;i<1;i++){
 		//tg1[i]=new TGraph(8,massZ,db[i]);
 		if(option==2)tg1[i]->SetLineStyle(7);
 		if(i==1){
@@ -324,19 +324,23 @@ void smallDrawTGragh(string outputName,TH2D* th1[],int option=0){
 	else leg=new TLegend(0.711452,0.652447,0.940645,0.913966);
 	
 	leg->AddEntry(tg1[0],"m_{A0}=300GeV");
+	/*
 	leg->AddEntry(tg1[1],"m_{A0}=400GeV");
 	leg->AddEntry(tg1[2],"m_{A0}=500GeV");
 	leg->AddEntry(tg1[3],"m_{A0}=600GeV");
 	leg->AddEntry(tg1[4],"m_{A0}=700GeV");
 	leg->AddEntry(tg1[5],"m_{A0}=800GeV");
+	*/
 	if(option==2){
 		leg->Clear();
 		leg->AddEntry(tg2[0],"m_{A0}=300GeV");
+		/*
 		leg->AddEntry(tg2[1],"m_{A0}=400GeV");
 		leg->AddEntry(tg2[2],"m_{A0}=500GeV");
 		leg->AddEntry(tg2[3],"m_{A0}=600GeV");
 		leg->AddEntry(tg2[4],"m_{A0}=700GeV");
 		leg->AddEntry(tg2[5],"m_{A0}=800GeV");
+		*/
 	}
 	 leg->SetFillColor(0);
 	leg->SetFillStyle(0);
@@ -388,7 +392,7 @@ void smallDrawTGragh(string outputName,TH2D* th1[],int option=0){
 	
 
 	 Float_t x0 = 600;
-  Float_t x1 = 2500;
+  Float_t x1 = 10000;
   Float_t y0 = 1.;
   Float_t y1 = 1.;
 	TLine* one = new TLine(x0,y0,x1,y1);
@@ -444,7 +448,7 @@ void bb_Zpb(){
 	th2=readTxt(".","xsec");
 	TH2D* thh[2];
 	thh[0]=small0706InputXsec(th2,"../../bb/bb_zpb","limit_2D",0,2);
-	//thh[1]=small0706InputXsec(th2,"../../bb/bb_zpb","limit_2D",0,3);
+	thh[1]=small0706InputXsec(th2,"../../bb/bb_zpb","limit_2D",0,3);
 	
-	//smallDrawTGragh("limit_compare1D",thh,2);
+	smallDrawTGragh("limit_compare1D",thh,2);
 }
