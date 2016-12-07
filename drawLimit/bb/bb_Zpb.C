@@ -52,7 +52,7 @@ TH2D*  small0706InputXsec(TH2D* thxsec,string inputDir,string outputName,int opt
 	
 	for(int i=0;i<4;i++){
 		th2[i]->SetXTitle("m_{Z'}[GeV]");
-		th2[i]->SetYTitle("m_{A0}[GeV]");
+		th2[i]->SetYTitle("m_{#chi}[GeV]");
 		th2[i]->SetMarkerSize(2);
 	}
 	
@@ -325,7 +325,7 @@ void smallDrawTGragh(string outputName,TH2D* th1[],int option=0){
 	if(option==1)leg=new TLegend(0.711452,0.152447,0.980645,0.53966);
 	else leg=new TLegend(0.711452,0.652447,0.940645,0.913966);
 	
-	leg->AddEntry(tg1[0],"m_{A0}=300GeV");
+	leg->AddEntry(tg1[0],"m_{#chi}=300GeV");
 	/*
 	leg->AddEntry(tg1[1],"m_{A0}=400GeV");
 	leg->AddEntry(tg1[2],"m_{A0}=500GeV");
@@ -335,7 +335,7 @@ void smallDrawTGragh(string outputName,TH2D* th1[],int option=0){
 	*/
 	if(option==2){
 		leg->Clear();
-		leg->AddEntry(tg2[0],"m_{A0}=300GeV");
+		leg->AddEntry(tg2[0],"m_{A0}=1 GeV");
 		/*
 		leg->AddEntry(tg2[1],"m_{A0}=400GeV");
 		leg->AddEntry(tg2[2],"m_{A0}=500GeV");
@@ -435,7 +435,7 @@ TH2D* readTxt(string inputDir,string outputName,int option=0){
 	for(int i=0;i<20;i++)th2[0]->GetXaxis()->SetBinLabel(i+1,Form("%d",massZ[i]));
 	for(int i=0;i<8;i++)th2[0]->GetYaxis()->SetBinLabel(i+1,Form("%d",massA[i]));
 	th2[0]->SetXTitle("m_{Z'}[GeV]");
-		th2[0]->SetYTitle("m_{A0}[GeV]");
+		th2[0]->SetYTitle("m_{#chi}[GeV]");
 	th2[0]->SetMarkerSize(2);
 	th2[0]->SetTitle(Form("%s",outputName.data()));
 	gStyle->SetPaintTextFormat(" 2.2g");
