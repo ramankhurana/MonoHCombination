@@ -69,6 +69,7 @@ TH2D* small0706Base(string inputDir,string outputName,int option=0,int retrunexp
 				TFile* tf1;
 				TTree* tree;
 				tf1=TFile::Open(Form("%s/higgsCombineTest_Asymptotic_%d_%dGeV_MonoHbb_13TeV.root",inputDir.data(),massZ[i],massA[j]));
+				std::cout<<" filename = "<<tf1<<std::endl;
 				if(!tf1)continue;
 				//TDirectory * dir;
 				//dir = (TDirectory*)tf1->Get(Form("higgsCombineTest_Asymptotic_%d_%dGeV_MonoHbb_13TeV.root",massZ[i],massA[j]));
@@ -1159,9 +1160,10 @@ void small0803(){
 	
 	TH2D* th2,*th3,*th4;
 	th2=small0706Base("../../Combination","limit_combination",0,2);
+	std::cout<<" after th2, th3"<<std::endl;
 	th3=small0706Base("../../Combination","limit_combination",0,3);
 	//th2=small0706Compare(in,"limit_compare",1,2);
-	
+	std::cout<<" after th2, th3"<<std::endl;
 	TGraph* tg1,*tg2;
 	tg1=excludeLimit(th2);
 	

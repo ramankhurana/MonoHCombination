@@ -31,32 +31,33 @@ print regions
 def MakebbDecision(threshold, Zpmass, A0Mass):     ## > threshold is boosted analysis
     threshold = float(threshold)
     bb=''
+    print ('float(Zpmass) > threshold', float(Zpmass) > threshold)
     if float(Zpmass) > threshold:
         bb='bb/boostedAK8/DataCard_S_Plus_B_M'+str(Zpmass)+'_'+str(A0Mass)+'GeV_MonoHbb_13TeV.txt'
     if float(Zpmass) <= threshold:
         bb= 'bb/resolved/ZprimeToA0hToA0chichihbb_2HDM_MZp'+str(Zpmass)+'_MA0'+str(A0Mass)+'_13TeVmadgraphDatacards/ZprimeToA0hToA0chichihbb_2HDM_MZp'+str(Zpmass)+'_MA0'+str(A0Mass)+'_13TeVmadgraph_comb_v2.txt '
                 
-    print (threshold, Zpmass, A0Mass,bb)
+    #print (threshold, Zpmass, A0Mass,bb)
     return bb
 
 massvec=['600','800','1000','1200','1400','1700','2000','2500']
-a0massvec=['300']#,'400','500','600','700','800']
+a0massvec=['400','500','600','700','800']
 
 
 for imass in range(len(massvec)):
     for ia0mass in a0massvec:
-        threshold_ = 800
-        if ia0mass == 300:             threshold_ = 1000
-        if ia0mass == 400:             threshold_ = 1200
-        if ia0mass == 500:             threshold_ = 1200
-        if ia0mass == 600:             threshold_ = 1200
-        if ia0mass == 700:             threshold_ = 1200
-        if ia0mass == 800:             threshold_ = 1400
+        threshold_ = 1000
+        if ia0mass == str(300):             threshold_ = 10.0
+        if ia0mass == str(400):             threshold_ = 10.0
+        if ia0mass == str(500):             threshold_ = 10.0
+        if ia0mass == str(600):             threshold_ = 10.0
+        if ia0mass == str(700):             threshold_ = 10.0
+        if ia0mass == str(800):             threshold_ = 10.0
 
         datacards={
             'WW': 'WW/datacards/monoH_Alberto_comb/events/datacard_monoHWW'+str(massvec[imass])+'_'+str(ia0mass)+'.txt ',
             'gg': 'gg/DataCard_2HDM_mZP'+str(massvec[imass])+'_mA0'+str(ia0mass)+'.txt ',
-            'tt': 'tt/tt_update_negbinfix/Zprime'+str(massvec[imass])+'A'+str(ia0mass)+'/cmb/'+str(ia0mass)+'/DataCard_2HDM_M'+str(massvec[imass])+'_'+str(ia0mass)+'GeV_MonoHTauTau_13TeV.txt ',
+            'tt': 'tt/tt_36fb_update//Zprime'+str(massvec[imass])+'A'+str(ia0mass)+'/cmb/'+str(ia0mass)+'/DataCard_2HDM_M'+str(massvec[imass])+'_'+str(ia0mass)+'GeV_MonoHTauTau_13TeV.txt ',
             #'bb': 'bb/resolved/ZprimeToA0hToA0chichihbb_2HDM_MZp'+str(massvec[imass])+'_MA0'+str(ia0mass)+'_13TeVmadgraphDatacards/ZprimeToA0hToA0chichihbb_2HDM_MZp'+str(massvec[imass])+'_MA0'+str(ia0mass)+'_13TeVmadgraph_comb_v2.txt ', 
             'bb': MakebbDecision(threshold_,str(massvec[imass]), str(ia0mass)),
    
@@ -66,17 +67,17 @@ for imass in range(len(massvec)):
         
         allregions=[]
         for iregion in regions:
-            print ('region =',iregion, str(datacards[iregion]) )
+            #print ('region =',iregion, str(datacards[iregion]) )
             datacard_name_ = str(datacards[iregion]).replace(' ','')
             if not bool(os.path.exists(datacard_name_)) : continue
-            print ['statu = ',bool(os.path.exists(datacard_name_))]
-            print (iregion, ' is added')
+            #print ['statu = ',bool(os.path.exists(datacard_name_))]
+            #print (iregion, ' is added')
             os.system('cp '+str(datacards[iregion])+' '+str(iregion)+'.txt')
             if (str(iregion) == 'ZZ') | (str(iregion) == 'WW') | (str(iregion) == 'tt') :
                 tmpname = iregion+'='+iregion+'.txt '
             if  (str(iregion) == 'bb') | (str(iregion) == 'gg'):
                 tmpname = iregion+'='+datacards[iregion]+' '
-            print (massvec[imass], ia0mass, tmpname)
+            #print (massvec[imass], ia0mass, tmpname)
             allregions.append(tmpname)
         
 
@@ -93,6 +94,7 @@ for imass in range(len(massvec)):
             card_ = open('tmpcard.txt')
 
             for line in card_:
+                line = line.replace('AnalysisHistograms_MergedSkimmedV12_Puppi_V7', '')
                 line = line.replace('DataCards_AllRegions', '')
                 outcard.write(line)
             outcard.close()

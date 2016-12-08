@@ -28,5 +28,15 @@ Mchi=1, 150, 500 GeV for MZp=500 GeV
 Mchi=1, 150, 1000 GeV for MZp=1000 GeV
 
 
-## How to combine cards
-python CombineDataCards.py Combination tt bb WW gg
+
+## Prepare tt cards
+python TauTauCards.py
+
+## prepare bb cards 
+python bbCards.py
+
+## Prepare combined cards 
+python CombineDataCards.py Combination tt bb WW gg ZZ
+
+## Run the combine cards 
+## 
