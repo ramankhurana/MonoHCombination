@@ -30,7 +30,8 @@
 #include"TGraphAsymmErrors.h"
 #include "TLatex.h"
 #include"TMultiGraph.h"
-
+#include "Math/Polynomial.h"
+#include "Math/Interpolator.h"
 
 TH2D* small0706Base(string inputDir,string outputName,int option=0,int retrunexp=0){
 	TCanvas* c1,*c2;
@@ -1155,6 +1156,45 @@ void drawExcludeLimitWith2D(TGraph* tg1,TGraph* tg2,TH2D* th2[]){
 	//c1->SaveAs("plot/exclude.png");
 }
 
+void interpolation(TH2D* th1){
+	int massZ[8]={600,800,1000,1200,1400,1700,2000,2500};
+	const int nMassA=6;
+	double massA[nMassA]={300,400,500,600,700,800};
+	
+	int massAinter[8][25];
+	
+	for(int i=0;i<8;i++){
+		ROOT::Math::Interpolator*  inter= new ROOT::Math::Interpolator(nMassA, ROOT::Math::Interpolation::kLINEAR);
+		double y[nMassA]={0};
+		for(int j=0;j<nMassA;j++){
+			y[i]=th1->GetBinContent(i+1,j+1);
+		}
+		cout<<"i="<<i<<endl;
+		inter->SetData(nMassA,massA, y);
+		for(int j=0;j<25;j++){
+			//massAinter[i][j]=inter.Eval(300+j*20);
+		}
+		delete inter;
+	}
+	
+	
+	TH2D* th2=new TH2D("","",8,0,8,20,0,25);
+	for(int i=0;i<8;i++){
+		for(int j=0;j<25;j++){
+			th2->SetBinContent(i+1,j+1,massAinter[i][j]);
+		}
+	}
+	
+	TCanvas* c1;
+	TStyle* ts =setNCUStyle();
+	//ts->SetPadRightMargin(0.17);
+	ts->SetTitleOffset(0.65, "Z");
+	ts->SetTitleOffset(0.8, "Y");
+	c1 = new TCanvas("c1","",1000,768);
+	th2->Draw("colz");
+	c1->Print("plot/interpolation.pdf");
+}
+
 void small0803(){
 	
 	
@@ -1178,7 +1218,7 @@ void small0803(){
 	th3->Write();
 	outFile->Close();
 
-	
+	interpolation(th2);
 	
 	smallDrawTGragh("limit_compare1D",thh,2);
 	//smallDrawTGragh("limit_compare1D_obs",th3);
