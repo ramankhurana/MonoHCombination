@@ -1254,6 +1254,41 @@ cout<<"option="<<option<<endl;
 		}
 	}
 	
+	
+	double tgy2[nMassZ];
+	for(int j=0;j<nMassZ;j++){
+		  auto interStyle=ROOT::Math::Interpolation::kLINEAR;
+		if(option ==2) interStyle=ROOT::Math::Interpolation::kCSPLINE;
+		else  if(option ==3) interStyle=ROOT::Math::Interpolation:: kPOLYNOMIAL;
+		else  if(option ==4) interStyle=ROOT::Math::Interpolation:: kCSPLINE_PERIODIC;
+		else  if(option ==5) interStyle=ROOT::Math::Interpolation:: kAKIMA;
+		else  if(option ==6) interStyle=ROOT::Math::Interpolation:: kAKIMA_PERIODIC;
+	     ROOT::Math::Interpolator inter(nMassA, interStyle);
+	   
+	   int fixNMassA=nMassA;
+	   if(j==0 && !(option==2|| option==3 || option ==5 || option==6) )fixNMassA=2;
+	   if(j==1 && !(option==5 || option==6) )fixNMassA=4;
+	   	for ( Int_t i = 0; i < fixNMassA; ++i )
+		{	   
+		yi[i] =th1->GetBinContent(j+1,i+1);
+		//cout<<"x="<<massA[i]<<",y="<<yi[i]<<endl;
+		}
+		inter.SetData(fixNMassA, massA, yi);
+		
+		bool findone=1;
+		double findy=300;
+		while(findone){
+			 if(inter.Eval(findy)>1||findy>800){
+				 tgy2[j]=findy;
+				 break;
+			 }
+			 findy+=.1;
+		}
+	}
+	
+	TGraph* tg2=new TGraph(nMassZ,massZ,tgy2);
+	
+	
 	double tgx[nMassZp];
 	double tgy[nMassZp];
 	for(int i=0;i<nMassZp;i++){
@@ -1269,9 +1304,7 @@ cout<<"option="<<option<<endl;
 			
 		}
 	}
-	
 	TGraph* tg1=new TGraph(nMassZp,tgx,tgy);
-	
 	
 	th2->GetXaxis()->SetNdivisions(508);
 	th2->GetYaxis()->SetNdivisions(508);
@@ -1281,6 +1314,11 @@ cout<<"option="<<option<<endl;
 	ts->SetTitleOffset(0.65, "Z");
 	ts->SetTitleOffset(0.8, "Y");
 	c1 = new TCanvas("c1","",1000,768);
+	
+	if(option==2){
+		tg2->Draw("apl");
+		c1->Print("plot/inter_1d_cspline.pdf");
+	}
 	//th2->Draw("colz ");
 	tg1->Draw("APL");
 	
