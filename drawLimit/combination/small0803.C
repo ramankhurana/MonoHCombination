@@ -1156,7 +1156,8 @@ void drawExcludeLimitWith2D(TGraph* tg1,TGraph* tg2,TH2D* th2[]){
 	//c1->SaveAs("plot/exclude.png");
 }
 
-void interpolation(TH2D* th1,int option=1){
+TH2D* interpolation(TH2D* th1,int option=1){
+cout<<"option="<<option<<endl;
 	const int nMassZ=8;
 	double massZ[nMassZ]={600,800,1000,1200,1400,1700,2000,2500};
 	const int nMassA=6;
@@ -1164,7 +1165,6 @@ void interpolation(TH2D* th1,int option=1){
 	const int nMassAp=25;
 	double massAinter[nMassZ][nMassAp]={0};
 	
-   Double_t iy[nMassAp];
    Double_t  yi[nMassA];
    
    for(int j=0;j<nMassZ;j++){
@@ -1175,20 +1175,26 @@ void interpolation(TH2D* th1,int option=1){
 	 else  if(option ==5) interStyle=ROOT::Math::Interpolation:: kAKIMA;
 	 else  if(option ==6) interStyle=ROOT::Math::Interpolation:: kAKIMA_PERIODIC;
 	   ROOT::Math::Interpolator inter(nMassA, interStyle);
-	   	for ( Int_t i = 0; i < nMassA; ++i )
+	   
+	   int fixNMassA=nMassA;
+	   if(j==0 && !(option==2|| option==3 || option ==5 || option==6) )fixNMassA=2;
+	   if(j==1 && !(option==5 || option==6) )fixNMassA=4;
+	   	for ( Int_t i = 0; i < fixNMassA; ++i )
    {   
       yi[i] =th1->GetBinContent(j+1,i+1);
 	//cout<<"x="<<massA[i]<<",y="<<yi[i]<<endl;
    }
-   inter.SetData(nMassA, massA, yi);
+   inter.SetData(fixNMassA, massA, yi);
  
    for ( Int_t i = 0; i < nMassAp; ++i )
    {
+	   if(300+20*i>massA[fixNMassA-1])continue;
       massAinter[j][i] = inter.Eval(300+20*i);
-	//cout<<"x="<<200+20*i<<",y="<<iy[i]<<endl;
+	//cout<<"x="<<300+20*i<<",y="<<massAinter[j][i]<<",massA="<<massA[fixNMassA-1]<<endl;
    }
    }
    
+   cout<<"step1 finished"<<endl;
      double  yii[nMassZ];
      const int nMassZp=95;
      double massAinterp[nMassZp][nMassAp]={0};
@@ -1201,14 +1207,28 @@ void interpolation(TH2D* th1,int option=1){
 	 else  if(option ==5) interStyle=ROOT::Math::Interpolation:: kAKIMA;
 	 else  if(option ==6) interStyle=ROOT::Math::Interpolation:: kAKIMA_PERIODIC;
 	   ROOT::Math::Interpolator inter(nMassA, interStyle);
+	   
+	   
+	   double massZ1[nMassZ-1]={800,1000,1200,1400,1700,2000,2500};
+	   double massZ2[nMassZ-2]={1000,1200,1400,1700,2000,2500};
+	   double xmin=600;
+	   if(j>5&& j<16)xmin=800;
+		else if(j>15)xmin=1000;
+	   
 	    	for ( Int_t i = 0; i < nMassZ; ++i )
 		{   
-		yii[i] =massAinter[i][j];
-		//cout<<"x="<<massZ[i]<<",y="<<yii[i]<<endl;
+		if(j>5&& j<16)yii[i] =massAinter[i+1][j];
+		else if(j>15)yii[i] =massAinter[i+1][j];
+		else yii[i] =massAinter[i][j];
+		
+		//cout<<"j="<<j<<",x="<<massZ[i]<<",y="<<yii[i]<<endl;
 		}
-		 inter.SetData(nMassZ, massZ, yii);
+		if(j>5&& j<16) inter.SetData(nMassZ-1, massZ1, yii);
+		else if(j>15) inter.SetData(nMassZ-2, massZ2, yii);
+		 else inter.SetData(nMassZ, massZ, yii);
 		  for ( Int_t i = 0; i < nMassZp; ++i )
-		{
+		{	
+			if(600+20*i<xmin)continue;
 			massAinterp[i][j] = inter.Eval(600+20*i);
 		//cout<<"x="<<200+20*i<<",y="<<iy[i]<<endl;
 		}
@@ -1233,6 +1253,26 @@ void interpolation(TH2D* th1,int option=1){
 			th2->SetBinContent(i+1,j+1,massAinterp[i][j]);
 		}
 	}
+	
+	double tgx[nMassZp];
+	double tgy[nMassZp];
+	for(int i=0;i<nMassZp;i++){
+		tgx[i]=600+20*i;
+		for(int j=0;j<nMassAp;j++){
+			if(j==nMassAp-1)tgy[i]=800;
+			if(massAinterp[i][j]<1)continue;
+			else {
+				tgy[i]=300+20*j;
+				break;
+			}
+			
+			
+		}
+	}
+	
+	TGraph* tg1=new TGraph(nMassZp,tgx,tgy);
+	
+	
 	th2->GetXaxis()->SetNdivisions(508);
 	th2->GetYaxis()->SetNdivisions(508);
 	TCanvas* c1;
@@ -1241,13 +1281,25 @@ void interpolation(TH2D* th1,int option=1){
 	ts->SetTitleOffset(0.65, "Z");
 	ts->SetTitleOffset(0.8, "Y");
 	c1 = new TCanvas("c1","",1000,768);
-	th2->Draw("colz ");
+	//th2->Draw("colz ");
+	tg1->Draw("APL");
+	
 	if(option==1)c1->Print("plot/interpolation_linear.pdf");
 	else if (option==2)c1->Print("plot/interpolation_cspline.pdf");
 	else if (option==3)c1->Print("plot/interpolation_polynominal.pdf");
 	else if (option==4)c1->Print("plot/interpolation_CSPLINE_PERIODIC.pdf");
 	else if (option==5)c1->Print("plot/interpolation_AKIMA.pdf");
 	else if (option==6)c1->Print("plot/interpolation_AKIMA_PERIODIC.pdf");
+	
+	
+	if(option==1)th2->SetName("interpolation_linear");
+	else if (option==2)th2->SetName("interpolation_cspline");
+	else if (option==3)th2->SetName("interpolation_polynominal");
+	else if (option==4)th2->SetName("interpolation_CSPLINE_PERIODIC");
+	else if (option==5)th2->SetName("interpolation_AKIMA");
+	else if (option==6)th2->SetName("interpolation_AKIMA_PERIODIC");
+	
+	return th2;
 }
 
 void small0803(){
@@ -1271,21 +1323,29 @@ void small0803(){
 	TFile* outFile = new TFile("output.root","recreate");
 	th2->Write();
 	th3->Write();
-	outFile->Close();
-
+	
+	
+	TH2D* tg3[6];
+	for(int i=0;i<6;i++)tg3[i]=interpolation(th3,i+1);
+	/*
 	interpolation(th3);
 	interpolation(th3,2);
 	interpolation(th3,3);
 	interpolation(th3,4);
 	interpolation(th3,5);
 	interpolation(th3,6);
+	*/
+	
+	for(int i=0;i<6;i++)tg3[i]->Write();
+	outFile->Close();
+
 	
 	smallDrawTGragh("limit_compare1D",thh,2);
 	//smallDrawTGragh("limit_compare1D_obs",th3);
 	//th3=small0706Compare(in,"limit_compare",1,3);
 	//th4=small0706Compare(in,"limit_compare",1,4);
 	
-	
+	/*
 	tg2=excludeLimit(th3);
 	
 	drawExcludeLimit(tg1,tg2);
@@ -1314,6 +1374,7 @@ void small0803(){
 	tg2=excludeLimit(th3,1);
 	
 	drawExcludeLimitWith2D(tg1,tg2,thh);
+	*/
 }
 
 
