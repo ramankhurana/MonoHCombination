@@ -1156,7 +1156,7 @@ void drawExcludeLimitWith2D(TGraph* tg1,TGraph* tg2,TH2D* th2[]){
 	//c1->SaveAs("plot/exclude.png");
 }
 
-void interpolation(TH2D* th1){
+void interpolation(TH2D* th1,int option=1){
 	const int nMassZ=8;
 	double massZ[nMassZ]={600,800,1000,1200,1400,1700,2000,2500};
 	const int nMassA=6;
@@ -1168,7 +1168,13 @@ void interpolation(TH2D* th1){
    Double_t  yi[nMassA];
    
    for(int j=0;j<nMassZ;j++){
-	   ROOT::Math::Interpolator inter(nMassA, ROOT::Math::Interpolation::kLINEAR);
+	   auto interStyle=ROOT::Math::Interpolation::kLINEAR;
+	  if(option ==2) interStyle=ROOT::Math::Interpolation::kCSPLINE;
+	 else  if(option ==3) interStyle=ROOT::Math::Interpolation:: kPOLYNOMIAL;
+	 else  if(option ==4) interStyle=ROOT::Math::Interpolation:: kCSPLINE_PERIODIC;
+	 else  if(option ==5) interStyle=ROOT::Math::Interpolation:: kAKIMA;
+	 else  if(option ==6) interStyle=ROOT::Math::Interpolation:: kAKIMA_PERIODIC;
+	   ROOT::Math::Interpolator inter(nMassA, interStyle);
 	   	for ( Int_t i = 0; i < nMassA; ++i )
    {   
       yi[i] =th1->GetBinContent(j+1,i+1);
@@ -1188,7 +1194,13 @@ void interpolation(TH2D* th1){
      double massAinterp[nMassZp][nMassAp]={0};
    
    for(int j=0;j<nMassAp;j++){
-	   ROOT::Math::Interpolator inter(nMassA, ROOT::Math::Interpolation::kLINEAR);
+	   auto interStyle=ROOT::Math::Interpolation::kLINEAR;
+	  if(option ==2) interStyle=ROOT::Math::Interpolation::kCSPLINE;
+	 else  if(option ==3) interStyle=ROOT::Math::Interpolation:: kPOLYNOMIAL;
+	 else  if(option ==4) interStyle=ROOT::Math::Interpolation:: kCSPLINE_PERIODIC;
+	 else  if(option ==5) interStyle=ROOT::Math::Interpolation:: kAKIMA;
+	 else  if(option ==6) interStyle=ROOT::Math::Interpolation:: kAKIMA_PERIODIC;
+	   ROOT::Math::Interpolator inter(nMassA, interStyle);
 	    	for ( Int_t i = 0; i < nMassZ; ++i )
 		{   
 		yii[i] =massAinter[i][j];
@@ -1230,7 +1242,12 @@ void interpolation(TH2D* th1){
 	ts->SetTitleOffset(0.8, "Y");
 	c1 = new TCanvas("c1","",1000,768);
 	th2->Draw("colz ");
-	c1->Print("plot/interpolation.pdf");
+	if(option==1)c1->Print("plot/interpolation_linear.pdf");
+	else if (option==2)c1->Print("plot/interpolation_cspline.pdf");
+	else if (option==3)c1->Print("plot/interpolation_polynominal.pdf");
+	else if (option==4)c1->Print("plot/interpolation_CSPLINE_PERIODIC.pdf");
+	else if (option==5)c1->Print("plot/interpolation_AKIMA.pdf");
+	else if (option==6)c1->Print("plot/interpolation_AKIMA_PERIODIC.pdf");
 }
 
 void small0803(){
@@ -1256,7 +1273,12 @@ void small0803(){
 	th3->Write();
 	outFile->Close();
 
-	interpolation(th2);
+	interpolation(th3);
+	interpolation(th3,2);
+	interpolation(th3,3);
+	interpolation(th3,4);
+	interpolation(th3,5);
+	interpolation(th3,6);
 	
 	smallDrawTGragh("limit_compare1D",thh,2);
 	//smallDrawTGragh("limit_compare1D_obs",th3);
