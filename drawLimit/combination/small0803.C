@@ -1157,41 +1157,79 @@ void drawExcludeLimitWith2D(TGraph* tg1,TGraph* tg2,TH2D* th2[]){
 }
 
 void interpolation(TH2D* th1){
-	int massZ[8]={600,800,1000,1200,1400,1700,2000,2500};
+	const int nMassZ=8;
+	double massZ[nMassZ]={600,800,1000,1200,1400,1700,2000,2500};
 	const int nMassA=6;
 	double massA[nMassA]={300,400,500,600,700,800};
+	const int nMassAp=25;
+	double massAinter[nMassZ][nMassAp]={0};
 	
-	int massAinter[8][25];
-	
-	for(int i=0;i<8;i++){
-		ROOT::Math::Interpolator*  inter= new ROOT::Math::Interpolator(nMassA, ROOT::Math::Interpolation::kLINEAR);
-		double y[nMassA]={0};
-		for(int j=0;j<nMassA;j++){
-			y[i]=th1->GetBinContent(i+1,j+1);
+   Double_t iy[nMassAp];
+   Double_t  yi[nMassA];
+   
+   for(int j=0;j<nMassZ;j++){
+	   ROOT::Math::Interpolator inter(nMassA, ROOT::Math::Interpolation::kLINEAR);
+	   	for ( Int_t i = 0; i < nMassA; ++i )
+   {   
+      yi[i] =th1->GetBinContent(j+1,i+1);
+	//cout<<"x="<<massA[i]<<",y="<<yi[i]<<endl;
+   }
+   inter.SetData(nMassA, massA, yi);
+ 
+   for ( Int_t i = 0; i < nMassAp; ++i )
+   {
+      massAinter[j][i] = inter.Eval(300+20*i);
+	//cout<<"x="<<200+20*i<<",y="<<iy[i]<<endl;
+   }
+   }
+   
+     double  yii[nMassZ];
+     const int nMassZp=95;
+     double massAinterp[nMassZp][nMassAp]={0};
+   
+   for(int j=0;j<nMassAp;j++){
+	   ROOT::Math::Interpolator inter(nMassA, ROOT::Math::Interpolation::kLINEAR);
+	    	for ( Int_t i = 0; i < nMassZ; ++i )
+		{   
+		yii[i] =massAinter[i][j];
+		//cout<<"x="<<massZ[i]<<",y="<<yii[i]<<endl;
 		}
-		cout<<"i="<<i<<endl;
-		inter->SetData(nMassA,massA, y);
-		for(int j=0;j<25;j++){
-			//massAinter[i][j]=inter.Eval(300+j*20);
+		 inter.SetData(nMassZ, massZ, yii);
+		  for ( Int_t i = 0; i < nMassZp; ++i )
+		{
+			massAinterp[i][j] = inter.Eval(600+20*i);
+		//cout<<"x="<<200+20*i<<",y="<<iy[i]<<endl;
 		}
-		delete inter;
+   }
+   /*
+ 
+	   ROOT::Math::Interpolator inter(nMassA, ROOT::Math::Interpolation::kLINEAR);
+	  
+   inter.SetData(nMassZ, massZ, yii);
+ 
+   for ( Int_t i = 0; i < nMassZp; ++i )
+   {
+      massAinter[j][i] = inter.Eval(300+20*i);
+	cout<<"x="<<200+20*i<<",y="<<iy[i]<<endl;
+   }
+   }
+   */
+   
+   TH2D* th2=new TH2D("","",nMassZp,600,2500,nMassAp,300,800);
+	for(int i=0;i<nMassZp;i++){
+		for(int j=0;j<nMassAp;j++){
+			th2->SetBinContent(i+1,j+1,massAinterp[i][j]);
+		}
 	}
-	
-	
-	TH2D* th2=new TH2D("","",8,0,8,20,0,25);
-	for(int i=0;i<8;i++){
-		for(int j=0;j<25;j++){
-			th2->SetBinContent(i+1,j+1,massAinter[i][j]);
-		}
-	}
-	
+	th2->GetXaxis()->SetNdivisions(508);
+	th2->GetYaxis()->SetNdivisions(508);
 	TCanvas* c1;
 	TStyle* ts =setNCUStyle();
-	//ts->SetPadRightMargin(0.17);
+	ts->SetPadRightMargin(0.17);
 	ts->SetTitleOffset(0.65, "Z");
 	ts->SetTitleOffset(0.8, "Y");
 	c1 = new TCanvas("c1","",1000,768);
-	th2->Draw("colz");
+	th2->Draw("colz ");
 	c1->Print("plot/interpolation.pdf");
 }
 
