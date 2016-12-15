@@ -1904,9 +1904,11 @@ void small0803(){
 	
 	
 	TH2D* th2,*th3,*th4;
-	th2=small0706Base("../../Combination","limit_combination",0,2);
+	//th2=small0706Base("../../Combination","limit_combination",0,2);
+	th2=small0706Base("../../Combination","limit_combination",0,0);
 	//std::cout<<" after th2, th3"<<std::endl;
-	th3=small0706Base("../../Combination","limit_combination",0,3);
+	//th3=small0706Base("../../Combination","limit_combination",0,3);
+	th3=small0706Base("../../Combination","limit_combination",0,1);
 	//th2=small0706Compare(in,"limit_compare",1,2);
 	//std::cout<<" after th2, th3"<<std::endl;
 	TGraph* tg1,*tg2;
@@ -1932,14 +1934,17 @@ void small0803(){
 	c2 = new TCanvas("c2","",1000,768);
 	string st1[17]={"0_4","0_6","0_8","1_0","1_2","1_4","1_6","1_8","2_0",
 	"2_5","3_0","3_5","4_0","4_5","5_0","7_0","10_0"};
+	string st2[17]={"0.4","0.6","0.8","1.0","1.2","1.4","1.6","1.8","2.0",
+	"2.5","3.0","3.5","4.0","4.5","5.0","7.0","10.0"};
 	TGraph* tg3[17];
-	th4=th3=small0706Base("../../Combination","limit_combination",0,0);
+	//th4=small0706Base("../../Combination","limit_combination",0,0);
 	for(int j=0;j<17;j++){
 		
-		th3=small0706Base(th4,Form("ma0mzp/ScanXsec_gz0_8tb%s.root",st1[j].data()));
-		
+		th4=small0706Base(th2,Form("ma0mzp/ScanXsec_gz0_8tb%s.root",st1[j].data()));
+		TH2D* th5;
+		th5=small0706Base(th3,Form("ma0mzp/ScanXsec_gz0_8tb%s.root",st1[j].data()));
 		//for(int i=0;i<6;i++)
-		tg3[j]=interpolation(th3,st1[j],2);
+		tg3[j]=interpolation(th4,st1[j],2);
 		TH2D* th_sigma[5];
 		TGraph* tg_sigma[5];
 	
@@ -1956,7 +1961,7 @@ void small0803(){
 			tg_sigma[3]=interpolation(th_sigma[3]);
 			tg_sigma[4]=interpolation(th_sigma[4]);
 			
-			tg2=interpolation(th3);
+			tg2=interpolation(th5);
 			drawExcludeLimit2Sigma(tg_sigma,tg2,2500);
 			drawExcludeLimit1Sigma(tg_sigma,tg2,2500);
 		}
@@ -1971,9 +1976,31 @@ void small0803(){
 	//leg->AddEntry(limit_95,"1 #sigma");
 	//leg->AddEntry(limit_68,"2 #sigma");
 	
+	int color[7]={1,2,kOrange-3,kCyan+2,4,kGreen+3,6};
+	int indexJ[7]={0,3,8,10,12,14,15};
+	for(int j=0;j<7;j++){
+		cout<<"j="<<j<<endl;
+		leg->AddEntry(tg3[indexJ[j]],Form("%s",st2[indexJ[j]].data()));
+		tg3[indexJ[j]]->SetFillColor(0);
+		tg3[indexJ[j]]->SetLineColor(color[j]);
+		tg3[indexJ[j]]->SetMarkerColor(color[j]);
+		tg3[indexJ[j]]->SetLineWidth(3);
+		if(j==0){
+			tg3[indexJ[j]]->Draw("APL");
+			tg3[indexJ[j]]->SetMaximum(825);
+		}
+		else tg3[indexJ[j]]->Draw("PL same");
+	}
+	leg->Draw("same");
+	c2->Print("plot/alltb_7.pdf");
+	
+	leg->Clear();
+	
+	
+	
 	for(int j=0;j<17;j++){
 		cout<<"j="<<j<<endl;
-		leg->AddEntry(tg3[j],Form("%s",st1[j].data()));
+		leg->AddEntry(tg3[j],Form("%s",st2[j].data()));
 		tg3[j]->SetFillColor(0);
 		tg3[j]->SetLineColor(94-3*j);
 		tg3[j]->SetMarkerColor(94-3*j);
