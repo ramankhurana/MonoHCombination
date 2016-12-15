@@ -1957,8 +1957,8 @@ void small0803(){
 			tg_sigma[4]=interpolation(th_sigma[4]);
 			
 			tg2=interpolation(th3);
-			drawExcludeLimit2Sigma(tg_sigma,tg2,1400);
-			drawExcludeLimit1Sigma(tg_sigma,tg2,1400);
+			drawExcludeLimit2Sigma(tg_sigma,tg2,2500);
+			drawExcludeLimit1Sigma(tg_sigma,tg2,2500);
 		}
 		
 	}
