@@ -175,6 +175,148 @@ TH2D* small0706Base(string inputDir,string outputName,int option=0,int retrunexp
 	else return th2[0];
 }
 
+TH2D* small0706Base(string inputDir,string inputXsec,string outputName,int option=0,int retrunexp=0){
+	TCanvas* c1,*c2;
+	TStyle* ts =setNCUStyle();
+	//ts->SetPadRightMargin(0.17);
+	ts->SetTitleOffset(0.65, "Z");
+	ts->SetTitleOffset(0.8, "Y");
+	c1 = new TCanvas("c1","",1000,768);
+	
+	int massZ[8]={600,800,1000,1200,1400,1700,2000,2500};
+	int inputZ[8]={1,2,3,4,5,7,8,11};
+	int massA[6]={300,400,500,600,700,800};
+	
+	TH2D* th2[4];
+	th2[0]=new TH2D("expected","expected",8,0,8,6,0,6);
+	th2[1]=new TH2D("observed","observed",8,0,8,6,0,6);
+	
+	th2[2]=new TH2D("expected","expected",8,0,8,6,0,6);
+	th2[3]=new TH2D("observed","observed",8,0,8,6,0,6);
+	
+	TFile* tf1;
+	
+	tf1=TFile::Open(Form("%s",inputXsec.data()));
+	TH2F * th2f2=(TH2F *)tf1->FindObjectAny("xsec1");
+	
+	
+	for(int i=0;i<4;i++){
+		th2[i]->SetXTitle("m_{Z'}[GeV]");
+		th2[i]->SetYTitle("m_{A0}[GeV]");
+		th2[i]->SetMarkerSize(2);
+	}
+	
+	for(int i=0;i<8;i++){
+		for(int j=0;j<6;j++){
+				
+				TFile* tf1;
+				TTree* tree;
+				tf1=TFile::Open(Form("%s/higgsCombineTest_Asymptotic_%d_%dGeV_MonoHbb_13TeV.root",inputDir.data(),massZ[i],massA[j]));
+				std::cout<<" filename = "<<tf1<<std::endl;
+				if(!tf1)continue;
+				//TDirectory * dir;
+				//dir = (TDirectory*)tf1->Get(Form("higgsCombineTest_Asymptotic_%d_%dGeV_MonoHbb_13TeV.root",massZ[i],massA[j]));
+				
+				tf1->GetObject("limit",tree);
+				TreeReader data(tree);
+				//data.Print();
+				for(Long64_t jEntry=0; jEntry<data.GetEntriesFast() ;jEntry++){
+						data.GetEntry(jEntry);
+						Float_t  quantileExpected = data.GetFloat("quantileExpected");
+						Double_t  limit = data.GetDouble("limit");
+						//if(option==1)limit*=8.3;
+						if(quantileExpected==0.5)th2[0]->Fill(i,j,limit);
+						if(quantileExpected==-1)th2[1]->Fill(i,j,limit);
+						
+						if(quantileExpected==0.5)th2[2]->Fill(i,j,limit/th2f2->GetBinContent(inputZ[i],j+2));
+						if(quantileExpected==-1)th2[3]->Fill(i,j,limit/th2f2->GetBinContent(inputZ[i],j+2));
+				}
+				
+		}
+	}
+	
+	for(int i=0;i<8;i++){
+		
+		th2[0]->GetXaxis()->SetBinLabel(i+1,Form("%d",massZ[i]));
+		th2[1]->GetXaxis()->SetBinLabel(i+1,Form("%d",massZ[i]));
+		th2[2]->GetXaxis()->SetBinLabel(i+1,Form("%d",massZ[i]));
+		th2[3]->GetXaxis()->SetBinLabel(i+1,Form("%d",massZ[i]));
+
+	}
+	for(int j=0;j<6;j++){
+		
+		th2[0]->GetYaxis()->SetBinLabel(j+1,Form("%d",massA[j]));
+		th2[1]->GetYaxis()->SetBinLabel(j+1,Form("%d",massA[j]));
+		th2[2]->GetYaxis()->SetBinLabel(j+1,Form("%d",massA[j]));
+		th2[3]->GetYaxis()->SetBinLabel(j+1,Form("%d",massA[j]));
+	}
+	th2[3]->SetZTitle("#sigma_{95% CL} / #sigma_{th}");
+	th2[2]->Draw("colz,text");
+	c1->Print("expected.pdf");
+	th2[3]->Draw("colz,text");
+	c1->Print("observed.pdf");
+	
+	
+	c1->Clear();
+	
+	TPad *p1 = new TPad("p1","",0,0.09,1,0.89);
+   p1->Draw();
+   p1->cd();
+   //th2[3]->SetLogz(1);
+   p1->SetLogz();
+   th2[3]->Draw("colzTEXT");
+   
+   p1->Update();
+   Double_t x1,y1,x2,y2;
+   gPad->GetRange(x1,y1,x2,y2);
+
+   c1->cd();
+   TPad *p2 = new TPad("p2","",0,0.12,1,0.92);
+   p2->SetFillStyle(0);
+   p2->SetFillColor(0);
+   p2->Draw();
+   p2->cd();
+   
+   for(int i=0;i<2;i++){
+		th2[i]->SetTitle("");
+		th2[i+2]->SetTitle("");
+	}
+	th2[1]->SetXTitle("");
+	th2[1]->SetYTitle("");
+	//th2[3]->SetXTitle("");
+	//th2[3]->SetYTitle("");
+   gStyle->SetPaintTextFormat(" 4.2f ");
+   
+   p2->Range(x1,y1,x2,y2);
+   th2[2]->Draw("TEXTSAME");
+	
+	TLatex * latex = new TLatex();
+    latex->SetNDC();
+    //latex->SetTextSize(0.05);
+    latex->SetTextAlign(12); // align left
+    latex->SetNDC(kTRUE);                                                                                                                        
+	latex->SetTextSize(0.04);    
+	//latex->SetTextFont(42);
+   // latex->DrawLatex(0.15, 0.92, Form("                                                                  %.1f fb^{-1} ( 13 TeV )", 2.32));
+     latex->DrawLatex(0.15, 0.84,"CMS");
+       latex->SetTextFont(42);
+	latex->DrawLatex(0.15, 0.81,"Z'#rightarrow DM+H");
+      latex->DrawLatex(0.15, 0.77," (2HDM)");
+      latex->DrawLatex(0.15, 0.73," Mono-H Combo");
+		 latex->DrawLatex(0.15, 0.92, Form("                                                                                        %.1f fb^{-1} ( 13 TeV )", 12.9));
+     
+	c1->Print(Form("plot/%s.pdf",outputName.data()));
+	c1->SaveAs(Form("plot/%s.png",outputName.data()));
+	
+	
+	if (retrunexp==0)return th2[0];
+	else if (retrunexp==1)return th2[1];
+	else if (retrunexp==2)return th2[2];
+	else if (retrunexp==3)return th2[3];
+	//else if (retrunexp==4)return th2[4];
+	else return th2[0];
+}
+
 TH2D* getSigmaLimit(string inputDir,int option=0){
 	TCanvas* c1,*c2;
 	TStyle* ts =setNCUStyle();
@@ -1156,7 +1298,7 @@ void drawExcludeLimitWith2D(TGraph* tg1,TGraph* tg2,TH2D* th2[]){
 	//c1->SaveAs("plot/exclude.png");
 }
 
-TH2D* interpolation(TH2D* th1,int option=1){
+TH2D* interpolation(TH2D* th1,string output,int option=1){
 cout<<"option="<<option<<endl;
 	const int nMassZ=8;
 	double massZ[nMassZ]={600,800,1000,1200,1400,1700,2000,2500};
@@ -1315,20 +1457,30 @@ cout<<"option="<<option<<endl;
 	ts->SetTitleOffset(0.8, "Y");
 	c1 = new TCanvas("c1","",1000,768);
 	
-	if(option==2){
-		tg2->Draw("apl");
-		c1->Print("plot/inter_1d_cspline.pdf");
-	}
-	//th2->Draw("colz ");
-	tg1->Draw("APL");
 	
+	//tg2->Draw("apl");
+	
+	
+	//th2->Draw("colz ");
+	//tg1->Draw("APL");
+	tg2->Draw("APL");
+	
+	
+	if(option==1)c1->Print(Form("plot/tb%s_inter_1d_linear.pdf",output.data()));
+	else if (option==2)c1->Print(Form("plot/tb%s_inter_1d_cspline.pdf",output.data()));
+	else if (option==3)c1->Print(Form("plot/tb%s_inter_1d_polynominal.pdf",output.data()));
+	else if (option==4)c1->Print(Form("plot/tb%s_inter_1d_CSPLINE_PERIODIC.pdf",output.data()));
+	else if (option==5)c1->Print(Form("plot/tb%s_inter_1d_AKIMA.pdf",output.data()));
+	else if (option==6)c1->Print(Form("plot/tb%s_inter_1d_AKIMA_PERIODIC.pdf",output.data()));
+	
+	/*
 	if(option==1)c1->Print("plot/interpolation_linear.pdf");
 	else if (option==2)c1->Print("plot/interpolation_cspline.pdf");
 	else if (option==3)c1->Print("plot/interpolation_polynominal.pdf");
 	else if (option==4)c1->Print("plot/interpolation_CSPLINE_PERIODIC.pdf");
 	else if (option==5)c1->Print("plot/interpolation_AKIMA.pdf");
 	else if (option==6)c1->Print("plot/interpolation_AKIMA_PERIODIC.pdf");
-	
+	*/
 	
 	if(option==1)th2->SetName("interpolation_linear");
 	else if (option==2)th2->SetName("interpolation_cspline");
@@ -1363,8 +1515,18 @@ void small0803(){
 	th3->Write();
 	
 	
-	TH2D* tg3[6];
-	for(int i=0;i<6;i++)tg3[i]=interpolation(th3,i+1);
+	string st1[17]={"0_4","0_6","0_8","10_0","1_0","1_2","1_4","1_6","1_8","2_0",
+	"2_5","3_0","3_5","4_0","4_5","5_0","7_0",};
+	
+	for(int j=0;j<17;j++){
+		
+		th3=small0706Base("../../Combination",Form("ma0mzp/ScanXsec_gz0_8tb%s.root",st1[j].data()),"limit_combination",0,3);
+		TH2D* tg3[6];
+		//for(int i=0;i<6;i++)
+		interpolation(th3,st1[j],2);
+	}
+	
+	
 	/*
 	interpolation(th3);
 	interpolation(th3,2);
@@ -1374,7 +1536,7 @@ void small0803(){
 	interpolation(th3,6);
 	*/
 	
-	for(int i=0;i<6;i++)tg3[i]->Write();
+	//for(int i=0;i<6;i++)tg3[i]->Write();
 	outFile->Close();
 
 	
