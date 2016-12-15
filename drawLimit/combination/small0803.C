@@ -194,10 +194,11 @@ TH2D* small0706Base(string inputDir,string inputXsec,string outputName,int optio
 	th2[2]=new TH2D("expected","expected",8,0,8,6,0,6);
 	th2[3]=new TH2D("observed","observed",8,0,8,6,0,6);
 	
-	TFile* tf1;
+	TFile* tf2;
 	
-	tf1=TFile::Open(Form("%s",inputXsec.data()));
-	TH2F * th2f2=(TH2F *)tf1->FindObjectAny("xsec1");
+	tf2=TFile::Open(Form("%s",inputXsec.data()),"read");
+	TH2F * th2f2=(TH2F *)tf2->FindObjectAny("xsec1");
+	
 	
 	
 	for(int i=0;i<4;i++){
@@ -211,13 +212,14 @@ TH2D* small0706Base(string inputDir,string inputXsec,string outputName,int optio
 				
 				TFile* tf1;
 				TTree* tree;
-				tf1=TFile::Open(Form("%s/higgsCombineTest_Asymptotic_%d_%dGeV_MonoHbb_13TeV.root",inputDir.data(),massZ[i],massA[j]));
-				std::cout<<" filename = "<<tf1<<std::endl;
+				tf1=TFile::Open(Form("%s/higgsCombineTest_Asymptotic_%d_%dGeV_MonoHbb_13TeV.root",inputDir.data(),massZ[i],massA[j]),"read");
+				//std::cout<<" filename = "<<tf1<<std::endl;
 				if(!tf1)continue;
 				//TDirectory * dir;
 				//dir = (TDirectory*)tf1->Get(Form("higgsCombineTest_Asymptotic_%d_%dGeV_MonoHbb_13TeV.root",massZ[i],massA[j]));
 				
-				tf1->GetObject("limit",tree);
+				tree=(TTree*)tf1->Get("limit");
+				//tf1->GetObject("limit",tree);
 				TreeReader data(tree);
 				//data.Print();
 				for(Long64_t jEntry=0; jEntry<data.GetEntriesFast() ;jEntry++){
@@ -232,6 +234,9 @@ TH2D* small0706Base(string inputDir,string inputXsec,string outputName,int optio
 						if(quantileExpected==-1)th2[3]->Fill(i,j,limit/th2f2->GetBinContent(inputZ[i],j+2));
 				}
 				
+				//delete tree;
+				//tf1->Close();
+				//delete tf1;
 		}
 	}
 	
@@ -308,13 +313,40 @@ TH2D* small0706Base(string inputDir,string inputXsec,string outputName,int optio
 	c1->Print(Form("plot/%s.pdf",outputName.data()));
 	c1->SaveAs(Form("plot/%s.png",outputName.data()));
 	
-	
+	tf2->Close();
+	delete tf2;
 	if (retrunexp==0)return th2[0];
 	else if (retrunexp==1)return th2[1];
 	else if (retrunexp==2)return th2[2];
 	else if (retrunexp==3)return th2[3];
 	//else if (retrunexp==4)return th2[4];
 	else return th2[0];
+}
+
+TH2D* small0706Base(TH2D* th3,string inputXsec){
+	
+	
+	int massZ[8]={600,800,1000,1200,1400,1700,2000,2500};
+	int inputZ[8]={1,2,3,4,5,7,8,11};
+	int massA[6]={300,400,500,600,700,800};
+	
+	TH2D* th2;
+	th2=(TH2D*)th3->Clone(Form("%s",th3->GetName()));
+	
+	TFile* tf2;
+	
+	tf2=TFile::Open(Form("%s",inputXsec.data()),"read");
+	TH2F * th2f2=(TH2F *)tf2->FindObjectAny("xsec1");
+	
+	
+	for(int i=0;i<8;i++){
+		for(int j=0;j<6;j++){
+				
+				th2->SetBinContent(i+1,j+1,th2->GetBinContent(i+1,j+1)/th2f2->GetBinContent(inputZ[i],j+2));
+		
+		}
+	}
+	return th2;
 }
 
 TH2D* getSigmaLimit(string inputDir,int option=0){
@@ -380,6 +412,74 @@ TH2D* getSigmaLimit(string inputDir,int option=0){
 	th2[0]->Draw("text");
 	c1->Print(Form("%d.pdf",option));
 	
+	 return th2[0];
+}
+
+TH2D* getSigmaLimit(string inputDir,string inputXsec,int option=0){
+	TCanvas* c1,*c2;
+	TStyle* ts =setNCUStyle();
+	ts->SetPadRightMargin(0.14);
+	c1 = new TCanvas("c1","",889,768);
+	
+	int massZ[8]={600,800,1000,1200,1400,1700,2000,2500};
+	int inputZ[8]={1,2,3,4,5,7,8,11};
+	int massA[6]={300,400,500,600,700,800};
+	
+	TH2D* th2[4];
+	th2[0]=new TH2D("expected","expected",8,0,8,6,0,6);
+	th2[1]=new TH2D("observed","observed",8,0,8,6,0,6);
+	
+	th2[2]=new TH2D("expected","expected",8,0,8,6,0,6);
+	th2[3]=new TH2D("observed","observed",8,0,8,6,0,6);
+	
+	TFile* tf2;
+	
+	//tf1=TFile::Open("../ScanPlot_gz08.root");
+	tf2=TFile::Open(Form("%s",inputXsec.data()));
+	TH2F * th2f2=(TH2F *)tf2->FindObjectAny("xsec1");
+	
+	
+	for(int i=0;i<4;i++){
+		th2[i]->SetXTitle("m_{Z'}[GeV]");
+		th2[i]->SetYTitle("m_{A0}[GeV]");
+		th2[i]->SetMarkerSize(2);
+	}
+	
+	for(int i=0;i<8;i++){
+		for(int j=0;j<6;j++){
+				
+				TFile* tf1;
+				TTree* tree;
+				tf1=TFile::Open(Form("%s/higgsCombineTest_Asymptotic_%d_%dGeV_MonoHbb_13TeV.root",inputDir.data(),massZ[i],massA[j]));
+				if(!tf1)continue;
+				//TDirectory * dir;
+				//dir = (TDirectory*)tf1->Get(Form("higgsCombineTest_Asymptotic_%d_%dGeV_MonoHbb_13TeV.root",massZ[i],massA[j]));
+				
+				tf1->GetObject("limit",tree);
+				TreeReader data(tree);
+				//data.Print();
+				data.GetEntry(option);
+				Double_t  limit = data.GetDouble("limit");
+				th2[0]->Fill(i,j,limit/th2f2->GetBinContent(inputZ[i],j+2));
+				/*
+				for(Long64_t jEntry=0; jEntry<data.GetEntriesFast() ;jEntry++){
+						data.GetEntry(jEntry);
+						Float_t  quantileExpected = data.GetFloat("quantileExpected");
+						Double_t  limit = data.GetDouble("limit");
+						//if(option==1)limit*=8.3;
+						if(quantileExpected==0.5)th2[0]->Fill(i,j,limit);
+						if(quantileExpected==-1)th2[1]->Fill(i,j,limit);
+						
+						if(quantileExpected==0.5)th2[2]->Fill(i,j,limit/th2f2->GetBinContent(inputZ[i],j+2));
+						if(quantileExpected==-1)th2[3]->Fill(i,j,limit/th2f2->GetBinContent(inputZ[i],j+2));
+				}
+				*/
+		}
+	}
+	th2[0]->Draw("text");
+	c1->Print(Form("%d.pdf",option));
+	tf2->Close();
+	delete tf2;
 	 return th2[0];
 }
 
@@ -1133,7 +1233,7 @@ void drawExcludeLimit(TGraph* tg1,TGraph* tg2,int rangeUp=2500){
 	c1->SaveAs(Form("plot/exclude_%d.png",rangeUp));
 }
 
-void drawExcludeLimitSigma(TGraph* tg1[],TGraph* tg2,int rangeUp=2500){
+void drawExcludeLimit2Sigma(TGraph* tg1[],TGraph* tg2,int rangeUp=2500){
 	TCanvas* c1;
 	setNCUStyle(1);
 	c1 = new TCanvas("c1","",889,768);
@@ -1214,8 +1314,93 @@ void drawExcludeLimitSigma(TGraph* tg1[],TGraph* tg2,int rangeUp=2500){
 	latex->SetTextFont(42);
     latex->DrawLatex(0.15, 0.92, Form("CMS                         %.1f fb^{-1} ( 13 TeV )", 2.32));
 	
-	c1->Print(Form("plot/exclude_%d.pdf",rangeUp));
-	c1->SaveAs(Form("plot/exclude_%d.png",rangeUp));
+	c1->Print(Form("plot/exclude_2sigma_%d.pdf",rangeUp));
+	c1->SaveAs(Form("plot/exclude_2sigma_%d.png",rangeUp));
+}
+
+void drawExcludeLimit1Sigma(TGraph* tg1[],TGraph* tg2,int rangeUp=2500){
+	TCanvas* c1;
+	setNCUStyle(1);
+	c1 = new TCanvas("c1","",889,768);
+	
+	tg2->SetFillColor(0);
+	
+	
+	tg2->SetLineColor(2);
+	//tg1->Draw("APL");
+	//c1->Print("exclude.pdf");
+	tg1[2]->SetLineWidth(3);
+	tg2->SetLineWidth(3);
+	tg1[0]->SetTitle("");
+	//tg1[0]->Draw("APL");
+	
+	//tg1[1]->Draw("PL,same");
+	//tg1[2]->Draw("PL,same");
+	//tg1[3]->Draw("PL,same");
+	//tg1[4]->Draw("PL,same");
+	
+	double limitSigma[5][8];
+	for(int i=0;i<5;i++){
+		double* temp=tg1[i]->GetY(); 
+		for(int j=0;j<8;j++){
+			limitSigma[i][j]=temp[j];
+			cout<<temp[j]<<",";
+		}
+		cout<<endl;
+	}
+	for(int i=0;i<8;i++){
+		limitSigma[0][i]-=limitSigma[2][i];
+		limitSigma[1][i]-=limitSigma[2][i];
+		limitSigma[3][i]=limitSigma[2][i]-limitSigma[3][i];
+		limitSigma[4][i]=limitSigma[2][i]-limitSigma[4][i];
+		
+	}
+	
+	double massZ[8]={600,800,1000,1200,1400,1700,2000,2500};
+	TGraphAsymmErrors* limit_68=new TGraphAsymmErrors(8,massZ,limitSigma[2],0,0,limitSigma[4],limitSigma[0]);
+	TGraphAsymmErrors* limit_95=new TGraphAsymmErrors(8,massZ,limitSigma[2],0,0,limitSigma[3],limitSigma[1]);
+	
+	limit_95->SetMaximum(800);
+	limit_95->SetMinimum(300);
+	limit_95->GetXaxis()->SetTitle("m_{Z'}[GeV]");
+	limit_95->GetXaxis()->SetNdivisions(508);
+	limit_95->GetXaxis()->SetRangeUser(600,rangeUp+10);
+	limit_95->GetYaxis()->SetTitle("m_{A0}[GeV]");
+	
+	limit_68->SetFillColor(kYellow);
+	//limit_68->Draw("3A");
+	
+	limit_95->SetFillColor(kGreen);
+	limit_95->Draw("3A ");
+	
+	tg1[2]->SetFillColor(0);
+	tg1[2]->Draw("PLsame");
+	
+	tg2->Draw("PL,same");
+	
+	
+	TLegend* leg ;
+	leg=new TLegend(0.711452,0.652447,0.940645,0.863966);
+	leg->SetFillColor(0);
+	leg->SetFillStyle(0);
+	leg->AddEntry(tg1[2],"expected");
+	leg->AddEntry(limit_95,"1 #sigma");
+	leg->AddEntry(limit_68,"2 #sigma");
+	
+	leg->AddEntry(tg2,"observed");
+	leg->Draw("same");
+	
+	TLatex * latex = new TLatex();
+    latex->SetNDC();
+    //latex->SetTextSize(0.03);
+    latex->SetTextAlign(10); // align left
+    latex->SetNDC(kTRUE);                                                                                                                        
+	latex->SetTextSize(0.06);    
+	latex->SetTextFont(42);
+    latex->DrawLatex(0.15, 0.92, Form("CMS                         %.1f fb^{-1} ( 13 TeV )", 2.32));
+	
+	c1->Print(Form("plot/exclude_1sigma_%d.pdf",rangeUp));
+	c1->SaveAs(Form("plot/exclude__1sigma%d.png",rangeUp));
 }
 
 void drawExcludeLimitWith2D(TGraph* tg1,TGraph* tg2,TH2D* th2[]){
@@ -1297,8 +1482,183 @@ void drawExcludeLimitWith2D(TGraph* tg1,TGraph* tg2,TH2D* th2[]){
 	//c1->Print("plot/exclude.pdf");
 	//c1->SaveAs("plot/exclude.png");
 }
-
+/*
 TH2D* interpolation(TH2D* th1,string output,int option=1){
+cout<<"option="<<option<<endl;
+	const int nMassZ=8;
+	double massZ[nMassZ]={600,800,1000,1200,1400,1700,2000,2500};
+	const int nMassA=6;
+	double massA[nMassA]={300,400,500,600,700,800};
+	const int nMassAp=25;
+	double massAinter[nMassZ][nMassAp]={0};
+	
+   Double_t  yi[nMassA];
+   
+   for(int j=0;j<nMassZ;j++){
+	   auto interStyle=ROOT::Math::Interpolation::kLINEAR;
+	  if(option ==2) interStyle=ROOT::Math::Interpolation::kCSPLINE;
+	 else  if(option ==3) interStyle=ROOT::Math::Interpolation:: kPOLYNOMIAL;
+	 else  if(option ==4) interStyle=ROOT::Math::Interpolation:: kCSPLINE_PERIODIC;
+	 else  if(option ==5) interStyle=ROOT::Math::Interpolation:: kAKIMA;
+	 else  if(option ==6) interStyle=ROOT::Math::Interpolation:: kAKIMA_PERIODIC;
+	   ROOT::Math::Interpolator inter(nMassA, interStyle);
+	   
+	   int fixNMassA=nMassA;
+	   if(j==0 && !(option==2|| option==3 || option ==5 || option==6) )fixNMassA=2;
+	   if(j==1 && !(option==5 || option==6) )fixNMassA=4;
+	   	for ( Int_t i = 0; i < fixNMassA; ++i )
+   {   
+      yi[i] =th1->GetBinContent(j+1,i+1);
+	//cout<<"x="<<massA[i]<<",y="<<yi[i]<<endl;
+   }
+   inter.SetData(fixNMassA, massA, yi);
+ 
+   for ( Int_t i = 0; i < nMassAp; ++i )
+   {
+	   if(300+20*i>massA[fixNMassA-1])continue;
+      massAinter[j][i] = inter.Eval(300+20*i);
+	//cout<<"x="<<300+20*i<<",y="<<massAinter[j][i]<<",massA="<<massA[fixNMassA-1]<<endl;
+   }
+   }
+   
+   cout<<"step1 finished"<<endl;
+     double  yii[nMassZ];
+     const int nMassZp=95;
+     double massAinterp[nMassZp][nMassAp]={0};
+   
+   for(int j=0;j<nMassAp;j++){
+	   auto interStyle=ROOT::Math::Interpolation::kLINEAR;
+	  if(option ==2) interStyle=ROOT::Math::Interpolation::kCSPLINE;
+	 else  if(option ==3) interStyle=ROOT::Math::Interpolation:: kPOLYNOMIAL;
+	 else  if(option ==4) interStyle=ROOT::Math::Interpolation:: kCSPLINE_PERIODIC;
+	 else  if(option ==5) interStyle=ROOT::Math::Interpolation:: kAKIMA;
+	 else  if(option ==6) interStyle=ROOT::Math::Interpolation:: kAKIMA_PERIODIC;
+	   ROOT::Math::Interpolator inter(nMassA, interStyle);
+	   
+	   
+	   double massZ1[nMassZ-1]={800,1000,1200,1400,1700,2000,2500};
+	   double massZ2[nMassZ-2]={1000,1200,1400,1700,2000,2500};
+	   double xmin=600;
+	   if(j>5&& j<16)xmin=800;
+		else if(j>15)xmin=1000;
+	   
+	    	for ( Int_t i = 0; i < nMassZ; ++i )
+		{   
+		if(j>5&& j<16)yii[i] =massAinter[i+1][j];
+		else if(j>15)yii[i] =massAinter[i+1][j];
+		else yii[i] =massAinter[i][j];
+		
+		//cout<<"j="<<j<<",x="<<massZ[i]<<",y="<<yii[i]<<endl;
+		}
+		if(j>5&& j<16) inter.SetData(nMassZ-1, massZ1, yii);
+		else if(j>15) inter.SetData(nMassZ-2, massZ2, yii);
+		 else inter.SetData(nMassZ, massZ, yii);
+		  for ( Int_t i = 0; i < nMassZp; ++i )
+		{	
+			if(600+20*i<xmin)continue;
+			massAinterp[i][j] = inter.Eval(600+20*i);
+		//cout<<"x="<<200+20*i<<",y="<<iy[i]<<endl;
+		}
+   }
+ 
+   
+   TH2D* th2=new TH2D("","",nMassZp,600,2500,nMassAp,300,800);
+	for(int i=0;i<nMassZp;i++){
+		for(int j=0;j<nMassAp;j++){
+			th2->SetBinContent(i+1,j+1,massAinterp[i][j]);
+		}
+	}
+	
+	
+	double tgy2[nMassZ];
+	for(int j=0;j<nMassZ;j++){
+		  auto interStyle=ROOT::Math::Interpolation::kLINEAR;
+		if(option ==2) interStyle=ROOT::Math::Interpolation::kCSPLINE;
+		else  if(option ==3) interStyle=ROOT::Math::Interpolation:: kPOLYNOMIAL;
+		else  if(option ==4) interStyle=ROOT::Math::Interpolation:: kCSPLINE_PERIODIC;
+		else  if(option ==5) interStyle=ROOT::Math::Interpolation:: kAKIMA;
+		else  if(option ==6) interStyle=ROOT::Math::Interpolation:: kAKIMA_PERIODIC;
+	     ROOT::Math::Interpolator inter(nMassA, interStyle);
+	   
+	   int fixNMassA=nMassA;
+	   if(j==0 && !(option==2|| option==3 || option ==5 || option==6) )fixNMassA=2;
+	   if(j==1 && !(option==5 || option==6) )fixNMassA=4;
+	   	for ( Int_t i = 0; i < fixNMassA; ++i )
+		{	   
+		yi[i] =th1->GetBinContent(j+1,i+1);
+		//cout<<"x="<<massA[i]<<",y="<<yi[i]<<endl;
+		}
+		inter.SetData(fixNMassA, massA, yi);
+		
+		bool findone=1;
+		double findy=300;
+		while(findone){
+			 if(inter.Eval(findy)>1||findy>800){
+				 tgy2[j]=findy;
+				 break;
+			 }
+			 findy+=.1;
+		}
+	}
+	
+	TGraph* tg2=new TGraph(nMassZ,massZ,tgy2);
+	
+	
+	double tgx[nMassZp];
+	double tgy[nMassZp];
+	for(int i=0;i<nMassZp;i++){
+		tgx[i]=600+20*i;
+		for(int j=0;j<nMassAp;j++){
+			if(j==nMassAp-1)tgy[i]=800;
+			if(massAinterp[i][j]<1)continue;
+			else {
+				tgy[i]=300+20*j;
+				break;
+			}
+			
+			
+		}
+	}
+	TGraph* tg1=new TGraph(nMassZp,tgx,tgy);
+	
+	th2->GetXaxis()->SetNdivisions(508);
+	th2->GetYaxis()->SetNdivisions(508);
+	TCanvas* c1;
+	TStyle* ts =setNCUStyle();
+	ts->SetPadRightMargin(0.17);
+	ts->SetTitleOffset(0.65, "Z");
+	ts->SetTitleOffset(0.8, "Y");
+	c1 = new TCanvas("c1","",1000,768);
+	
+	
+	//tg2->Draw("apl");
+	
+	
+	//th2->Draw("colz ");
+	//tg1->Draw("APL");
+	tg2->Draw("APL");
+	
+	
+	if(option==1)c1->Print(Form("plot/tb%s_inter_1d_linear.pdf",output.data()));
+	else if (option==2)c1->Print(Form("plot/tb%s_inter_1d_cspline.pdf",output.data()));
+	else if (option==3)c1->Print(Form("plot/tb%s_inter_1d_polynominal.pdf",output.data()));
+	else if (option==4)c1->Print(Form("plot/tb%s_inter_1d_CSPLINE_PERIODIC.pdf",output.data()));
+	else if (option==5)c1->Print(Form("plot/tb%s_inter_1d_AKIMA.pdf",output.data()));
+	else if (option==6)c1->Print(Form("plot/tb%s_inter_1d_AKIMA_PERIODIC.pdf",output.data()));
+	
+	
+	
+	if(option==1)th2->SetName("interpolation_linear");
+	else if (option==2)th2->SetName("interpolation_cspline");
+	else if (option==3)th2->SetName("interpolation_polynominal");
+	else if (option==4)th2->SetName("interpolation_CSPLINE_PERIODIC");
+	else if (option==5)th2->SetName("interpolation_AKIMA");
+	else if (option==6)th2->SetName("interpolation_AKIMA_PERIODIC");
+	
+	return th2;
+}
+*/
+TGraph* interpolation(TH2D* th1,string output,int option=1){
 cout<<"option="<<option<<endl;
 	const int nMassZ=8;
 	double massZ[nMassZ]={600,800,1000,1200,1400,1700,2000,2500};
@@ -1489,7 +1849,55 @@ cout<<"option="<<option<<endl;
 	else if (option==5)th2->SetName("interpolation_AKIMA");
 	else if (option==6)th2->SetName("interpolation_AKIMA_PERIODIC");
 	
-	return th2;
+	return tg2;
+}
+
+TGraph* interpolation(TH2D* th1,int option=1){
+cout<<"option="<<option<<endl;
+	const int nMassZ=8;
+	double massZ[nMassZ]={600,800,1000,1200,1400,1700,2000,2500};
+	const int nMassA=6;
+	double massA[nMassA]={300,400,500,600,700,800};
+	const int nMassAp=25;
+	double massAinter[nMassZ][nMassAp]={0};
+	Double_t  yi[nMassA];
+
+	double tgy2[nMassZ];
+	for(int j=0;j<nMassZ;j++){
+		  auto interStyle=ROOT::Math::Interpolation::kLINEAR;
+		if(option ==2) interStyle=ROOT::Math::Interpolation::kCSPLINE;
+		else  if(option ==3) interStyle=ROOT::Math::Interpolation:: kPOLYNOMIAL;
+		else  if(option ==4) interStyle=ROOT::Math::Interpolation:: kCSPLINE_PERIODIC;
+		else  if(option ==5) interStyle=ROOT::Math::Interpolation:: kAKIMA;
+		else  if(option ==6) interStyle=ROOT::Math::Interpolation:: kAKIMA_PERIODIC;
+	     ROOT::Math::Interpolator inter(nMassA, interStyle);
+	   
+	   int fixNMassA=nMassA;
+	   if(j==0 && !(option==2|| option==3 || option ==5 || option==6) )fixNMassA=2;
+	   if(j==1 && !(option==5 || option==6) )fixNMassA=4;
+	   	for ( Int_t i = 0; i < fixNMassA; ++i )
+		{	   
+		yi[i] =th1->GetBinContent(j+1,i+1);
+		//cout<<"x="<<massA[i]<<",y="<<yi[i]<<endl;
+		}
+		inter.SetData(fixNMassA, massA, yi);
+		
+		bool findone=1;
+		double findy=300;
+		while(findone){
+			 if(inter.Eval(findy)>1||findy>800){
+				 tgy2[j]=findy;
+				 break;
+			 }
+			 findy+=.1;
+		}
+	}
+	
+	TGraph* tg2=new TGraph(nMassZ,massZ,tgy2);
+	tg2->GetXaxis()->SetNdivisions(508);
+	tg2->GetYaxis()->SetNdivisions(508);
+	//tg2->Draw("APL");
+	return tg2;
 }
 
 void small0803(){
@@ -1497,10 +1905,10 @@ void small0803(){
 	
 	TH2D* th2,*th3,*th4;
 	th2=small0706Base("../../Combination","limit_combination",0,2);
-	std::cout<<" after th2, th3"<<std::endl;
+	//std::cout<<" after th2, th3"<<std::endl;
 	th3=small0706Base("../../Combination","limit_combination",0,3);
 	//th2=small0706Compare(in,"limit_compare",1,2);
-	std::cout<<" after th2, th3"<<std::endl;
+	//std::cout<<" after th2, th3"<<std::endl;
 	TGraph* tg1,*tg2;
 	tg1=excludeLimit(th2);
 	
@@ -1515,17 +1923,69 @@ void small0803(){
 	th3->Write();
 	
 	
-	string st1[17]={"0_4","0_6","0_8","10_0","1_0","1_2","1_4","1_6","1_8","2_0",
-	"2_5","3_0","3_5","4_0","4_5","5_0","7_0",};
 	
+	TCanvas* c2;
+	TStyle* ts =setNCUStyle();
+	ts->SetPadRightMargin(0.17);
+	ts->SetTitleOffset(0.65, "Z");
+	ts->SetTitleOffset(0.8, "Y");
+	c2 = new TCanvas("c2","",1000,768);
+	string st1[17]={"0_4","0_6","0_8","1_0","1_2","1_4","1_6","1_8","2_0",
+	"2_5","3_0","3_5","4_0","4_5","5_0","7_0","10_0"};
+	TGraph* tg3[17];
+	th4=th3=small0706Base("../../Combination","limit_combination",0,0);
 	for(int j=0;j<17;j++){
 		
-		th3=small0706Base("../../Combination",Form("ma0mzp/ScanXsec_gz0_8tb%s.root",st1[j].data()),"limit_combination",0,3);
-		TH2D* tg3[6];
+		th3=small0706Base(th4,Form("ma0mzp/ScanXsec_gz0_8tb%s.root",st1[j].data()));
+		
 		//for(int i=0;i<6;i++)
-		interpolation(th3,st1[j],2);
-	}
+		tg3[j]=interpolation(th3,st1[j],2);
+		TH2D* th_sigma[5];
+		TGraph* tg_sigma[5];
 	
+		if(j==3){
+			th_sigma[0]=getSigmaLimit("../../Combination",Form("ma0mzp/ScanXsec_gz0_8tb%s.root",st1[j].data()),0);
+			th_sigma[1]=getSigmaLimit("../../Combination",Form("ma0mzp/ScanXsec_gz0_8tb%s.root",st1[j].data()),1);
+			th_sigma[2]=getSigmaLimit("../../Combination",Form("ma0mzp/ScanXsec_gz0_8tb%s.root",st1[j].data()),2);
+			th_sigma[3]=getSigmaLimit("../../Combination",Form("ma0mzp/ScanXsec_gz0_8tb%s.root",st1[j].data()),3);
+			th_sigma[4]=getSigmaLimit("../../Combination",Form("ma0mzp/ScanXsec_gz0_8tb%s.root",st1[j].data()),4);
+			
+			tg_sigma[0]=interpolation(th_sigma[0]);
+			tg_sigma[1]=interpolation(th_sigma[1]);
+			tg_sigma[2]=interpolation(th_sigma[2]);
+			tg_sigma[3]=interpolation(th_sigma[3]);
+			tg_sigma[4]=interpolation(th_sigma[4]);
+			
+			tg2=interpolation(th3);
+			drawExcludeLimit2Sigma(tg_sigma,tg2,1400);
+			drawExcludeLimit1Sigma(tg_sigma,tg2,1400);
+		}
+		
+	}
+	c2->cd();
+		TLegend* leg ;
+	leg=new TLegend(0.151452,0.452447,0.340645,0.863966);
+	leg->SetFillColor(0);
+	leg->SetFillStyle(0);
+	//leg->AddEntry(tg1[2],"expected");
+	//leg->AddEntry(limit_95,"1 #sigma");
+	//leg->AddEntry(limit_68,"2 #sigma");
+	
+	for(int j=0;j<17;j++){
+		cout<<"j="<<j<<endl;
+		leg->AddEntry(tg3[j],Form("%s",st1[j].data()));
+		tg3[j]->SetFillColor(0);
+		tg3[j]->SetLineColor(94-3*j);
+		tg3[j]->SetMarkerColor(94-3*j);
+		tg3[j]->SetLineWidth(3);
+		if(j==0){
+			tg3[j]->Draw("APL");
+			tg3[j]->SetMaximum(825);
+		}
+		else tg3[j]->Draw("PL same");
+	}
+	leg->Draw("same");
+	c2->Print("plot/alltb.pdf");
 	
 	/*
 	interpolation(th3);
