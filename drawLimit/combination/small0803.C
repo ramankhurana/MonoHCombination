@@ -1900,8 +1900,41 @@ cout<<"option="<<option<<endl;
 	return tg2;
 }
 
-void small0803(){
+void xsecVstb(){
 	
+	double tb[17]={0.4,0.6,0.8,1,1.2,1.4,1.6,1.8,2,2.5,
+	3,3.5,4,4.5,5,7,10};
+	string st1[17]={"0_4","0_6","0_8","1_0","1_2","1_4","1_6","1_8","2_0",
+	"2_5","3_0","3_5","4_0","4_5","5_0","7_0","10_0"};
+	double xsec[17]={0};
+	
+	for(int i=0;i<17;i++){
+		
+		TFile* tf2;
+	
+		tf2=TFile::Open(Form("ma0mzp/ScanXsec_gz0_8tb%s.root",st1[i].data()),"read");
+		TH2F * th2f2=(TH2F *)tf2->FindObjectAny("xsec1");
+		xsec[i]=th2f2->GetBinContent(7,6);
+	}
+	TCanvas* c1;
+	TStyle* ts =setNCUStyle();
+	ts->SetTitleSize(0.045,"XYZ");
+	ts->SetLabelSize(0.05, "XYZ");
+	ts->SetLabelOffset(0.007, "XYZ");
+	ts->SetTitleOffset(2, "Y");
+	ts->SetTitleFontSize(0.005);
+	ts->SetPadLeftMargin(0.2);
+	ts->SetPadRightMargin(0.11);
+	c1 = new TCanvas("c1","", 600, 600);
+	TGraph* tg1=new TGraph(17,tb,xsec);
+	tg1->GetXaxis()->SetTitle("tb");
+	tg1->GetYaxis()->SetTitle("cross section");
+	tg1->Draw("APL");
+	c1->Print("plot/xsecVstb.pdf");
+}
+
+void small0803(){
+	xsecVstb();
 	
 	TH2D* th2,*th3,*th4;
 	//th2=small0706Base("../../Combination","limit_combination",0,2);
