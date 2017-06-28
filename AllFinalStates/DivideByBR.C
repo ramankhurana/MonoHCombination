@@ -1,12 +1,12 @@
 void DivideByBR(){
-  TString filename = "gg.root";
-  float br = 1.0;
-  bool prodxs = false;
+  TString filename = "combination.root";
+  float br = 1.;
+  bool prodxs = true;
   float xs[]={0.45217, 0.27765, 0.14383, 0.075451, 0.041208, 0.017786, 0.0082317, 0.0025458};
   
   TFile* f = new TFile (filename, "update");
   f->cd();
-  TGraph* limitgr = (TGraph*) f->Get("limit");
+  TGraph* limitgr = (TGraph*) f->Get("LimitExpectedCLs");
   std::cout<<" # of points = "<<limitgr->GetN()<<std::endl;
   const int npoint = 8;
   Double_t* x;

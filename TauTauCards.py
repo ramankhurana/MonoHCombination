@@ -1,8 +1,8 @@
 import sys 
 import os 
 
-massvec=['500','1000']
-a0massvec=['1', '150', '500', '1000']
+massvec=['600','800', '1000', '1200', '1400', '1700', '2000', '2500']
+a0massvec=['300']
 
 
 
@@ -39,9 +39,12 @@ for imass in range(len(massvec)):
             line = line.replace('$MASS', str(ia0mass))
             outcard.write(line)
         outcard.close()
+        os.system('combine -M Asymptotic '+datacardnamefit+' -t -1')
+        os.system('mv higgsCombineTest.Asymptotic.mH120.root higgsCombineTest_Asymptotic_'+(str(massvec[imass]))+'_300GeV_MonoHbb_13TeV.root')
 
-
-
+'''
+massvec=['500','1000']
+a0massvec=['1', '150', '500', '1000']
 
 for imass in range(len(massvec)):
     for ia0mass in a0massvec:
@@ -74,3 +77,4 @@ for imass in range(len(massvec)):
             line = line.replace('$MASS', str(ia0mass))
             outcard.write(line)
         outcard.close()
+'''

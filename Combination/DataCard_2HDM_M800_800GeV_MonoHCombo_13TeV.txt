@@ -1,11 +1,4 @@
-Combination of WW=WW.txt
-imax 0 number of bins
-jmax -1 number of processes minus 1
-kmax 0 number of nuisance parameters
-----------------------------------------------------------------------------------------------------------------------------------
-----------------------------------------------------------------------------------------------------------------------------------
-bin          
-process      
-process      
-rate         
-----------------------------------------------------------------------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/afs/hep.wisc.edu/cms/khurana/MonoH2016MCProduction/MonoHEfficiency/CMSSW_7_4_7/bin/slc6_amd64_gcc491/combineCards.py", line 44, in <module>
+    raise RuntimeError, "No input datacards specified."
+RuntimeError: No input datacards specified.

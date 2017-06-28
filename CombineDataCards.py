@@ -40,14 +40,14 @@ def MakebbDecision(threshold, Zpmass, A0Mass):     ## > threshold is boosted ana
     #print (threshold, Zpmass, A0Mass,bb)
     return bb
 
-massvec=['600','800','1000','1200','1400','1700','2000','2500']
-a0massvec=['400','500','600','700','800']
+massvec=['600']#'800','1000','1200','1400','1700','2000','2500']
+a0massvec=['300'] #'400.','500.','600.','700','800']
 
 
 for imass in range(len(massvec)):
     for ia0mass in a0massvec:
         threshold_ = 1000
-        if ia0mass == str(300):             threshold_ = 10.0
+        if ia0mass == str(300):             threshold_ = 1000.0
         if ia0mass == str(400):             threshold_ = 10.0
         if ia0mass == str(500):             threshold_ = 10.0
         if ia0mass == str(600):             threshold_ = 10.0

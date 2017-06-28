@@ -107,19 +107,19 @@ def DrawOverlap(fileVec, histVec, titleVec,legendtext,pngname,logstatus=[0,0],xR
 #        print "hist status =", (tt is TH1D) or (tt is TH1F)
         if ih == 0 :      
             if (tt is TGraphAsymmErrors) | (tt is TGraph) : 
-                histList[ih].Draw("ALC")
+                histList[ih].Draw("AC")
             if (tt is TH1D) or (tt is TH1F) or (tt is TH1) or (tt is TH1I) :
                 histList[ih].Draw("C hist")   
         if ih > 0 :
             #histList[ih].SetLineWidth(2)
             if (tt is TGraphAsymmErrors) | (tt is TGraph) : 
-                histList[ih].Draw("LC same")
+                histList[ih].Draw("C same")
             if (tt is TH1D) or (tt is TH1F) or (tt is TH1) or (tt is TH1I) :
                 histList[ih].Draw("C hist same")   
 
         if (tt is TGraphAsymmErrors) | (tt is TGraph) :
             histList[ih].SetMaximum(10000.0) 
-            histList[ih].SetMinimum(0.01) 
+            histList[ih].SetMinimum(0.001) 
             histList[ih].SetMarkerColor(colors[ih])
             histList[ih].SetLineColor(colors[ih])
             histList[ih].SetLineWidth(3)
@@ -187,9 +187,19 @@ def DrawOverlap(fileVec, histVec, titleVec,legendtext,pngname,logstatus=[0,0],xR
 
 print "calling the plotter"
 
-files=['WW.root', 'bb.root', 'gg.root', 'tt.root', 'combine.root'  ]
+files=['WW.root',
+       'bb.root', 
+       'gg.root',
+       'tt_1.root', 
+       'ZZ.root',
+       'combination.root'  ]
 
-legend=['WW', 'bb','gg: 35 fb^{-1}','#tau#tau', 'Mono-H Combo' ]
+legend=['WW:12.9 fb^{-1}', 
+        'bb',
+        'gg',
+        '#tau#tau', 
+        'ZZ',
+        'Mono-H Combo' ]
 
 histodir=''
 histodirMET=''

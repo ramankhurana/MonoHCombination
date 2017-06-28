@@ -160,7 +160,7 @@ TH2D* small0706Base(string inputDir,string outputName,int option=0,int retrunexp
 	latex->DrawLatex(0.15, 0.81,"Z'#rightarrow DM+H");
       latex->DrawLatex(0.15, 0.77," (2HDM)");
       latex->DrawLatex(0.15, 0.73," Mono-H Combo");
-		 latex->DrawLatex(0.15, 0.92, Form("                                                                                        %.1f fb^{-1} ( 13 TeV )", 12.9));
+		 latex->DrawLatex(0.15, 0.92, Form("                                                                                        %.1f fb^{-1} ( 13 TeV )", 36.6));
      
 	c1->Print(Form("plot/%s.pdf",outputName.data()));
 	c1->SaveAs(Form("plot/%s.png",outputName.data()));
@@ -398,7 +398,7 @@ TH2D* small0706Compare(string inputDir[],string outputName,int option=0,int retr
     latex->SetNDC(kTRUE);                                                                                                                        
 	latex->SetTextSize(0.06);    
 	//latex->SetTextFont(42);
-    latex->DrawLatex(0.15, 0.92, Form("CMS                         %.1f fb^{-1} ( 13 TeV )", 12.9));//latex->DrawLatex(0.18, 0.885, );
+    latex->DrawLatex(0.15, 0.92, Form("CMS                         %.1f fb^{-1} ( 13 TeV )", 36.6));//latex->DrawLatex(0.18, 0.885, );
 	
 	c1->Print(Form("plot/%s.pdf",outputName.data()));
 	c1->SaveAs(Form("plot/%s.png",outputName.data()));
@@ -822,18 +822,18 @@ void smallDrawTGragh(string outputName,TH2D* th1[],int option=0){
      latex->DrawLatex(0.15, 0.84,"Z'#rightarrow DM+H(2HDM)");
      latex->DrawLatex(0.15, 0.81,"Mono-H Combo");
      latex->DrawLatex(0.15, 0.77," g_{Z'}=0.8");
-     latex->DrawLatex(0.15, 0.92, Form("                                                                             %.1f fb^{-1} ( 13 TeV )", 12.9));
+     latex->DrawLatex(0.15, 0.92, Form("                                                                             %.1f fb^{-1} ( 13 TeV )", 36.6));
      
     } 
 	
-	else  latex->DrawLatex(0.15, 0.92, Form("CMS                    %.1f fb^{-1} ( 13 TeV )", 12.9));
+	else  latex->DrawLatex(0.15, 0.92, Form("CMS                    %.1f fb^{-1} ( 13 TeV )", 36.6));
 	
 	
 	//
 	c1->Print(Form("plot/%s.pdf",outputName.data()));
 	c1->SaveAs(Form("plot/%s.png",outputName.data()));
 	tg1[0]->SetMaximum(250);
-	tg1[0]->SetMinimum(0.1);
+	tg1[0]->SetMinimum(0.01);
 	c1->SetLogy(1);
 	
 
@@ -1159,9 +1159,9 @@ void small0803(){
 	
 	
 	TH2D* th2,*th3,*th4;
-	th2=small0706Base("../../Combination","limit_combination",0,2);
+	th2=small0706Base("../../bbfiles","limit_combination",0,2);
 	std::cout<<" after th2, th3"<<std::endl;
-	th3=small0706Base("../../Combination","limit_combination",0,3);
+	th3=small0706Base("../../bbfiles","limit_combination",0,3);
 	//th2=small0706Compare(in,"limit_compare",1,2);
 	std::cout<<" after th2, th3"<<std::endl;
 	TGraph* tg1,*tg2;
@@ -1193,11 +1193,11 @@ void small0803(){
 	
 	//draw limit 2 sigma
 	TH2D* th_sigma[5];
-	th_sigma[0]=getSigmaLimit("../../Combination",0);
-	th_sigma[1]=getSigmaLimit("../../Combination",1);
-	th_sigma[2]=getSigmaLimit("../../Combination",2);
-	th_sigma[3]=getSigmaLimit("../../Combination",3);
-	th_sigma[4]=getSigmaLimit("../../Combination",4);
+	th_sigma[0]=getSigmaLimit("../../bbfiles",0);
+	th_sigma[1]=getSigmaLimit("../../bbfiles",1);
+	th_sigma[2]=getSigmaLimit("../../bbfiles",2);
+	th_sigma[3]=getSigmaLimit("../../bbfiles",3);
+	th_sigma[4]=getSigmaLimit("../../bbfiles",4);
 	
 	TGraph* tg_sigma[5];
 	tg_sigma[0]=excludeLimit(th_sigma[0]);
