@@ -16,17 +16,14 @@ dirname=sys.argv[1]
 
 
 nargv = len(sys.argv) -2
-print nargv
-print sys.argv[2]
+
 regions=[]
 for iargv in range(0,nargv):
     if sys.argv[iargv+2] != 'runlimit':
         if sys.argv[iargv+2] != 'obs':
             regions.append(sys.argv[iargv+2])
-    
-print regions
 
-
+print 'regions= ', regions
 
 def MakebbDecision(threshold, Zpmass, A0Mass):     ## > threshold is boosted analysis
     threshold = float(threshold)
@@ -41,46 +38,35 @@ def MakebbDecision(threshold, Zpmass, A0Mass):     ## > threshold is boosted ana
     return bb
 
 massvec=['600','800','1000','1200','1400','1700','2000','2500']
-a0massvec=['400','500','600','700','800']
+a0massvec=['300']#,'400','500','600','700','800']
 
 
 for imass in range(len(massvec)):
     for ia0mass in a0massvec:
-        threshold_ = 1000
-        if ia0mass == str(300):             threshold_ = 10.0
-        if ia0mass == str(400):             threshold_ = 10.0
-        if ia0mass == str(500):             threshold_ = 10.0
-        if ia0mass == str(600):             threshold_ = 10.0
-        if ia0mass == str(700):             threshold_ = 10.0
-        if ia0mass == str(800):             threshold_ = 10.0
-
         datacards={
+            ## this string should have trailing space
             'WW': 'WW/datacards/monoH_Alberto_comb/events/datacard_monoHWW'+str(massvec[imass])+'_'+str(ia0mass)+'.txt ',
             'gg': 'gg/DataCard_2HDM_mZP'+str(massvec[imass])+'_mA0'+str(ia0mass)+'.txt ',
-            'tt': 'tt/tt_36fb_update//Zprime'+str(massvec[imass])+'A'+str(ia0mass)+'/cmb/'+str(ia0mass)+'/DataCard_2HDM_M'+str(massvec[imass])+'_'+str(ia0mass)+'GeV_MonoHTauTau_13TeV.txt ',
-            #'bb': 'bb/resolved/ZprimeToA0hToA0chichihbb_2HDM_MZp'+str(massvec[imass])+'_MA0'+str(ia0mass)+'_13TeVmadgraphDatacards/ZprimeToA0hToA0chichihbb_2HDM_MZp'+str(massvec[imass])+'_MA0'+str(ia0mass)+'_13TeVmadgraph_comb_v2.txt ', 
-            'bb': MakebbDecision(threshold_,str(massvec[imass]), str(ia0mass)),
-   
-            #hhxx_Fall15_card_4l_ZprimeToA0hToA0chichihZZTo4l_2HDM_MZp-1200_MA0-300_13TeV-madgraph.txt
+            'tt': 'tt/Jul3_CardsForCombo/Zprime'+str(massvec[imass])+'A'+str(ia0mass)+'/cmb/'+str(ia0mass)+'/DataCard_2HDM_M'+str(massvec[imass])+'_'+str(ia0mass)+'GeV_MonoHTauTau_13TeV.txt ',
+            'bb': 'bb/datacards_2HDM/ZpA0-'+str(massvec[imass])+'-'+str(ia0mass)+'/combined.txt ',
             'ZZ': 'ZZ/datacards_4l_2016/hhxx_Fall15_card_4l_ZprimeToA0hToA0chichihZZTo4l_2HDM_MZp-'+str(massvec[imass])+'_MA0-'+str(ia0mass)+'_13TeV-madgraph.txt'
             }
         
         allregions=[]
         for iregion in regions:
-            #print ('region =',iregion, str(datacards[iregion]) )
             datacard_name_ = str(datacards[iregion]).replace(' ','')
+            print datacard_name_
             if not bool(os.path.exists(datacard_name_)) : continue
-            #print ['statu = ',bool(os.path.exists(datacard_name_))]
-            #print (iregion, ' is added')
             os.system('cp '+str(datacards[iregion])+' '+str(iregion)+'.txt')
-            if (str(iregion) == 'ZZ') | (str(iregion) == 'WW') | (str(iregion) == 'tt') :
+            if (str(iregion) == 'ZZ') | (str(iregion) == 'WW'):
                 tmpname = iregion+'='+iregion+'.txt '
-            if  (str(iregion) == 'bb') | (str(iregion) == 'gg'):
-                tmpname = iregion+'='+datacards[iregion]+' '
-            #print (massvec[imass], ia0mass, tmpname)
-            allregions.append(tmpname)
-        
 
+            if  (str(iregion) == 'bb') | (str(iregion) == 'gg') | (str(iregion) == 'tt'):
+                tmpname = iregion+'='+datacards[iregion]+' '
+            
+            allregions.append(tmpname)
+            
+            
         allcards = ''.join(allregions)
         print allcards
         splusbFitdir = dirname
@@ -88,7 +74,9 @@ for imass in range(len(massvec)):
         tmpdcard = 'tmpcard.txt'
         if (len(sys.argv) >= 2) & (not ('runlimit' in sys.argv )) :
             
+            print    ('combineCards.py  -S '+allcards+' >& tmpcard.txt')
             os.system('combineCards.py  -S '+allcards+' >& tmpcard.txt')
+            
             
             outcard = open(datacardnamefit,'w')
             card_ = open('tmpcard.txt')
@@ -113,7 +101,7 @@ for imass in range(len(massvec)):
             os.system('mv higgsCombineTest.Asymptotic.mH120.root '+dirname+'/higgsCombineTest_Asymptotic_'+(str(massvec[imass]))+'_'+ia0mass+'GeV_MonoHbb_13TeV.root')
 
         
-            
+        
         '''
         tmpdcard = 'tmpcard.txt'
         dcard = open(datacardname,'r')
