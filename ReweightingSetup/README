@@ -1,0 +1,13 @@
+# To run on the GEN trees, and save the Higgs PT shape for all the given mass points, listed in the file, rootfiles.txt, do: 
+
+python FillTrueHistograms.py -s 
+
+This will also open the mono-x.root and save the RECO MET histogram in the rootfile, if it exist, otherwise do nothing. 
+
+
+# To run on the shapes just produced by previous step, and create the gen weights by taking ratio of the gen Higgs pT, 
+  - target / base 
+  in fine bins and save the new weight histogram, do
+ 
+python FillTrueHistograms.py -w 
+
