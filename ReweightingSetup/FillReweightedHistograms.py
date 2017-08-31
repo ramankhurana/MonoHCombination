@@ -47,6 +47,7 @@ parser = optparse.OptionParser(usage)
 parser.add_option("-s", "--savehisto",  action="store_true",  dest="savehisto")
 parser.add_option("-w", "--saveweight", action="store_true",  dest="saveweight")
 
+
 (options, args) = parser.parse_args()
 
 
@@ -126,9 +127,9 @@ class FillTrueHistograms:
     def Loop(self):
         
         print "inside Loop"
-        #for ievent in range(self.NEntries):
-        loop_events = min (10,self.NEntries)
-        for ievent in range(loop_events):
+        for ievent in range(self.NEntries):
+        #loop_events = min (10,self.NEntries)
+        #for ievent in range(loop_events):
             print ' ievent = ', ievent
             self.monoHTree.GetEntry(ievent)
             higgspT_               =  self.monoHTree.__getattr__('higgsPt')
@@ -258,19 +259,19 @@ if __name__ == "__main__":
     if options.savehisto:
         #for ifile in open('rootfiles.txt'):
         #filename = ifile.rstrip()
-        '''
+        
         for mzp in range(825, 4000, 25):
             for ma0 in range (300,1000, 25):
                 ## This function need the mass point for which you need the reweighted histogram 
                 ## This will decide by itself the closest mass point which can be used as a base mass point and to be used for the reweighting. 
                 ## The reweighted histograms is scaled with the cross-section of target and base cross-section. 
-        '''     
-        mzp = 825
-        ma0 = 300
-        SaveHisto(filename,  int(mzp), int(ma0) )
-        SaveHisto(filename,  int(mzp), int(ma0), "_btagUp" )
-        SaveHisto(filename,  int(mzp), int(ma0), "_btagDown" )
-        SaveHisto(filename,  int(mzp), int(ma0), "_mistagUp" )
-        SaveHisto(filename,  int(mzp), int(ma0), "_mistagDown" )
+                
+        #mzp = int(sys.argv[2])#825
+        #ma0 = int(sys.argv[3])#300
+                SaveHisto(filename,  int(mzp), int(ma0) )
+                SaveHisto(filename,  int(mzp), int(ma0), "_btagUp" )
+                SaveHisto(filename,  int(mzp), int(ma0), "_btagDown" )
+                SaveHisto(filename,  int(mzp), int(ma0), "_mistagUp" )
+                SaveHisto(filename,  int(mzp), int(ma0), "_mistagDown" )
                 
         
