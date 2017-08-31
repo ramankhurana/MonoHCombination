@@ -64,7 +64,9 @@ parser.add_option("-w", "--saveweight", action="store_true",  dest="saveweight")
 
 
 
-#ZpMass=[600., 800., 1000.,1200.,1400.,1700.,2000.,2500.]
+ZpMass=[600., 800., 1000.,1200.,1400.,1700.,2000.,2500.]
+
+A0Mass=[300., 400., 500.,600.,700.,800.]
 
 
 class FillTrueHistograms:
@@ -269,6 +271,12 @@ def SaveWeightHisto(filename, massvalue):
     histname = Genhistname(massvalueStr[0], massvalueStr[1])
     
     baseZp =  min(ZpMass, key=lambda x:abs(x-int(massvalueStr[0])))
+    if (int(massvalueStr[0]) - int(baseZp)) ==0: 
+        baseZp = ZpMass[ZpMass.index(baseZp)-1]
+    
+    #baseA0 = min(A0Mass, key=lambda x:abs(x-int(massvalueStr[1])))
+    #if (int(massvalueStr[1]) - int(baseA0)) ==0:
+    #    baseA0 = A0Mass[A0Mass.index(baseA0)-1]
     massValueBase = [str(int(baseZp)), massvalueStr[1]]
     massBalueBaseStr = [str(massValueBase[0]), str(massValueBase[1])]
     basehistname = Genhistname(massBalueBaseStr[0], massBalueBaseStr[1]) 

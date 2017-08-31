@@ -11,3 +11,7 @@ This will also open the mono-x.root and save the RECO MET histogram in the rootf
  
 python FillTrueHistograms.py -w 
 
+
+# To reweight the histograms event by event and normalise to cross-section do: 
+
+python FillReweightedHistograms.py -s 
