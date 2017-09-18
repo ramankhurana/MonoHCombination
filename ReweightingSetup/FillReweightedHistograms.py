@@ -1,4 +1,4 @@
-
+#!/usr/bin/env python
 ### 
 ###
 # Created By : Raman Khurana
@@ -15,7 +15,7 @@
 
 ## import user defined modules
 #from Utils import *
-import Utils
+#import Utils
 import sys
 #sys.argv.append( '-b-' )
 
@@ -36,10 +36,11 @@ import sys
 sys.path.append('../')
 ## this will search for files in 'Helpers'
 sys.path.append('/afs/hep.wisc.edu/cms/khurana/MonoH2016MCProduction/MonoHEfficiency/CMSSW_8_0_11/src/MonoH/MonoHbb/Helpers')
+sys.path.append('/afs/cern.ch/work/k/khurana/monoHSignalProduction/genproductions/bin/MadGraph5_aMCatNLO/testgridpack/CMSSW_7_4_5/src/MonoHCombination/CommonUtilities/Helpers')
 import fileutils
 from ReadXS import *
 
-os.system('rm monoHReweightedSignalShapes.root')
+#os.system('rm monoHReweightedSignalShapes.root')
 usage = "usage: %prog [options] arg1 arg2"
 parser = optparse.OptionParser(usage)
 
@@ -56,6 +57,7 @@ ZpMass=[600., 800., 1000.,1200.,1400.,1700.,2000.,2500.]
 A0Mass=[300., 400., 500.,600.,700.,800.]
 
 
+os.system('mkdir -p data')
 class FillTrueHistograms:
     def __init__(self, rootfilename, treename, histname, outfile, weightfilename, xs_ratio):
         print "inside initialize function"
@@ -69,7 +71,9 @@ class FillTrueHistograms:
         print ' self.NEntries = ', self.NEntries
         self.histname = histname
         self.outfile = outfile
-        self.weighthistname = self.histname.replace('signal_','weight_')
+        print 'self.histname.replace = ',self.histname
+        self.weighthistname = self.histname.replace('_btagUp','').replace('_btagDown','').replace('_mistagUp','').replace('_mistagDown','').replace('signal_','weight_')
+        
         self.weightfilename = weightfilename
         self.xs_ratio = xs_ratio
         self.hpT = []
@@ -78,20 +82,21 @@ class FillTrueHistograms:
         
     def DefineHisto(self):
         print "inside define histogram"
-        #nbins = 4
-        #binning = [200.0, 270.0, 350.0, 475.0, 1000.0]
+        nbins = 4
+        binning = [200.0, 270.0, 350.0, 475.0, 1000.0]
         #print "inside Define Histo"
         
         ## define one higgs pT histogram for one set of cut values. 
         #for ihist in range(10):
          #   ihist_str = str(ihist)
-        #self.hpT.append(TH1F(self.histname, self.histname, nbins, scipy.array(binning) ))
+        self.hpT.append(TH1F(self.histname, self.histname, nbins, scipy.array(binning) ))
+        self.hpT.append(TH1F(self.histname+"Base", self.histname, nbins, scipy.array(binning) ))
         
 
-        binhi = 1000
-        binlo = 200
-        nbins = int ((binhi - binlo )/ 5.0)
-        self.hpT.append(TH1F(self.histname, self.histname, nbins, binlo, binhi ))
+        #binhi = 1000
+        #binlo = 200
+        #nbins = int ((binhi - binlo )/ 5.0)
+        #self.hpT.append(TH1F(self.histname, self.histname, nbins, binlo, binhi ))
 
         return 0
     
@@ -102,9 +107,15 @@ class FillTrueHistograms:
         ''' open the weight file'''
         fin = fileutils.OpenRootFile(self.weightfilename)
         weighthist_ = fin.Get(self.weighthistname)
+        #print 'nbins before =', weighthist_.GetNbinsX()
+        #weighthist_.Rebin(2)
+        #print 'nbins after =', weighthist_.GetNbinsX()
+
+
         print " weight histname = ", self.weighthistname
         #print " type = ", type(weighthist_) 
         if type(weighthist_) is TH1F: 
+            print 'type matched'
             try: 
                 weighthist_.SetDirectory(0)
                 print ' nbins = ', weighthist_.GetNbinsX()
@@ -128,7 +139,7 @@ class FillTrueHistograms:
         
         print "inside Loop"
         for ievent in range(self.NEntries):
-        #loop_events = min (10,self.NEntries)
+        #loop_events = min (5,self.NEntries)
         #for ievent in range(loop_events):
             print ' ievent = ', ievent
             self.monoHTree.GetEntry(ievent)
@@ -143,13 +154,19 @@ class FillTrueHistograms:
             if N2DDT_ > 0: continue 
             genweight = 1.0 
             
+            if higgspT_ < 200.0: higgspT_ = 200.01 
+            
             genweight = self.ExtractGenWeight(higgspT_)
             #genweight = self.ExtractGenWeight(met_)
             print ( 'higgs pT = ', higgspT_, ' genweight = ', genweight)
             #self.weighthistname
             
             totalweight = weight_ * genweight
+            if met_ < 200.0: met_ = 200.01
+            if met_ > 999.999: met_ = 999.999
             self.hpT[0].Fill(met_,totalweight)
+            self.hpT[1].Fill(met_,weight_)
+            
             
         return 0
 
@@ -158,8 +175,27 @@ class FillTrueHistograms:
         print "writing histo"
         fout = TFile(self.outfile,mode)
         fout.cd()
-        self.hpT[0].Scale(self.xs_ratio)
+        '''
+        1 = target 
+        2 = base 
+        
+        
+        a = xs1 * e1 / xs2 * e2 
+        e1/e2 = a * xs1 / xs2 
+        
+        
+        norm = ( e1 / e2 ) * (xs1 / xs2) = a * ratio * ratio 
+        
+        * ratio 
+        * 
+        '''
+        
+        self.hpT[0].Scale( self.xs_ratio )
+        # * self.xs_ratio * self.xs_ratio 
+        #  (self.hpT[1].Integral()/self.hpT[0].Integral())
+        #self.hpT[0].Scale( self.xs_ratio * (self.hpT[1].Integral()/self.hpT[0].Integral()) )
         self.hpT[0].Write()
+        self.hpT[1].Write()
         fout.Close()
         return 0
 
@@ -212,10 +248,12 @@ def WriteHistoCopied(outfile, histname,  mode='update'):
 def SaveHisto(filename, mzp, ma0, postfix=""):
 
 # weights are saved in this file
-    weightfilename = 'monoHSignalShapes.root'
+    weightfilename = '/afs/cern.ch/work/k/khurana/monoHSignalProduction/genproductions/bin/MadGraph5_aMCatNLO/testgridpack/CMSSW_7_4_5/src/MonoHCombination/ReweightingSetup/data/monoHSignalShapes.root'
 
 # reweighted histograms are saved in this file
-    outputfilename = 'monoHReweightedSignalShapes.root'
+    outputfilename = '/afs/cern.ch/work/k/khurana/monoHSignalProduction/genproductions/bin/MadGraph5_aMCatNLO/testgridpack/CMSSW_7_4_5/src/MonoHCombination/ReweightingSetup/data/monoHReweightedSignalShapes_'+ sys.argv[2] + '_' + sys.argv[3]+'.root'
+    
+    #outputfilename = '/afs/cern.ch/work/k/khurana/monoHSignalProduction/genproductions/bin/MadGraph5_aMCatNLO/testgridpack/CMSSW_7_4_5/src/MonoHCombination/ReweightingSetup/data/monoHReweightedSignalShapes_'+ str(int(mzp)) + '_' + str(int(ma0)) +'.root'
     
 
 ## extract histname with weights 
@@ -233,45 +271,53 @@ def SaveHisto(filename, mzp, ma0, postfix=""):
     print ' treename= ', treename
 ## extract histname to be saved in the output rootfiles. 
     recohistname = weighthistname.replace('weight_', 'signal_')
+    
     recohistname = recohistname + postfix
-    xsobj = crosssection('crosssectionZp2HDM.txt')
+    xsobj = crosssection('/afs/cern.ch/work/k/khurana/monoHSignalProduction/genproductions/bin/MadGraph5_aMCatNLO/testgridpack/CMSSW_7_4_5/src/MonoHCombination/ReweightingSetup/data/crosssectionZp2HDM.txt')
     xs_base_ = xsobj.xs(mzpTree, ma0Tree)
     xs_target_ = xsobj.xs(int(mzp), int(ma0))
-    xs_ratio_ = float(xs_target_/xs_base_)
+    print xs_base_, xs_target_
     
-    
-    fillhisto = FillTrueHistograms (filename, treename, recohistname, outputfilename, weightfilename, xs_ratio_)
-    
+    if (xs_base_ > 0) & (xs_target_ > 0) :
+        xs_ratio_ = float(xs_target_/xs_base_)
+        
+        print [filename, treename, recohistname, outputfilename, weightfilename, xs_ratio_]
+        fillhisto = FillTrueHistograms (filename, treename, recohistname, outputfilename, weightfilename, xs_ratio_)
+        
 ## Deifne histograms 
-    fillhisto.DefineHisto()
-
+        fillhisto.DefineHisto()
+        
 ## Loop over events 
-    fillhisto.Loop()
+        fillhisto.Loop()
 ## Write histogram to rootfile
-    fillhisto.WriteHisto()
+        fillhisto.WriteHisto()
+    
     
     return (recohistname,recohistname)
 
 
 if __name__ == "__main__":
-    filename = '/afs/hep.wisc.edu/cms/khurana/MonoH2016MCProduction/MonoHEfficiency/CMSSW_7_4_7/src/MonoHCombination/BenediktSetup/MonoXFit_MonoH/limitForest_all.root'
+    filename = '/afs/cern.ch/work/k/khurana/monoHSignalProduction/genproductions/bin/MadGraph5_aMCatNLO/testgridpack/CMSSW_7_4_5/src/MonoHCombination/ReweightingSetup/data/limitForest_all.root'
     ## loop over all the files and save the gen and reco histograms in same rootfile
     if options.savehisto:
         #for ifile in open('rootfiles.txt'):
         #filename = ifile.rstrip()
         
-        for mzp in range(825, 4000, 25):
-            for ma0 in range (300,1000, 25):
+#        for mzp in range(825, 4000, 25):
+        #for imzp in ZpMass:
+         #   for ma0 in range (300,325, 25):
                 ## This function need the mass point for which you need the reweighted histogram 
                 ## This will decide by itself the closest mass point which can be used as a base mass point and to be used for the reweighting. 
                 ## The reweighted histograms is scaled with the cross-section of target and base cross-section. 
                 
-        #mzp = int(sys.argv[2])#825
-        #ma0 = int(sys.argv[3])#300
-                SaveHisto(filename,  int(mzp), int(ma0) )
-                SaveHisto(filename,  int(mzp), int(ma0), "_btagUp" )
-                SaveHisto(filename,  int(mzp), int(ma0), "_btagDown" )
-                SaveHisto(filename,  int(mzp), int(ma0), "_mistagUp" )
-                SaveHisto(filename,  int(mzp), int(ma0), "_mistagDown" )
+        mzp = int(sys.argv[2])#825
+        ma0 = int(sys.argv[3])#300
+        #mzp = int(imzp)
+        print ('calling function for', mzp, ma0)
+        SaveHisto(filename,  int(mzp), int(ma0) )
+        SaveHisto(filename,  int(mzp), int(ma0), "_btagUp" )
+        SaveHisto(filename,  int(mzp), int(ma0), "_btagDown" )
+                #SaveHisto(filename,  int(mzp), int(ma0), "_mistagUp" )
+                #SaveHisto(filename,  int(mzp), int(ma0), "_mistagDown" )
                 
         

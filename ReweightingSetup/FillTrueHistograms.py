@@ -28,7 +28,7 @@
 
 ## import user defined modules
 #from Utils import *
-import Utils
+#import Utils
 import sys
 #sys.argv.append( '-b-' )
 
@@ -49,6 +49,8 @@ import sys
 sys.path.append('../')
 ## this will search for files in 'Helpers'
 sys.path.append('/afs/hep.wisc.edu/cms/khurana/MonoH2016MCProduction/MonoHEfficiency/CMSSW_8_0_11/src/MonoH/MonoHbb/Helpers')
+sys.path.append('/afs/cern.ch/work/k/khurana/monoHSignalProduction/genproductions/bin/MadGraph5_aMCatNLO/testgridpack/CMSSW_7_4_5/src/MonoHCombination/CommonUtilities/Helpers')
+
 import fileutils
 
 
@@ -162,6 +164,8 @@ def CreateWeights(outfile, targethistname, basehistname, weightHistname, mode='u
     ## normalise numerator and denominator with same number i.e. unity in this case. 
     target_ = fout.Get(targethistname)
     base_   = fout.Get(basehistname)
+    #target_.Rebin(2)
+    #base_.Rebin(2)
     print targethistname, basehistname
     print 'type target = ' , type(target_)
     print 'type base = ' , type(base_)
@@ -273,6 +277,7 @@ def SaveWeightHisto(filename, massvalue):
     baseZp =  min(ZpMass, key=lambda x:abs(x-int(massvalueStr[0])))
     if (int(massvalueStr[0]) - int(baseZp)) ==0: 
         baseZp = ZpMass[ZpMass.index(baseZp)-1]
+        #baseZp = ZpMass[ZpMass.index(baseZp)]
     
     #baseA0 = min(A0Mass, key=lambda x:abs(x-int(massvalueStr[1])))
     #if (int(massvalueStr[1]) - int(baseA0)) ==0:
@@ -300,12 +305,12 @@ if __name__ == "__main__":
             SaveHisto(filename)
             
     if options.saveweight:
-        for mzp in range(600, 4000, 25):
-            for ma0 in range (300,1000, 25):
-                #mzp=600
-                #ma0=625
-                massvec = [mzp, ma0]
-                SaveWeightHisto('monoHSignalShapes.root', massvec)
+        #for mzp in range(600, 4000, 25):
+         #   for ma0 in range (300,350, 25):
+        mzp=800
+        ma0=300
+        massvec = [mzp, ma0]
+        SaveWeightHisto('monoHSignalShapes.root', massvec)
         #print 'name'
         
     
