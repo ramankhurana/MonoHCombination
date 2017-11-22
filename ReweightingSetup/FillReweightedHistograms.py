@@ -53,8 +53,8 @@ parser.add_option("-w", "--saveweight", action="store_true",  dest="saveweight")
 
 
 
-ZpMass=[600., 800., 1000.,1200.,1400.,1700.,2000.,2500.]
-A0Mass=[300., 400., 500.,600.,700.,800.]
+ZpMass=[600, 800, 1000.,1200.,1400.,1700.,2000.,2500.]
+A0Mass=[ 300., 400., 500., 600., 700., 800.]
 
 
 os.system('mkdir -p data')
@@ -154,18 +154,19 @@ class FillTrueHistograms:
             if N2DDT_ > 0: continue 
             genweight = 1.0 
             
-            if higgspT_ < 200.0: higgspT_ = 200.01 
+#            if higgspT_ < 200.0: higgspT_ = 200.01 
             
-            genweight = self.ExtractGenWeight(higgspT_)
-            #genweight = self.ExtractGenWeight(met_)
-            print ( 'higgs pT = ', higgspT_, ' genweight = ', genweight)
+            #genweight = self.ExtractGenWeight(higgspT_)
+            genweight = self.ExtractGenWeight(met_)
+            #if abs(genweight - self.ExtractGenWeight(higgspT_)) > 5.:
+            print ( '-----------------------higgs pT = ', higgspT_, ' genweight = ', genweight, self.ExtractGenWeight(met_) )
             #self.weighthistname
             
             totalweight = weight_ * genweight
             if met_ < 200.0: met_ = 200.01
             if met_ > 999.999: met_ = 999.999
             self.hpT[0].Fill(met_,totalweight)
-            self.hpT[1].Fill(met_,weight_)
+            self.hpT[1].Fill(met_,1.0)
             
             
         return 0
@@ -175,20 +176,6 @@ class FillTrueHistograms:
         print "writing histo"
         fout = TFile(self.outfile,mode)
         fout.cd()
-        '''
-        1 = target 
-        2 = base 
-        
-        
-        a = xs1 * e1 / xs2 * e2 
-        e1/e2 = a * xs1 / xs2 
-        
-        
-        norm = ( e1 / e2 ) * (xs1 / xs2) = a * ratio * ratio 
-        
-        * ratio 
-        * 
-        '''
         
         self.hpT[0].Scale( self.xs_ratio )
         # * self.xs_ratio * self.xs_ratio 
@@ -248,12 +235,12 @@ def WriteHistoCopied(outfile, histname,  mode='update'):
 def SaveHisto(filename, mzp, ma0, postfix=""):
 
 # weights are saved in this file
-    weightfilename = '/afs/cern.ch/work/k/khurana/monoHSignalProduction/genproductions/bin/MadGraph5_aMCatNLO/testgridpack/CMSSW_7_4_5/src/MonoHCombination/ReweightingSetup/data/monoHSignalShapes.root'
+    weightfilename = '/afs/cern.ch/work/k/khurana/monoHSignalProduction/genproductions/bin/MadGraph5_aMCatNLO/testgridpack/CMSSW_7_4_5/src/MonoHCombination/ReweightingSetup/test/monoHSignalShapes.root'
 
 # reweighted histograms are saved in this file
-    outputfilename = '/afs/cern.ch/work/k/khurana/monoHSignalProduction/genproductions/bin/MadGraph5_aMCatNLO/testgridpack/CMSSW_7_4_5/src/MonoHCombination/ReweightingSetup/data/monoHReweightedSignalShapes_'+ sys.argv[2] + '_' + sys.argv[3]+'.root'
+    #outputfilename = '/afs/cern.ch/work/k/khurana/monoHSignalProduction/genproductions/bin/MadGraph5_aMCatNLO/testgridpack/CMSSW_7_4_5/src/MonoHCombination/ReweightingSetup/data/monoHReweightedSignalShapes_'+ sys.argv[2] + '_' + sys.argv[3]+'.root'
     
-    #outputfilename = '/afs/cern.ch/work/k/khurana/monoHSignalProduction/genproductions/bin/MadGraph5_aMCatNLO/testgridpack/CMSSW_7_4_5/src/MonoHCombination/ReweightingSetup/data/monoHReweightedSignalShapes_'+ str(int(mzp)) + '_' + str(int(ma0)) +'.root'
+    outputfilename = '/afs/cern.ch/work/k/khurana/monoHSignalProduction/genproductions/bin/MadGraph5_aMCatNLO/testgridpack/CMSSW_7_4_5/src/MonoHCombination/ReweightingSetup/data/monoHReweightedSignalShapes_'+ str(int(mzp)) + '_' + str(int(ma0)) +'.root'
     
 
 ## extract histname with weights 
@@ -303,21 +290,23 @@ if __name__ == "__main__":
         #for ifile in open('rootfiles.txt'):
         #filename = ifile.rstrip()
         
-#        for mzp in range(825, 4000, 25):
-        #for imzp in ZpMass:
-         #   for ma0 in range (300,325, 25):
+        for mzp in ZpMass:
+            #for imzp in ZpMass:
+            for ma0 in [400]:
                 ## This function need the mass point for which you need the reweighted histogram 
                 ## This will decide by itself the closest mass point which can be used as a base mass point and to be used for the reweighting. 
                 ## The reweighted histograms is scaled with the cross-section of target and base cross-section. 
                 
-        mzp = int(sys.argv[2])#825
-        ma0 = int(sys.argv[3])#300
-        #mzp = int(imzp)
-        print ('calling function for', mzp, ma0)
-        SaveHisto(filename,  int(mzp), int(ma0) )
-        SaveHisto(filename,  int(mzp), int(ma0), "_btagUp" )
-        SaveHisto(filename,  int(mzp), int(ma0), "_btagDown" )
-                #SaveHisto(filename,  int(mzp), int(ma0), "_mistagUp" )
-                #SaveHisto(filename,  int(mzp), int(ma0), "_mistagDown" )
-                
+                #mzp = 800#int(sys.argv[2])#825
+        #ma0 = 300#int(sys.argv[3])#300
+        #for mzp in ZpMass:
+         #   for ma0 in A0Mass:
+        
+                print ('calling function for', mzp, ma0)
+                SaveHisto(filename,  int(mzp), int(ma0) )
+        #SaveHisto(filename,  int(mzp), int(ma0), "_btagUp" )
+        #SaveHisto(filename,  int(mzp), int(ma0), "_btagDown" )
+        #SaveHisto(filename,  int(mzp), int(ma0), "_mistagUp" )
+        #SaveHisto(filename,  int(mzp), int(ma0), "_mistagDown" )
+        
         

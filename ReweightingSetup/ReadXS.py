@@ -18,6 +18,6 @@ class crosssection:
     
         
 
-#xsObj = crosssection('crosssectionZp2HDM.txt')
-#sigma = xsObj.xs(600,300)
-#print sigma
+xsObj = crosssection('crosssectionZp2HDM.txt')
+sigma = xsObj.xs(600,300)
+print sigma

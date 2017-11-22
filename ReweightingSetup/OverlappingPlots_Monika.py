@@ -90,6 +90,7 @@ def DrawOverlap(fileVec, histVec, titleVec,legendtext,pngname,logstatus=[0,0],xR
             histList.append(histo)
             # for ratio plot as they should nt be normalize 
             histList1.append(histo)
+            print ('type = ',type(histo))
             print histList[ii].Integral()
             histList[ii].Rebin(xRange[2])
             print ('after',histList[ii].Integral(0,-1))
@@ -274,11 +275,61 @@ def DrawOverlap(fileVec, histVec, titleVec,legendtext,pngname,logstatus=[0,0],xR
 
 
 print "calling the plotter"
-files=['Merged_Shapes.root','']
-legend=['reco','reweighted']
-histoname1=['signal_ZpA0-1700-300_signal', 'reweighted_ZpA0-1700-300_signal']
+files=['originalshapes.root','Merged_Shapes.root']
+legend=['originalshape','Merged']
+histoname=['signal_ZpA0-600-300_signal']
 
 xtitle='p_{T}^{miss} [GeV]'
 ytitle='area normalised'
 
-DrawOverlap(files,histoname1,[xtitle,ytitle],legend,'RecoVsReweight',[0,0],[200,1000,1])
+DrawOverlap(files,['signal_ZpA0-600-300_signal'],[xtitle,ytitle],legend,'signal_ZpA0-600-300_signal')
+DrawOverlap(files,['signal_ZpA0-600-400_signal'],[xtitle,ytitle],legend,'signal_ZpA0-600-400_signal')
+DrawOverlap(files,['signal_ZpA0-800-300_signal'],[xtitle,ytitle],legend,'signal_ZpA0-800-300_signal')
+DrawOverlap(files,['signal_ZpA0-800-400_signal'],[xtitle,ytitle],legend,'signal_ZpA0-800-400_signal')
+#DrawOverlap(files,['signal_ZpA0-800-500_signal'],[xtitle,ytitle],legend,'signal_ZpA0-800-500_signal')
+#DrawOverlap(files,['signal_ZpA0-800-600_signal'],[xtitle,ytitle],legend,'signal_ZpA0-800-600_signal')
+
+DrawOverlap(files,['signal_ZpA0-1000-300_signal'],[xtitle,ytitle],legend,'signal_ZpA0-1000-300_signal')
+DrawOverlap(files,['signal_ZpA0-1000-400_signal'],[xtitle,ytitle],legend,'signal_ZpA0-1000-400_signal')
+DrawOverlap(files,['signal_ZpA0-1000-500_signal'],[xtitle,ytitle],legend,'signal_ZpA0-1000-500_signal')
+DrawOverlap(files,['signal_ZpA0-1000-600_signal'],[xtitle,ytitle],legend,'signal_ZpA0-1000-600_signal')
+#DrawOverlap(files,['signal_ZpA0-1000-700_signal'],[xtitle,ytitle],legend,'signal_ZpA0-1000-700_signal')
+#DrawOverlap(files,['signal_ZpA0-1000-800_signal'],[xtitle,ytitle],legend,'signal_ZpA0-1000-800_signal')
+
+
+DrawOverlap(files,['signal_ZpA0-1200-300_signal'],[xtitle,ytitle],legend,'signal_ZpA0-1200-300_signal')
+DrawOverlap(files,['signal_ZpA0-1200-400_signal'],[xtitle,ytitle],legend,'signal_ZpA0-1200-400_signal')
+DrawOverlap(files,['signal_ZpA0-1200-500_signal'],[xtitle,ytitle],legend,'signal_ZpA0-1200-500_signal')
+DrawOverlap(files,['signal_ZpA0-1200-600_signal'],[xtitle,ytitle],legend,'signal_ZpA0-1200-600_signal')
+DrawOverlap(files,['signal_ZpA0-1200-700_signal'],[xtitle,ytitle],legend,'signal_ZpA0-1200-700_signal')
+DrawOverlap(files,['signal_ZpA0-1200-800_signal'],[xtitle,ytitle],legend,'signal_ZpA0-1200-800_signal')
+
+DrawOverlap(files,['signal_ZpA0-1400-300_signal'],[xtitle,ytitle],legend,'signal_ZpA0-1400-300_signal')
+DrawOverlap(files,['signal_ZpA0-1400-400_signal'],[xtitle,ytitle],legend,'signal_ZpA0-1400-400_signal')
+DrawOverlap(files,['signal_ZpA0-1400-500_signal'],[xtitle,ytitle],legend,'signal_ZpA0-1400-500_signal')
+#DrawOverlap(files,['signal_ZpA0-1400-600_signal'],[xtitle,ytitle],legend,'signal_ZpA0-1400-600_signal')
+DrawOverlap(files,['signal_ZpA0-1400-700_signal'],[xtitle,ytitle],legend,'signal_ZpA0-1400-700_signal')
+#DrawOverlap(files,['signal_ZpA0-1400-800_signal'],[xtitle,ytitle],legend,'signal_ZpA0-1400-800_signal')
+'''
+DrawOverlap(files,['signal_ZpA0-1700-300_signal'],[xtitle,ytitle],legend,'signal_ZpA0-1700-300_signal')
+DrawOverlap(files,['signal_ZpA0-1700-400_signal'],[xtitle,ytitle],legend,'signal_ZpA0-1700-400_signal')
+DrawOverlap(files,['signal_ZpA0-1700-500_signal'],[xtitle,ytitle],legend,'signal_ZpA0-1700-500_signal')
+DrawOverlap(files,['signal_ZpA0-1700-600_signal'],[xtitle,ytitle],legend,'signal_ZpA0-1700-600_signal')
+DrawOverlap(files,['signal_ZpA0-1700-700_signal'],[xtitle,ytitle],legend,'signal_ZpA0-1700-700_signal')
+DrawOverlap(files,['signal_ZpA0-1700-800_signal'],[xtitle,ytitle],legend,'signal_ZpA0-1700-800_signal')
+
+DrawOverlap(files,['signal_ZpA0-2000-300_signal'],[xtitle,ytitle],legend,'signal_ZpA0-2000-300_signal')
+DrawOverlap(files,['signal_ZpA0-2000-400_signal'],[xtitle,ytitle],legend,'signal_ZpA0-2000-400_signal')
+DrawOverlap(files,['signal_ZpA0-2000-500_signal'],[xtitle,ytitle],legend,'signal_ZpA0-2000-500_signal')
+DrawOverlap(files,['signal_ZpA0-2000-600_signal'],[xtitle,ytitle],legend,'signal_ZpA0-2000-600_signal')
+DrawOverlap(files,['signal_ZpA0-2000-700_signal'],[xtitle,ytitle],legend,'signal_ZpA0-2000-700_signal')
+DrawOverlap(files,['signal_ZpA0-2000-800_signal'],[xtitle,ytitle],legend,'signal_ZpA0-2000-800_signal')
+
+DrawOverlap(files,['signal_ZpA0-2500-300_signal'],[xtitle,ytitle],legend,'signal_ZpA0-2500-300_signal')
+DrawOverlap(files,['signal_ZpA0-2500-400_signal'],[xtitle,ytitle],legend,'signal_ZpA0-2500-400_signal')
+DrawOverlap(files,['signal_ZpA0-2500-500_signal'],[xtitle,ytitle],legend,'signal_ZpA0-2500-500_signal')
+DrawOverlap(files,['signal_ZpA0-2500-600_signal'],[xtitle,ytitle],legend,'signal_ZpA0-2500-600_signal')
+DrawOverlap(files,['signal_ZpA0-2500-700_signal'],[xtitle,ytitle],legend,'signal_ZpA0-2500-700_signal')
+DrawOverlap(files,['signal_ZpA0-2500-800_signal'],[xtitle,ytitle],legend,'signal_ZpA0-2500-800_signal')
+'''
+

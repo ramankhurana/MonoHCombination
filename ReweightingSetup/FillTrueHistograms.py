@@ -28,7 +28,7 @@
 
 ## import user defined modules
 #from Utils import *
-#import Utils
+import Utils
 import sys
 #sys.argv.append( '-b-' )
 
@@ -49,8 +49,6 @@ import sys
 sys.path.append('../')
 ## this will search for files in 'Helpers'
 sys.path.append('/afs/hep.wisc.edu/cms/khurana/MonoH2016MCProduction/MonoHEfficiency/CMSSW_8_0_11/src/MonoH/MonoHbb/Helpers')
-sys.path.append('/afs/cern.ch/work/k/khurana/monoHSignalProduction/genproductions/bin/MadGraph5_aMCatNLO/testgridpack/CMSSW_7_4_5/src/MonoHCombination/CommonUtilities/Helpers')
-
 import fileutils
 
 
@@ -66,9 +64,9 @@ parser.add_option("-w", "--saveweight", action="store_true",  dest="saveweight")
 
 
 
-ZpMass=[600., 800., 1000.,1200.,1400.,1700.,2000.,2500.]
+ZpMass=[600., 800., 1000., 1200., 1400., 1700., 2000., 2500.]
 
-A0Mass=[300., 400., 500.,600.,700.,800.]
+A0Mass=[300., 400., 500., 600., 700., 800.]
 
 
 class FillTrueHistograms:
@@ -82,9 +80,13 @@ class FillTrueHistograms:
         self.histname = histname
         self.outfile = outfile
         self.hpT = []
-    
+        self.MET = []
+        self.Diff = []
     def DefineHisto(self):
-        #nbins = 4
+        #nbins = 8
+        #binning = [200.0, 230.0, 270.0, 310.0, 350.0, 400.0, 475.0, 700.0, 1000.0]
+        
+        #3nbins = 4
         #binning = [200.0, 270.0, 350.0, 475.0, 1000.0]
         #print "inside Define Histo"
         
@@ -92,11 +94,14 @@ class FillTrueHistograms:
         #for ihist in range(10):
          #   ihist_str = str(ihist)
         #self.hpT.append(TH1F(self.histname, self.histname, nbins, scipy.array(binning) ))
+        
         binhi = 1000
         binlo = 200
-        nbins = int ((binhi - binlo )/ 10.0)
+        #nbins = int ((binhi - binlo )/ 15.0)
+        nbins = 40
         self.hpT.append(TH1F(self.histname, self.histname, nbins, binlo, binhi ))
-        
+        self.MET.append(TH1F(self.histname+'_pt', self.histname, nbins, binlo, binhi ))
+        self.Diff.append(TH1F(self.histname+'_diff', self.histname, 100, -500,500 ))
         return 0
     
     ''' Loop over events and fill the required histograms, right now only hPT is filled  '''
@@ -105,9 +110,12 @@ class FillTrueHistograms:
         for ievent in range(self.NEntries):
             self.monoHTree.GetEntry(ievent)
             higgspT_              =  self.monoHTree.__getattr__('HiggsPt')
+            truemet_              =  self.monoHTree.__getattr__('trueMET')
             #if (ievent % 10000) == 0:     print ' event number = ', ievent
+            #self.hpT[0].Fill(truemet_)
             self.hpT[0].Fill(higgspT_)
-
+            self.MET[0].Fill(higgspT_)
+            self.Diff[0].Fill(truemet_-higgspT_)
         return 0
     
     '''Write histograms to file, only those which are created and filled in this class.'''
@@ -116,6 +124,8 @@ class FillTrueHistograms:
         fout = TFile(self.outfile,mode)
         fout.cd()
         self.hpT[0].Write()
+        self.MET[0].Write()
+        self.Diff[0].Write()
         fout.Close()
         return 0
 
@@ -164,8 +174,6 @@ def CreateWeights(outfile, targethistname, basehistname, weightHistname, mode='u
     ## normalise numerator and denominator with same number i.e. unity in this case. 
     target_ = fout.Get(targethistname)
     base_   = fout.Get(basehistname)
-    #target_.Rebin(2)
-    #base_.Rebin(2)
     print targethistname, basehistname
     print 'type target = ' , type(target_)
     print 'type base = ' , type(base_)
@@ -175,7 +183,7 @@ def CreateWeights(outfile, targethistname, basehistname, weightHistname, mode='u
         print "inside CreateWeights"
         target_.SetDirectory(0)
         base_.SetDirectory(0)
-
+        
         target_.Scale(1.0/target_.Integral())
         base_.Scale(1.0/base_.Integral())
         weighthist_ = target_
@@ -264,6 +272,7 @@ def CreateReweightedRecoHisto(weight, target, rootfile, mode='update'):
 massvalue is a list with two elements, Zp mass and A0 mass. '''
 
 def SaveWeightHisto(filename, massvalue):
+    highToLow = False
 ## Input file name 
     fin = fileutils.OpenRootFile(filename)
     
@@ -275,10 +284,17 @@ def SaveWeightHisto(filename, massvalue):
     histname = Genhistname(massvalueStr[0], massvalueStr[1])
     
     baseZp =  min(ZpMass, key=lambda x:abs(x-int(massvalueStr[0])))
+    if highToLow:
+        index_base = ZpMass.index(baseZp) + 1 
+        baseZp = ZpMass[index_base]
+    
     if (int(massvalueStr[0]) - int(baseZp)) ==0: 
         baseZp = ZpMass[ZpMass.index(baseZp)-1]
-        #baseZp = ZpMass[ZpMass.index(baseZp)]
+        if highToLow:
+            baseZp = ZpMass[ZpMass.index(baseZp)+1]
     
+    if (int(massvalueStr[0]) < int(baseZp)):
+        baseZp = ZpMass[ZpMass.index(baseZp)-1]
     #baseA0 = min(A0Mass, key=lambda x:abs(x-int(massvalueStr[1])))
     #if (int(massvalueStr[1]) - int(baseA0)) ==0:
     #    baseA0 = A0Mass[A0Mass.index(baseA0)-1]
@@ -288,6 +304,7 @@ def SaveWeightHisto(filename, massvalue):
     
     ## cerate the weight histogram and save in the same output rootfile
     weightHistname = histname.replace('gen_','weight_')
+    print (filename, histname, basehistname, weightHistname)
     hpTWeight = CreateWeights(filename, histname, basehistname, weightHistname)
     print "type of hpTWeight = ",type(hpTWeight)
     WriteHistoCopied(filename, hpTWeight)
@@ -299,18 +316,23 @@ if __name__ == "__main__":
     
     ## loop over all the files and save the gen and reco histograms in same rootfile
     if options.savehisto:
-        for ifile in open('rootfiles.txt'):
+        #for ifile in open('rootfiles.txt'):
+        for ifile in open('rootfiles_1.txt'):
             print 'saving the Higgs pT histograms for ', ifile
             filename = ifile.rstrip()
             SaveHisto(filename)
             
     if options.saveweight:
-        #for mzp in range(600, 4000, 25):
-         #   for ma0 in range (300,350, 25):
-        mzp=800
-        ma0=300
-        massvec = [mzp, ma0]
-        SaveWeightHisto('monoHSignalShapes.root', massvec)
+        for mzp in ZpMass:
+            for ma0 in  [400]:#A0Mass:
+                
+                #for mzp in range(600, 4000, 25):
+                # for ma0 in range (300,1000, 25):
+                #mzp=2500
+                #ma0=300
+                massvec = [int(mzp), int(ma0)]
+                print '----------------------------saving weights for ',massvec
+                SaveWeightHisto('monoHSignalShapes.root', massvec)
         #print 'name'
         
     
