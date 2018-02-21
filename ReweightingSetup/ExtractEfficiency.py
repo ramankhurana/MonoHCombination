@@ -79,13 +79,32 @@ def WriteEff():
 
             histname_pt = histname+'_pt'
             histname_diff = histname+'_diff'
-            h = TH1F(histname,histname, 40, 200, 1000)
-            h_pt = TH1F(histname_pt, histname_pt, 40, 200, 1000)
+            histname_up   = histname + '_btagUp'
+            histname_down = histname + '_btagDown'
+            histname_mistagup   = histname + '_mistagUp'
+            histname_mistagdown = histname + '_mistagDown'
+            
+            nbins = 4
+            binning = [200.0, 270.0, 350.0, 475.0, 1000.0]
+
+            
+            h = TH1F(histname,histname, nbins, scipy.array(binning))
+            h_up = TH1F(histname_up,histname_up, nbins, scipy.array(binning))
+            h_down = TH1F(histname_down,histname_down, nbins, scipy.array(binning))
+            h_mistagup = TH1F(histname_mistagup,histname_mistagup, nbins, scipy.array(binning))
+            h_mistagdown = TH1F(histname_mistagdown,histname_mistagdown, nbins, scipy.array(binning))
+
+            h_pt = TH1F(histname_pt, histname_pt, nbins, scipy.array(binning))
             #h = TH1F(histname,histname, nbins, scipy.array(binning) )
             #h_pt = TH1F(histname_pt, histname_pt, nbins, scipy.array(binning) )
             h_diff = TH1F(histname_diff, histname_diff, 100, -500, 500 )
 
             tree_.Draw("met>>"+histname,"weight*(N2DDT<0.0)","goff")
+            tree_.Draw("met>>"+histname_up,"weight*(N2DDT<0.0)","goff")
+            tree_.Draw("met>>"+histname_down,"weight*(N2DDT<0.0)","goff")
+            tree_.Draw("met>>"+histname_mistagup,"weight*(N2DDT<0.0)","goff")
+            tree_.Draw("met>>"+histname_mistagdown,"weight*(N2DDT<0.0)","goff")
+
             tree_.Draw("higgsPt>>"+histname_pt,"weight*(N2DDT<0.0)","goff")
             tree_.Draw("(met-higgsPt)>>"+histname_diff,"weight*(N2DDT<0.0)","goff")
             
@@ -98,6 +117,10 @@ def WriteEff():
                 fout.write(effline)
                 froot.cd()
                 h.Write()
+                h_up.Write()
+                h_down.Write()
+                h_mistagup.Write()
+                h_mistagdown.Write()
                 h_pt.Write()
                 h_diff.Write()
 
@@ -119,6 +142,7 @@ def SaveHisto(model='2HDM'):
     for iline in open('efficiency-2HDM.txt'):
         masses = iline.rstrip().split()
         h_eff.Fill(float(masses[0]), float(masses[1]),float( masses[2]))
+        
     fhisto.cd()
     h_eff.Write()
 

@@ -232,6 +232,59 @@ def WriteHistoCopied(outfile, histname,  mode='update'):
         fout.Close()
     return 0
 
+
+def findClosestA0(ma0):
+    baseA0 =  min(A0Mass, key=lambda x:abs(x-int(ma0)))
+    if baseA0 < ma0:
+        baseA0 = baseA0
+    if baseA0 > ma0:
+        idx_a0 = A0Mass.index(baseA0)
+        baseA0 = A0Mass[idx_a0-1]
+    return baseA0
+
+
+
+def findClosestZp(mzp):
+    baseZp =  min(ZpMass, key=lambda x:abs(x-int(mzp)))
+    if baseZp < mzp:
+        baseZp = baseZp
+    if baseZp > mzp:
+        idx_zp = ZpMass.index(baseZp)
+        baseZp = ZpMass[idx_zp-1]
+    return baseZp
+
+
+## This can be used to step down the Ma0 or MZp list entry.                                                                                                                        
+def MassStepDown(baseZp, massList):
+    if massList.index(baseZp) > 0:
+        baseZp = massList[massList.index(baseZp)-1]
+    return baseZp
+
+
+def FindNearestPoint(mzp, ma0):
+    baseZp =  min(ZpMass, key=lambda x:abs(x-int(mzp)))
+    baseA0 =  min(A0Mass, key=lambda x:abs(x-int(ma0)))
+
+    if ((int(mzp) - int(baseZp)) ==0) & ((int(ma0) - int(baseA0)) ==0) :
+        '''keep the same reco histogram'''
+
+    if ((int(mzp) - int(baseZp)) ==0) & ((int(ma0) - int(baseA0)) !=0) :
+        baseA0 = findClosestA0(int(ma0))
+        baseZp = baseZp
+
+    if ((int(ma0) - int(baseA0)) ==0) & ((int(mzp) - int(baseZp)) !=0):
+        baseA0 = baseA0
+        baseZp  = findClosestZp(int(mzp))
+
+
+    if ((int(mzp) - int(baseZp)) !=0) & ((int(ma0) - int(baseA0)) !=0) :
+        baseA0 = findClosestA0(int(ma0))
+        baseZp  = findClosestZp(int(mzp))
+
+    basePoint = [baseZp, baseA0]
+    return basePoint
+
+
 def SaveHisto(filename, mzp, ma0, postfix=""):
 
 # weights are saved in this file
@@ -248,12 +301,20 @@ def SaveHisto(filename, mzp, ma0, postfix=""):
     weighthistname = tmpname.replace('gen_', 'weight_')
     
     print ' weight histo is= ', weighthistname
+    
+    '''
+    BaseMassValue_ = 
     mzpTree = min(ZpMass, key=lambda x:abs(x-int( mzp)))
     if (int(mzp) - int(mzpTree)) ==0:
         mzpTree = ZpMass[ZpMass.index(mzpTree)-1]
     
     ma0Tree = min(A0Mass, key=lambda x:abs(x-int( ma0)))
-
+    '''
+    BaseMassValue_  = FindNearestPoint(int(mzp), int(ma0))
+    mzpTree = BaseMassValue_[0]
+    ma0Tree = BaseMassValue_[1]
+    
+    
     treename = 'ZpA0_'+ str(int(mzpTree)) +'_'+ str(int(ma0Tree)) +'_signal'+postfix
     print ' treename= ', treename
 ## extract histname to be saved in the output rootfiles. 
@@ -289,10 +350,11 @@ if __name__ == "__main__":
     if options.savehisto:
         #for ifile in open('rootfiles.txt'):
         #filename = ifile.rstrip()
-        
-        for mzp in ZpMass:
-            #for imzp in ZpMass:
-            for ma0 in [400]:
+        for mzp in range(1050, 4000, 50):
+            for ma0 in range (300,1000, 25):
+                
+                #for mzp in ZpMass:
+                #for ma0 in [500,600,700,800]:
                 ## This function need the mass point for which you need the reweighted histogram 
                 ## This will decide by itself the closest mass point which can be used as a base mass point and to be used for the reweighting. 
                 ## The reweighted histograms is scaled with the cross-section of target and base cross-section. 
@@ -300,8 +362,8 @@ if __name__ == "__main__":
                 #mzp = 800#int(sys.argv[2])#825
         #ma0 = 300#int(sys.argv[3])#300
         #for mzp in ZpMass:
-         #   for ma0 in A0Mass:
-        
+                #   for ma0 in A0Mass:
+                
                 print ('calling function for', mzp, ma0)
                 SaveHisto(filename,  int(mzp), int(ma0) )
         #SaveHisto(filename,  int(mzp), int(ma0), "_btagUp" )
