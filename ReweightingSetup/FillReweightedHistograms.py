@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python                                                                                                                                                               
 ### 
 ###
 # Created By : Raman Khurana
@@ -35,7 +35,7 @@ import sys
 ## this will search for files in the previous directory
 sys.path.append('../')
 ## this will search for files in 'Helpers'
-sys.path.append('/afs/hep.wisc.edu/cms/khurana/MonoH2016MCProduction/MonoHEfficiency/CMSSW_8_0_11/src/MonoH/MonoHbb/Helpers')
+#sys.path.append('/afs/hep.wisc.edu/cms/khurana/MonoH2016MCProduction/MonoHEfficiency/CMSSW_8_0_11/src/MonoH/MonoHbb/Helpers')
 sys.path.append('/afs/cern.ch/work/k/khurana/monoHSignalProduction/genproductions/bin/MadGraph5_aMCatNLO/testgridpack/CMSSW_7_4_5/src/MonoHCombination/CommonUtilities/Helpers')
 import fileutils
 from ReadXS import *
@@ -53,11 +53,10 @@ parser.add_option("-w", "--saveweight", action="store_true",  dest="saveweight")
 
 
 
-ZpMass=[600, 800, 1000.,1200.,1400.,1700.,2000.,2500.]
-A0Mass=[ 300., 400., 500., 600., 700., 800.]
+ZpMass=[10, 20, 50, 100, 200, 300, 500, 1000, 2000]
+A0Mass=[1]
 
 
-os.system('mkdir -p data')
 class FillTrueHistograms:
     def __init__(self, rootfilename, treename, histname, outfile, weightfilename, xs_ratio):
         print "inside initialize function"
@@ -71,8 +70,7 @@ class FillTrueHistograms:
         print ' self.NEntries = ', self.NEntries
         self.histname = histname
         self.outfile = outfile
-        print 'self.histname.replace = ',self.histname
-        self.weighthistname = self.histname.replace('_btagUp','').replace('_btagDown','').replace('_mistagUp','').replace('_mistagDown','').replace('signal_','weight_')
+        self.weighthistname = self.histname.replace('signal_','weight_')
         
         self.weightfilename = weightfilename
         self.xs_ratio = xs_ratio
@@ -89,13 +87,13 @@ class FillTrueHistograms:
         ## define one higgs pT histogram for one set of cut values. 
         #for ihist in range(10):
          #   ihist_str = str(ihist)
+        #self.hpT.append(TH1F(self.histname, self.histname, nbins, scipy.array(binning) ))
         self.hpT.append(TH1F(self.histname, self.histname, nbins, scipy.array(binning) ))
         self.hpT.append(TH1F(self.histname+"Base", self.histname, nbins, scipy.array(binning) ))
-        
 
         #binhi = 1000
         #binlo = 200
-        #nbins = int ((binhi - binlo )/ 5.0)
+        #nbins = int ((binhi - binlo )/ 80.0)
         #self.hpT.append(TH1F(self.histname, self.histname, nbins, binlo, binhi ))
 
         return 0
@@ -107,15 +105,9 @@ class FillTrueHistograms:
         ''' open the weight file'''
         fin = fileutils.OpenRootFile(self.weightfilename)
         weighthist_ = fin.Get(self.weighthistname)
-        #print 'nbins before =', weighthist_.GetNbinsX()
-        #weighthist_.Rebin(2)
-        #print 'nbins after =', weighthist_.GetNbinsX()
-
-
         print " weight histname = ", self.weighthistname
         #print " type = ", type(weighthist_) 
         if type(weighthist_) is TH1F: 
-            print 'type matched'
             try: 
                 weighthist_.SetDirectory(0)
                 print ' nbins = ', weighthist_.GetNbinsX()
@@ -139,13 +131,14 @@ class FillTrueHistograms:
         
         print "inside Loop"
         for ievent in range(self.NEntries):
-        #loop_events = min (5,self.NEntries)
+        #loop_events = min (10,self.NEntries)
         #for ievent in range(loop_events):
             print ' ievent = ', ievent
             self.monoHTree.GetEntry(ievent)
-            higgspT_               =  self.monoHTree.__getattr__('higgsPt')
+            higgspT_               =  self.monoHTree.__getattr__('fj1Pt')
             N2DDT_                 =  self.monoHTree.__getattr__('N2DDT')
-            genBosonPt_            =  self.monoHTree.__getattr__('genBosonPt')
+            genBosonPt_            =  self.monoHTree.__getattr__('higgsPt')
+            genMET_                =  self.monoHTree.__getattr__('genMet')
             met_                   =  self.monoHTree.__getattr__('met')
             weight_                =  self.monoHTree.__getattr__('weight')
             #=  self.monoHTree.__getattr__('')
@@ -154,20 +147,16 @@ class FillTrueHistograms:
             if N2DDT_ > 0: continue 
             genweight = 1.0 
             
-#            if higgspT_ < 200.0: higgspT_ = 200.01 
-            
             #genweight = self.ExtractGenWeight(higgspT_)
-            genweight = self.ExtractGenWeight(met_)
-            #if abs(genweight - self.ExtractGenWeight(higgspT_)) > 5.:
-            print ( '-----------------------higgs pT = ', higgspT_, ' genweight = ', genweight, self.ExtractGenWeight(met_) )
+
+            
+            genweight = self.ExtractGenWeight(genBosonPt_)
+            print ( 'higgs pT = ', higgspT_, ' genweight = ', genweight)
             #self.weighthistname
             
             totalweight = weight_ * genweight
-            if met_ < 200.0: met_ = 200.01
-            if met_ > 999.999: met_ = 999.999
             self.hpT[0].Fill(met_,totalweight)
-            self.hpT[1].Fill(met_,1.0)
-            
+            #self.hpT[0].Fill(higgspT_,totalweight)
             
         return 0
 
@@ -176,13 +165,8 @@ class FillTrueHistograms:
         print "writing histo"
         fout = TFile(self.outfile,mode)
         fout.cd()
-        
-        self.hpT[0].Scale( self.xs_ratio )
-        # * self.xs_ratio * self.xs_ratio 
-        #  (self.hpT[1].Integral()/self.hpT[0].Integral())
-        #self.hpT[0].Scale( self.xs_ratio * (self.hpT[1].Integral()/self.hpT[0].Integral()) )
+        self.hpT[0].Scale(self.xs_ratio)
         self.hpT[0].Write()
-        self.hpT[1].Write()
         fout.Close()
         return 0
 
@@ -213,13 +197,13 @@ class FillTrueHistograms:
 
 
 def Genhistname(MZp, MA0):
-    histname = 'gen_ZpA0-'+MZp + '-' + MA0 +'_signal'
+    histname = 'gen_BarZp-'+MZp + '-' + MA0 +'_signal'
     return histname
 
 
 
 def Recohistname(MZp, MA0):
-    histname = 'category_monohiggs/signal_ZpA0-'+MZp + '-' + MA0 +'_signal'
+    histname = 'category_monohiggs/signal_BarZp-'+MZp + '-' + MA0 +'_signal'
     return histname
 
 def WriteHistoCopied(outfile, histname,  mode='update'):
@@ -243,7 +227,6 @@ def findClosestA0(ma0):
     return baseA0
 
 
-
 def findClosestZp(mzp):
     baseZp =  min(ZpMass, key=lambda x:abs(x-int(mzp)))
     if baseZp < mzp:
@@ -259,15 +242,15 @@ def MassStepDown(baseZp, massList):
     if massList.index(baseZp) > 0:
         baseZp = massList[massList.index(baseZp)-1]
     return baseZp
-
+'''
 
 def FindNearestPoint(mzp, ma0):
     baseZp =  min(ZpMass, key=lambda x:abs(x-int(mzp)))
     baseA0 =  min(A0Mass, key=lambda x:abs(x-int(ma0)))
 
     if ((int(mzp) - int(baseZp)) ==0) & ((int(ma0) - int(baseA0)) ==0) :
-        '''keep the same reco histogram'''
-
+   '''     '''keep the same reco histogram'''
+'''
     if ((int(mzp) - int(baseZp)) ==0) & ((int(ma0) - int(baseA0)) !=0) :
         baseA0 = findClosestA0(int(ma0))
         baseZp = baseZp
@@ -283,92 +266,183 @@ def FindNearestPoint(mzp, ma0):
 
     basePoint = [baseZp, baseA0]
     return basePoint
+'''
+
+def IsOfficialSample(massvec):
+    ispresent = False
+    for imass in open('zpbaryonicMass_official.txt'):
+        #print imass                                                                                                                                                                 
+        massstr  = str(massvec[0]) + ' ' + str(massvec[1])
+        if massstr == imass.rstrip():
+            ispresent = True
+            break
+    return ispresent
+
+
+def FindNearestPoint(mzp, ma0):
+    
+    
+    baseZp =  min(ZpMass, key=lambda x:abs(x-int(mzp)))
+    baseA0 =  min(A0Mass, key=lambda x:abs(x-int(ma0)))
+    
+    
+    ## if mzp is matched but mdm is not
+    if ((int(mzp) - int(baseZp)) ==0) :  
+        
+        A0MassSkim=[]
+        for imass in open('zpbaryonicMass_official.txt'):
+            masses_ = imass.split(' ')
+            if int(masses_[0]) == mzp:
+                A0MassSkim.append(int(masses_[1]))
+            
+        
+        baseZp = baseZp
+        A0MassSkim.sort()
+        baseA0 = min(A0MassSkim, key=lambda x:abs(x-int(ma0)))
+        
+        
+    #########################
+    if ((int(ma0) - int(baseA0)) ==0) :
+        ZpMassSkim=[]
+        for imass in open('zpbaryonicMass_official.txt'):
+            masses_ = imass.split(' ')
+            if int(masses_[1]) == ma0:
+                ZpMassSkim.append(int(masses_[0]))
+            
+        
+        ZpMassSkim.sort()
+        baseZp = min(ZpMassSkim, key=lambda x:abs(x-int(mzp)))
+        baseA0 = baseA0
+        
+    #########################
+    if ( ((int(mzp) - int(baseZp)) != 0 ) & ((int(ma0) - int(baseA0)) !=0) ):
+        baseZp = baseZp 
+        print 'basezp before', baseZp, ZpMass
+        if baseZp > int(mzp): 
+            baseZp = ZpMass[ZpMass.index(baseZp)-1]
+        
+        A0MassSkim=[]
+        for imass in open('zpbaryonicMass_official.txt'):
+            masses_ = imass.split(' ')
+            if int(masses_[0]) == baseZp:
+                A0MassSkim.append(int(masses_[1]))
+
+        A0MassSkim.sort()
+        print 'A0MassSkim = ',A0MassSkim 
+        baseA0 = min(A0MassSkim, key=lambda x:abs(x-int(ma0)))
+        if baseA0>ma0:
+            baseA0 = A0MassSkim[A0MassSkim.index(baseA0)-1]
+        
+
+    
+    ## following code is for the validation purpose. validating interpolation along mDM 
+    '''
+    if ((int(mzp) - int(baseZp)) ==0) & ((int(ma0) - int(baseA0)) ==0) :
+        baseZp = baseZp
+        baseA0 = A0Mass[A0Mass.index(baseA0)-1]
+
+    '''
+    
+    '''
+    ## following code is for the validation purpose. validating interpolation along mZp
+    if ((int(mzp) - int(baseZp)) ==0) & ((int(ma0) - int(baseA0)) ==0) :
+        baseZp = ZpMass[ZpMass.index(baseZp)-1]
+        baseA0 = baseA0
+    '''
+
+
+    basePoint = [baseZp, baseA0]
+    return basePoint
+
 
 
 def SaveHisto(filename, mzp, ma0, postfix=""):
-
+    
 # weights are saved in this file
-    weightfilename = '/afs/cern.ch/work/k/khurana/monoHSignalProduction/genproductions/bin/MadGraph5_aMCatNLO/testgridpack/CMSSW_7_4_5/src/MonoHCombination/ReweightingSetup/test/monoHSignalShapes.root'
+    weightfilename = 'monoHSignalShapes.root'
 
 # reweighted histograms are saved in this file
-    #outputfilename = '/afs/cern.ch/work/k/khurana/monoHSignalProduction/genproductions/bin/MadGraph5_aMCatNLO/testgridpack/CMSSW_7_4_5/src/MonoHCombination/ReweightingSetup/data/monoHReweightedSignalShapes_'+ sys.argv[2] + '_' + sys.argv[3]+'.root'
+    #outputfilename = 'monoHReweightedSignalShapes.root'
+    outputfilename = 'weightfiles/monoHReweightedSignalShapes'+str(mzp)+'_'+str(ma0)+'.root'
     
-    outputfilename = '/afs/cern.ch/work/k/khurana/monoHSignalProduction/genproductions/bin/MadGraph5_aMCatNLO/testgridpack/CMSSW_7_4_5/src/MonoHCombination/ReweightingSetup/data/monoHReweightedSignalShapes_'+ str(int(mzp)) + '_' + str(int(ma0)) +'.root'
-    
+    massvalue = [mzp,ma0]
+    isinOfficalSample = IsOfficialSample(massvalue)
+    print " This is an official sample ", isinOfficalSample
+    if isinOfficalSample==True:
+        massValueBase = massvalue
 
+    if isinOfficalSample==False:
+        massValueBase = FindNearestPoint(int(massvalue[0]), int(massvalue[1]))
+        
+    
+    
 ## extract histname with weights 
     tmpname = Genhistname(str(int(mzp)), str(int(ma0)) )
     weighthistname = tmpname.replace('gen_', 'weight_')
     
-    print ' weight histo is= ', weighthistname
     
+
+    print ' weight histo is= ', weighthistname
     '''
-    BaseMassValue_ = 
     mzpTree = min(ZpMass, key=lambda x:abs(x-int( mzp)))
     if (int(mzp) - int(mzpTree)) ==0:
         mzpTree = ZpMass[ZpMass.index(mzpTree)-1]
     
     ma0Tree = min(A0Mass, key=lambda x:abs(x-int( ma0)))
+    if (int(ma0) - int(ma0Tree)) ==0:
+        ma0Tree = A0Mass[A0Mass.index(ma0Tree)-1]
+
     '''
-    BaseMassValue_  = FindNearestPoint(int(mzp), int(ma0))
-    mzpTree = BaseMassValue_[0]
-    ma0Tree = BaseMassValue_[1]
-    
-    
-    treename = 'ZpA0_'+ str(int(mzpTree)) +'_'+ str(int(ma0Tree)) +'_signal'+postfix
+    mzpTree = str(massValueBase[0])
+    ma0Tree = str(massValueBase[1])
+    treename = 'BarZp_'+ str((mzpTree)) +'_'+ str((ma0Tree)) +'_signal'+postfix
     print ' treename= ', treename
 ## extract histname to be saved in the output rootfiles. 
     recohistname = weighthistname.replace('weight_', 'signal_')
-    
     recohistname = recohistname + postfix
-    xsobj = crosssection('/afs/cern.ch/work/k/khurana/monoHSignalProduction/genproductions/bin/MadGraph5_aMCatNLO/testgridpack/CMSSW_7_4_5/src/MonoHCombination/ReweightingSetup/data/crosssectionZp2HDM.txt')
+    xsobj = crosssection('crosssectionZpBaryonic.txt')
     xs_base_ = xsobj.xs(mzpTree, ma0Tree)
     xs_target_ = xsobj.xs(int(mzp), int(ma0))
-    print xs_base_, xs_target_
+    xs_ratio_ = float(xs_target_/xs_base_)
+    print "xs_ratio_ = ", xs_ratio_
     
-    if (xs_base_ > 0) & (xs_target_ > 0) :
-        xs_ratio_ = float(xs_target_/xs_base_)
-        
-        print [filename, treename, recohistname, outputfilename, weightfilename, xs_ratio_]
-        fillhisto = FillTrueHistograms (filename, treename, recohistname, outputfilename, weightfilename, xs_ratio_)
-        
+    fillhisto = FillTrueHistograms (filename, treename, recohistname, outputfilename, weightfilename, xs_ratio_)
+    
 ## Deifne histograms 
-        fillhisto.DefineHisto()
-        
+    fillhisto.DefineHisto()
+
 ## Loop over events 
-        fillhisto.Loop()
+    fillhisto.Loop()
 ## Write histogram to rootfile
-        fillhisto.WriteHisto()
-    
+    fillhisto.WriteHisto()
     
     return (recohistname,recohistname)
 
 
 if __name__ == "__main__":
-    filename = '/afs/cern.ch/work/k/khurana/monoHSignalProduction/genproductions/bin/MadGraph5_aMCatNLO/testgridpack/CMSSW_7_4_5/src/MonoHCombination/ReweightingSetup/data/limitForest_all.root'
+    filename = 'limitForest_nominal.root'
     ## loop over all the files and save the gen and reco histograms in same rootfile
     if options.savehisto:
         #for ifile in open('rootfiles.txt'):
         #filename = ifile.rstrip()
-        for mzp in range(1050, 4000, 50):
-            for ma0 in range (300,1000, 25):
-                
-                #for mzp in ZpMass:
-                #for ma0 in [500,600,700,800]:
+        
+        #for mzp in [200, 300, 500, 1000, 2000]:
+        #    for ma0 in [ 1]:
+        
                 ## This function need the mass point for which you need the reweighted histogram 
                 ## This will decide by itself the closest mass point which can be used as a base mass point and to be used for the reweighting. 
                 ## The reweighted histograms is scaled with the cross-section of target and base cross-section. 
                 
-                #mzp = 800#int(sys.argv[2])#825
-        #ma0 = 300#int(sys.argv[3])#300
-        #for mzp in ZpMass:
-                #   for ma0 in A0Mass:
-                
-                print ('calling function for', mzp, ma0)
-                SaveHisto(filename,  int(mzp), int(ma0) )
-        #SaveHisto(filename,  int(mzp), int(ma0), "_btagUp" )
-        #SaveHisto(filename,  int(mzp), int(ma0), "_btagDown" )
-        #SaveHisto(filename,  int(mzp), int(ma0), "_mistagUp" )
-        #SaveHisto(filename,  int(mzp), int(ma0), "_mistagDown" )
+        mzp = int(sys.argv[2])#825
+        ma0 = int(sys.argv[3])#300
+        
+        #for imass in open('zpbaryonicMass_private.txt'):
+        #mzp = imass.split(" ")[0]
+        #ma0 = imass.split(" ")[1]
+        SaveHisto(filename,  int(mzp), int(ma0) )
+        SaveHisto(filename,  int(mzp), int(ma0), "_btagUp" )
+        SaveHisto(filename,  int(mzp), int(ma0), "_btagDown" )
+        SaveHisto(filename,  int(mzp), int(ma0), "_mistagUp" )
+        SaveHisto(filename,  int(mzp), int(ma0), "_mistagDown" )
         
         

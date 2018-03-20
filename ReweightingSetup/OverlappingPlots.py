@@ -28,7 +28,9 @@ linestyle=[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
 
 
 def DrawOverlap(fileVec, histVec, titleVec,legendtext,pngname,logstatus=[0,0],xRange=[-99999,99999,1]):
-
+    
+    ftext = open('yieldcomparison.txt', 'a')
+    
     gStyle.SetOptTitle(0)
     gStyle.SetOptStat(0)
     gStyle.SetTitleOffset(1.1,"Y");
@@ -76,7 +78,7 @@ def DrawOverlap(fileVec, histVec, titleVec,legendtext,pngname,logstatus=[0,0],xR
     ii=0    
     inputfile={}
     print str(fileVec[(len(fileVec)-1)])
-
+    
     for ifile_ in range(len(fileVec)):
         print ("opening file  "+fileVec[ifile_])
         inputfile[ifile_] = TFile( fileVec[ifile_] )
@@ -90,7 +92,10 @@ def DrawOverlap(fileVec, histVec, titleVec,legendtext,pngname,logstatus=[0,0],xR
             histList1.append(histo)
             #print histList[ii].Integral()
             #histList[ii].Rebin(xRange[2])
-            histList[ii].Scale(1.0/histList[ii].Integral())
+            print 'Integral = ', histList[ii].Integral()
+            iline = 'Integral = ' + str(histList[ii].Integral())+'    '
+            ftext.write(iline.rstrip('\n'))
+            #histList[ii].Scale(1.0/histList[ii].Integral())
             maximum.append(histList[ii].GetMaximum())
             maximum.sort()
             ii=ii+1
@@ -102,7 +107,8 @@ def DrawOverlap(fileVec, histVec, titleVec,legendtext,pngname,logstatus=[0,0],xR
             histList[ih].SetMaximum(100) #1.4 for log
             histList[ih].SetMinimum(0.01) #1.4 for log
         if logstatus[1] is 0 :
-            histList[ih].SetMaximum(1.4) #1.4 for log
+            #histList[ih].SetMaximum(1.4) #1.4 for log
+            histList[ih].SetMaximum(1.4*maximum[0]) #1.4 for log
             histList[ih].SetMinimum(0.001) #1.4 for log
 #        print "graph_status =" ,(tt is TGraphAsymmErrors)
 #        print "hist status =", (tt is TH1D) or (tt is TH1F)
@@ -180,6 +186,8 @@ def DrawOverlap(fileVec, histVec, titleVec,legendtext,pngname,logstatus=[0,0],xR
     histname=outputdirname+pngname 
     c.SaveAs(histname+'.png')
     c.SaveAs(histname+'.pdf')
+    ftext.write('\n')
+    ftext.close()
 #    outputname = 'cp  -r '+ outputdirname +' /afs/hep.wisc.edu/home/khurana/public_html/'
 #    os.system(outputname) 
     
@@ -187,14 +195,38 @@ def DrawOverlap(fileVec, histVec, titleVec,legendtext,pngname,logstatus=[0,0],xR
 
 
 print "calling the plotter"
-files=['monoHSignalShapes.root']
+files=['original.root', 'monoHReweightedSignalShapes.root']
 legend=['reco','reweighted']
-
-histoname1=['signal_ZpA0-1700-300_signal', 'reweighted_ZpA0-1700-300_signal']
-
 ytitle='p_{T}^{miss} [GeV]'
+'''
+histoname1=['signal_ZpA0-10-150_signal']
+DrawOverlap(files,histoname1,["area normalised",ytitle],legend,histoname1[0],[0,0],[200,1000])
+
+histoname1=['signal_ZpA0-10-500_signal']
+DrawOverlap(files,histoname1,["area normalised",ytitle],legend,histoname1[0],[0,0],[200,1000])
 
 
-DrawOverlap(files,histoname1,["area normalised",ytitle],legend,'RecoVsReweight',[0,0],[200,1000])
-#DrawOverlap(files,histoname2,['E_{T}^{Miss}[GeV]',ytitle],legend,'SR_TT_abc')
+histoname1=['signal_ZpA0-10-1000_signal']
+DrawOverlap(files,histoname1,["area normalised",ytitle],legend,histoname1[0],[0,0],[200,1000])
 
+signal_BarZp-2000-1_signal'''
+
+'''
+histoname1=['signal_BarZp-200-1_signal']
+DrawOverlap(files,histoname1,["area normalised",ytitle],legend,histoname1[0],[0,0],[200,1000])
+
+histoname1=['signal_BarZp-300-1_signal']
+DrawOverlap(files,histoname1,["area normalised",ytitle],legend,histoname1[0],[0,0],[200,1000])
+
+
+
+histoname1=['signal_BarZp-1000-1_signal']
+DrawOverlap(files,histoname1,["area normalised",ytitle],legend,histoname1[0],[0,0],[200,1000])
+
+histoname1=['signal_BarZp-2000-1_signal']
+DrawOverlap(files,histoname1,["area normalised",ytitle],legend,histoname1[0],[0,0],[200,1000])
+'''
+
+
+histoname1=['signal_BarZp-500-1_signal']
+DrawOverlap(files,histoname1,["area normalised",ytitle],legend,histoname1[0],[0,0],[200,1000])

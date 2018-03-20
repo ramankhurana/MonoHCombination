@@ -28,14 +28,19 @@ def SubmitJobfunc(mzp, ma0):
 
 
 time=0
-for mzp in range(600, 1850, 50):
-    for ma0 in range(300,825,25):
+for imass in open('zpbaryonicMass_private.txt'):
+    mzp = imass.rstrip().split(" ")[0]
+    ma0 = imass.rstrip().split(" ")[1]
+
+#for mzp in range(600, 1850, 50):
+#    for ma0 in range(300,825,25):
 #ZpMass=[600., 800., 1000.,1200.,1400.,1700.,2000.,2500.]
 #for imzp in ZpMass:
  #   for ma0 in range (400,450, 100):
         #mzp = int(imzp)
-        SubmitJobfunc( mzp, ma0)
-        time = time + 1 
-        if (time%300) == 0:
-            os.system('sleep 600')
+    print "submitting job for ", (mzp, ma0)
+    SubmitJobfunc( mzp, ma0)
+    time = time + 1 
+    if (time%150) == 0:
+        os.system('sleep 300')
 #SubmitJobfunc( 1000,300)
