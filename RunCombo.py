@@ -167,43 +167,40 @@ def RunLimits(cardList):
 def SubmitBatchJobs(cardname):
     print "routine to submit batch job has been called. "
     print "one job for each data card will be submitted now"
-    
     print "submitting jobs for ", cardname 
-    
+    SubmitJobfunc(cardname)
     
 
+
+
+def SubmitJobfunc(cardname):
+    tempshell='''
 #!/bin/sh                                                                                                                                                                           
 export SCRAM_ARCH=slc6_amd64_gcc491
 currentpath=$PWD
 cd /afs/cern.ch/work/k/khurana/monoHSignalProduction/genproductions/bin/MadGraph5_aMCatNLO/testgridpack/CMSSW_7_4_7/src/
 eval `scram runtime -sh`
 cd /afs/cern.ch/work/k/khurana/monoHSignalProduction/genproductions/bin/MadGraph5_aMCatNLO/testgridpack/CMSSW_7_4_5/src/MonoHCombination/
-/afs/cern.ch/work/k/khurana/monoHSignalProduction/genproductions/bin/MadGraph5_aMCatNLO/testgridpack/CMSSW_7_4_5/src/MonoHCombination/ModelBiulder/ XXX YYY 
-
-
-def SubmitJobfunc(cardname):
-    mzp_ = str(mzp)
-    ma0_ = str(ma0)
-    postname=str(mzp_)+'_'+str(ma0_)
-    shellfilename = 'cards/temporary_Res_submit_'+postname+'.sh'
-    os.system('rm '+shellfilename)
-
+/afs/cern.ch/work/k/khurana/monoHSignalProduction/genproductions/bin/MadGraph5_aMCatNLO/testgridpack/CMSSW_7_4_5/src/MonoHCombination/scan.sh DATACARDNAME
+'''
+    shellfilename = 'temporary_'+cardname.rstrip().split("/")[-1].replace(".txt",".sh")
     
-    fileshell = open(shellfilename,'a')
-    for linesh in open('Template_submit_batch.sh','r'):
-        linesh = linesh.replace('XXX',mzp_)
-        linesh = linesh.replace('YYY',ma0_)
-        fileshell.write(linesh)
-    fileshell.close()
-    os.chdir('/afs/cern.ch/work/k/khurana/monoHSignalProduction/genproductions/bin/MadGraph5_aMCatNLO/testgridpack/CMSSW_7_4_5/src/MonoHCombination/ModelBiulder/datacards/cards')
-    shellfilename = shellfilename.replace("cards/","")
+    if bool(os.path.exists(shellfilename)):
+        os.system('rm '+shellfilename)
+        
+    fileshell = open(shellfilename,'w')
+    tempshell = tempshell.replace("DATACARDNAME",cardname)
+    fileshell.write(tempshell)
+    
+    #pwd_ = os.getcwd()
+    #os.chdir(pwd_ + '/shcards')
     os.system('chmod 777 '+shellfilename)
     tmpcmnd = 'bsub  -q 8nh '+' '+shellfilename+';'
     command =  tmpcmnd
     
     print command
     os.system(command)
-    os.chdir('/afs/cern.ch/work/k/khurana/monoHSignalProduction/genproductions/bin/MadGraph5_aMCatNLO/testgridpack/CMSSW_7_4_5/src/MonoHCombination/ModelBiulder/datacards/')
+    #os.chdir(pwd_)
     return 0
 
 
