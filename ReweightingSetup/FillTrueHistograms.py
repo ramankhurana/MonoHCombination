@@ -78,9 +78,8 @@ for imass in open('zpbaryonicMass_official.txt'):
 
 ZpMass.sort()
 A0Mass.sort()    
-#ZpMass=[10, 20, 50, 100, 200, 300, 500, 1000, 2000]
-
-#A0Mass=[1]
+ZpMass=[10, 20, 50, 100, 200, 300, 500, 1000, 2000]
+A0Mass=[1]
 
 
 class FillTrueHistograms:
@@ -192,6 +191,7 @@ def CreateWeights(outfile, targethistname, basehistname, weightHistname, mode='u
     print targethistname, basehistname
     print 'type target = ' , type(target_)
     print 'type base = ' , type(base_)
+    
     
     weighthist_ = target_
     if (type(target_) is TH1F )  & (type(base_) is TH1F ):
@@ -325,6 +325,17 @@ def FindNearestPoint(mzp, ma0):
     
     baseZp =  min(ZpMass, key=lambda x:abs(x-int(mzp)))
     baseA0 =  min(A0Mass, key=lambda x:abs(x-int(ma0)))
+    '''
+    baseZp = ZpMass[ZpMass.index(baseZp)-1]
+    '''
+    
+    ''' for higher base point
+    if ZpMass.index(baseZp)+1 < len(ZpMass):
+    baseZp = ZpMass[ZpMass.index(baseZp)+1]
+    if ZpMass.index(baseZp)+1 >= len(ZpMass):
+        baseZp = ZpMass[ZpMass.index(baseZp)-1]
+    baseA0 = baseA0
+    '''
     
     
     ## if mzp is matched but mdm is not
@@ -342,6 +353,8 @@ def FindNearestPoint(mzp, ma0):
         baseA0 = min(A0MassSkim, key=lambda x:abs(x-int(ma0)))
         
         
+        
+
     #########################
     if ((int(ma0) - int(baseA0)) ==0) :
         ZpMassSkim=[]
@@ -359,8 +372,10 @@ def FindNearestPoint(mzp, ma0):
     if ( ((int(mzp) - int(baseZp)) != 0 ) & ((int(ma0) - int(baseA0)) !=0) ):
         baseZp = baseZp 
         print 'basezp before', baseZp, ZpMass
-        if baseZp > int(mzp): 
+        if ( baseZp > int(mzp) ) & ( baseZp > 1400): 
             baseZp = ZpMass[ZpMass.index(baseZp)-1]
+        #if baseZp > int(mzp): 
+        #    baseZp = ZpMass[ZpMass.index(baseZp)-1]
         
         A0MassSkim=[]
         for imass in open('zpbaryonicMass_official.txt'):
@@ -375,8 +390,12 @@ def FindNearestPoint(mzp, ma0):
             baseA0 = A0MassSkim[A0MassSkim.index(baseA0)-1]
         
 
-    
-    ## following code is for the validation purpose. validating interpolation along mDM 
+
+    basePoint = [baseZp, baseA0]
+ 
+    return basePoint
+
+## following code is for the validation purpose. validating interpolation along mDM 
     '''
     if ((int(mzp) - int(baseZp)) ==0) & ((int(ma0) - int(baseA0)) ==0) :
         baseZp = baseZp
@@ -387,13 +406,12 @@ def FindNearestPoint(mzp, ma0):
     '''
     ## following code is for the validation purpose. validating interpolation along mZp
     if ((int(mzp) - int(baseZp)) ==0) & ((int(ma0) - int(baseA0)) ==0) :
-        baseZp = ZpMass[ZpMass.index(baseZp)-1]
+    baseZp = ZpMass[ZpMass.index(baseZp)-1]
         baseA0 = baseA0
     '''
 
 
-    basePoint = [baseZp, baseA0]
-    return basePoint
+    
 
 def SaveWeightHisto(filename, massvalue):
     highToLow = False
@@ -414,21 +432,8 @@ def SaveWeightHisto(filename, massvalue):
         
     histname = Genhistname(massvalueStr[0], massvalueStr[1])
     
-    
-    '''
-    baseZp =  min(ZpMass, key=lambda x:abs(x-int(massvalueStr[0])))
-    if highToLow:
-        index_base = ZpMass.index(baseZp) + 1 
-        baseZp = ZpMass[index_base]
-    
-    if (int(massvalueStr[0]) - int(baseZp)) ==0: 
-        baseZp = ZpMass[ZpMass.index(baseZp)-1]
-        if highToLow:
-            baseZp = ZpMass[ZpMass.index(baseZp)+1]
-    
-    if (int(massvalueStr[0]) < int(baseZp)):
-        baseZp = ZpMass[ZpMass.index(baseZp)-1]
-    '''
+
+    ## Following code is useful for the actual running, but not for the validation of the official points. 
     
     ## if this is an official sample then choose the base sample and the target sample so that weights are unity. 
     if isinOfficalSample==True:
@@ -437,16 +442,18 @@ def SaveWeightHisto(filename, massvalue):
     if isinOfficalSample==False: 
         massValueBase = FindNearestPoint(int(massvalue[0]), int(massvalue[1]))
         
+
+
+##    massValueBase = FindNearestPoint(int(massvalue[0]), int(massvalue[1]))
+    
+    print 'base mass value', massValueBase
     
     
-    #baseA0 = min(A0Mass, key=lambda x:abs(x-int(massvalueStr[1])))
-    #if (int(massvalueStr[1]) - int(baseA0)) ==0:
-    #    baseA0 = A0Mass[A0Mass.index(baseA0)-1]
-    #massValueBase = [str(int(baseZp)), massvalueStr[1]]
+
     massBalueBaseStr = [str(massValueBase[0]), str(massValueBase[1])]
     basehistname = Genhistname(massBalueBaseStr[0], massBalueBaseStr[1]) 
     
-    ## cerate the weight histogram and save in the same output rootfile
+    ## create the weight histogram and save in the same output rootfile
     weightHistname = histname.replace('gen_','weight_')
     print (filename, histname, basehistname, weightHistname)
     hpTWeight = CreateWeights(filename, histname, basehistname, weightHistname)
@@ -486,7 +493,9 @@ if __name__ == "__main__":
     #        for ma0 in [100]:
                 #mzp=2500
                 #ma0=300
-        for imassval in open('zpbaryonicMass_private.txt'):
+#        for imassval in open('zpbaryonicMass_private.txt'):
+        for imassval in open('test.txt'):
+        #for imassval in open('zpbaryonicMass_official.txt'):
             #massvec = [int(mzp), int(ma0)]
             massvec = [int(imassval.split(' ')[0]), int(imassval.split(' ')[1])]
             print '----------------------------saving weights for ',massvec

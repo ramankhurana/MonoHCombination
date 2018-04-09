@@ -51,14 +51,26 @@ parser.add_option("-w", "--saveweight", action="store_true",  dest="saveweight")
 
 (options, args) = parser.parse_args()
 
+ZpMass=[]
+A0Mass=[]
+ZpMass_=set()
+A0Mass_=set()
+for imass in open('zpbaryonicMass_official.txt'):
+    masses = imass.split(' ')
+    ZpMass_.add(int(masses[0]))
+    A0Mass_.add(int(masses[1]))
+    ZpMass=list(ZpMass_)
+    A0Mass=list(A0Mass_)
 
+ZpMass.sort()
+A0Mass.sort()
 
-ZpMass=[10, 20, 50, 100, 200, 300, 500, 1000, 2000]
-A0Mass=[1]
+#ZpMass=[10, 20, 50, 100, 200, 300, 500, 1000, 2000]
+#A0Mass=[1]
 
 
 class FillTrueHistograms:
-    def __init__(self, rootfilename, treename, histname, outfile, weightfilename, xs_ratio):
+    def __init__(self, rootfilename, treename, histname, outfile, weightfilename, xs_ratio, weighthistname):
         print "inside initialize function"
         
         self.rootfilename = rootfilename
@@ -70,7 +82,7 @@ class FillTrueHistograms:
         print ' self.NEntries = ', self.NEntries
         self.histname = histname
         self.outfile = outfile
-        self.weighthistname = self.histname.replace('signal_','weight_')
+        self.weighthistname = weighthistname
         
         self.weightfilename = weightfilename
         self.xs_ratio = xs_ratio
@@ -106,6 +118,7 @@ class FillTrueHistograms:
         fin = fileutils.OpenRootFile(self.weightfilename)
         weighthist_ = fin.Get(self.weighthistname)
         print " weight histname = ", self.weighthistname
+        print " integral of weight histograms is", weighthist_.Integral()
         #print " type = ", type(weighthist_) 
         if type(weighthist_) is TH1F: 
             try: 
@@ -286,6 +299,7 @@ def FindNearestPoint(mzp, ma0):
     baseA0 =  min(A0Mass, key=lambda x:abs(x-int(ma0)))
     
     
+
     ## if mzp is matched but mdm is not
     if ((int(mzp) - int(baseZp)) ==0) :  
         
@@ -318,8 +332,11 @@ def FindNearestPoint(mzp, ma0):
     if ( ((int(mzp) - int(baseZp)) != 0 ) & ((int(ma0) - int(baseA0)) !=0) ):
         baseZp = baseZp 
         print 'basezp before', baseZp, ZpMass
-        if baseZp > int(mzp): 
+        if ( baseZp > int(mzp) ) & ( baseZp > 1400):
             baseZp = ZpMass[ZpMass.index(baseZp)-1]
+
+        #if baseZp > int(mzp): 
+        #    baseZp = ZpMass[ZpMass.index(baseZp)-1]
         
         A0MassSkim=[]
         for imass in open('zpbaryonicMass_official.txt'):
@@ -334,7 +351,7 @@ def FindNearestPoint(mzp, ma0):
             baseA0 = A0MassSkim[A0MassSkim.index(baseA0)-1]
         
 
-    
+
     ## following code is for the validation purpose. validating interpolation along mDM 
     '''
     if ((int(mzp) - int(baseZp)) ==0) & ((int(ma0) - int(baseA0)) ==0) :
@@ -343,12 +360,22 @@ def FindNearestPoint(mzp, ma0):
 
     '''
     
-    '''
+
     ## following code is for the validation purpose. validating interpolation along mZp
-    if ((int(mzp) - int(baseZp)) ==0) & ((int(ma0) - int(baseA0)) ==0) :
-        baseZp = ZpMass[ZpMass.index(baseZp)-1]
-        baseA0 = baseA0
     '''
+    if ((int(mzp) - int(baseZp)) ==0) & ((int(ma0) - int(baseA0)) ==0) :
+    '''
+    ''' this is for higher base sample
+        if ZpMass.index(baseZp)+1 < len(ZpMass):
+            baseZp = ZpMass[ZpMass.index(baseZp)+1]
+            if ZpMass.index(baseZp)+1 >= len(ZpMass):
+            baseZp = ZpMass[ZpMass.index(baseZp)-1]
+    '''
+        
+        ## this is for lower base sample. 
+        #baseZp = ZpMass[ZpMass.index(baseZp)-1]
+        #baseA0 = baseA0
+
 
 
     basePoint = [baseZp, baseA0]
@@ -368,13 +395,19 @@ def SaveHisto(filename, mzp, ma0, postfix=""):
     massvalue = [mzp,ma0]
     isinOfficalSample = IsOfficialSample(massvalue)
     print " This is an official sample ", isinOfficalSample
+
+    # Following code is for actual setup
+  #  for testing don't use this condition
+
     if isinOfficalSample==True:
         massValueBase = massvalue
 
     if isinOfficalSample==False:
         massValueBase = FindNearestPoint(int(massvalue[0]), int(massvalue[1]))
         
+
     
+##    massValueBase = FindNearestPoint(int(massvalue[0]), int(massvalue[1]))
     
 ## extract histname with weights 
     tmpname = Genhistname(str(int(mzp)), str(int(ma0)) )
@@ -404,9 +437,8 @@ def SaveHisto(filename, mzp, ma0, postfix=""):
     xs_base_ = xsobj.xs(mzpTree, ma0Tree)
     xs_target_ = xsobj.xs(int(mzp), int(ma0))
     xs_ratio_ = float(xs_target_/xs_base_)
-    print "xs_ratio_ = ", xs_ratio_
-    
-    fillhisto = FillTrueHistograms (filename, treename, recohistname, outputfilename, weightfilename, xs_ratio_)
+        
+    fillhisto = FillTrueHistograms (filename, treename, recohistname, outputfilename, weightfilename, xs_ratio_, weighthistname)
     
 ## Deifne histograms 
     fillhisto.DefineHisto()

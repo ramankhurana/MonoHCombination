@@ -4,8 +4,8 @@ import os
 massvec=['600','800','1000','1200','1400','1700','2000','2500']
 a0massvec=['300','400','500','600','700','800']                                                                                                                                          
 
-#massvec=['500','1000']
-#a0massvec=['1', '150', '500', '1000']
+#massvec=['1000']
+#a0massvec=['300']
 
 
 
@@ -13,7 +13,8 @@ a0massvec=['300','400','500','600','700','800']
 #os.system('mkdir -p oneplustwo')
 for imass in range(len(massvec)):
     for ia0mass in a0massvec:
-        basename='tt/Jul3_CardsForCombo/Zprime'+(str(massvec[imass]))+'A'+ia0mass+'/cmb/'+ia0mass+'/'
+        basename='combocards/MB_2HDM_tt/Zprime'+(str(massvec[imass]))+'A'+ia0mass+'/cmb/'+ia0mass+'/'
+        print basename
         if not bool(os.path.exists(basename)): continue 
         datacards={
             'et':'xtt_et_1_13TeV.txt ',
@@ -42,6 +43,7 @@ for imass in range(len(massvec)):
         if not os.path.exists(basename):
             print 'path of tt datacards does not exist'
             quit()
+        print "entering dir",basename
         os.chdir(basename)
         os.system ('combineCards.py  '+allcards+' >& tmpcard.txt')
         

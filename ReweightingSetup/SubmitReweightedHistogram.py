@@ -28,7 +28,10 @@ def SubmitJobfunc(mzp, ma0):
 
 
 time=0
-for imass in open('zpbaryonicMass_private.txt'):
+#for imass in open('refined.txt'):
+for imass in open('test.txt'):
+#for imass in open('zpbaryonicMass_private.txt'):
+#for imass in open('zpbaryonicMass_official.txt'):
     mzp = imass.rstrip().split(" ")[0]
     ma0 = imass.rstrip().split(" ")[1]
 
@@ -41,6 +44,6 @@ for imass in open('zpbaryonicMass_private.txt'):
     print "submitting job for ", (mzp, ma0)
     SubmitJobfunc( mzp, ma0)
     time = time + 1 
-    if (time%150) == 0:
+    if (time%250) == 0:
         os.system('sleep 300')
 #SubmitJobfunc( 1000,300)

@@ -17,7 +17,7 @@ rootfile  = 'limitForest_nominal.root'
 crosssectionfile = 'crosssectionZpBaryonic.txt'
 
 
-ZpMass=[1000.,500]
+ZpMass=[10,20,50,100,500,1000.,2000]
 A0Mass=[1.]
 lumi_ = 35.9 
 
@@ -68,7 +68,7 @@ def WriteEff():
             tree_ = TChain(treename)
             tree_.Add(rootfile)
             
-            histname = 'original_signal_' + treename
+            histname = 'signal_' + treename
             histname = histname.replace("BarZp_","BarZp-")
             histname = histname.replace("_","-")
             histname = histname.replace("-signal","_signal")
