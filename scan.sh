@@ -7,9 +7,11 @@ txtfilename=${dataardname}_limits.txt
 datestr=`echo $1 | sed -e "s/combocards\/combo_gg_ww_tt_bb_2HDM\/Datacard_MZp//g" | sed -e "s/Ma0//g" | sed -e "s/MonoHCombo2016FullData.txt//g"`
 echo $datestr
 
-mzp=`echo $a | sed -e "s/combocards\/combo_gg_ww_tt_bb_2HDM\/Datacard_MZp//g"  | sed -e "s/MonoHCombo2016FullData.txt//g" | sed 's/Ma0/ /g' | gawk '{print $1}'`
-ma0=`echo $a | sed -e "s/combocards\/combo_gg_ww_tt_bb_2HDM\/Datacard_MZp//g"  | sed -e "s/MonoHCombo2016FullData.txt//g" | sed 's/Ma0/ /g' | gawk '{print $2}'`
+mzp=`echo $1 | sed -e "s/combocards\/combo_gg_ww_tt_bb_2HDM\/Datacard_MZp//g"  | sed -e "s/MonoHCombo2016FullData.txt//g" | sed 's/Ma0/ /g' | gawk '{print $1}'`
+ma0=`echo $1 | sed -e "s/combocards\/combo_gg_ww_tt_bb_2HDM\/Datacard_MZp//g"  | sed -e "s/MonoHCombo2016FullData.txt//g" | sed 's/Ma0/ /g' | gawk '{print $2}'`
 
+echo $mzp
+echo $ma0
 #`date +%s%3`
 combine -M Asymptotic $dataardname --rAbsAcc 0 --rMax 30 --mass $datestr | tee ${txtfilename}
     #Parsing results into textfile

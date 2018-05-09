@@ -4,6 +4,7 @@ import sys, optparse
 usage = "usage: %prog [options] "
 parser = optparse.OptionParser(usage)
 
+parser.add_option(      "--myhelp", action="store_true", dest="myhelp")
 parser.add_option("-c", "--combine",  action="store_true",  dest="combine")
 parser.add_option("-r", "--runcombo", action="store_true",  dest="runcombo")
 parser.add_option("-T", "--runtt", action="store_true",  dest="runtt")
@@ -13,10 +14,76 @@ parser.add_option("-B", "--runbb", action="store_true",  dest="runbb")
 parser.add_option("-I", "--runImpact", action="store_true",  dest="runImpact")
 parser.add_option("-P", "--runPull", action="store_true",  dest="runPull")
 parser.add_option("-S", "--submitJobs", action="store_true",  dest="submitJobs")
+parser.add_option("--scalelimits", action="store_true", dest="scalelimits")
+parser.add_option("--scalegglimits", action="store_true", dest="scalegglimits")
+parser.add_option("--scalebblimits", action="store_true", dest="scalebblimits")
+parser.add_option("--scalewwlimits", action="store_true", dest="scalewwlimits")
+parser.add_option("--scalettlimits", action="store_true", dest="scalettlimits")
+
 (options, args) = parser.parse_args()
+
+
+if options.myhelp:
+    helpmessage='''
+-c, --combine:        combine datacards. This will also produce text files for each final state listing the available mass points. 
+                      The available mass points for combination is also listed in the text file. The list of combined datacards are 
+                      also prepare in a text file which will be used later for running the combination. 
+
+-r, --runcombo:       Run the combine datacards. The list of datacards are in the already in bin/.txt file. 
+
+-T, --runtt:          Run only tau tau limits 
+
+-W, --runww:          Run only WW limits 
+
+-G, --rungg:          Run only gamma gamma limits
+
+-B, --runbb:          Run only bbbar limits
+
+-I, --runImpact:      Run impacts also 
+
+-P, --runPull:        Run the pulls also 
+
+-S, --submitJobs:     Submit the jobs on lxplus batch system. 
+
+--scalelimits:        scale the limits with theory cross-section value stored in crosssection text file in the bin. 
+
+--scalegglimits:      scale gamma gamma limits 
+
+--scalebblimits:      scale bbbar limits 
+
+--scalewwlimits:      scale ww limits
+
+--scalettlimits:      scale tau tau limits
+
+'''
+
+    print helpmessage
+
+
 
 ## User Utility 
 import config_combo as cc
+
+formatters = {             
+    'red': '\033[91m',     
+    'green': '\033[92m',   
+    'black':'\033[30m',
+    'green':'\033[32m',
+    'orange':'\033[33m',
+    'blue':'\033[34m',
+    'purple':'\033[35m',
+    'cyan':'\033[36m',
+    'lightgrey':'\033[37m',
+    'darkgrey':'\033[90m',
+    'lightred':'\033[91m',
+    'lightgreen':'\033[92m',
+    'yellow':'\033[93m',
+    'lightblue':'\033[94m',
+    'pink':'\033[95m',
+    'lightcyan':'\033[96m',
+    'END': '\033[0m',
+    'end': '\033[0m',
+    }
 
 
 def PrintAvailabilityStatus():
@@ -28,7 +95,16 @@ def PrintAvailabilityStatus():
     tt2hdmCardstxt = open(cc.monohCombo['ttcards2HDM'],'w')
     ww2hdmCardstxt = open(cc.monohCombo['wwcards2HDM'],'w')
     bb2hdmCardstxt = open(cc.monohCombo['bbcards2HDM'],'w')
-    for imass in open(cc.monohCombo['FSmasspoints2HDM']):
+    #for imass in open(cc.monohCombo['FSmasspoints2HDM']):
+    for imass in open(cc.monohCombo['allAvailable2HDM']):
+        print "                        "
+        print "                        "
+        print ("{blue}-----------------------------------------------------------------------------------{END}".format(**formatters))
+        print ("{blue}--------                                                                     ------{END}".format(**formatters))
+        print ("--------                          "+ imass.rstrip() + "                                    ------")
+        print ("{blue}--------                                                                     ------{END}".format(**formatters))
+        print ("{blue}-----------------------------------------------------------------------------------{END}".format(**formatters))
+        
         gg_ = cc.monohCombo['ggpath2HDM'] + cc.monohCombo['gg_cardname2HDM']
         ww_ = cc.monohCombo['wwpath2HDM']+ cc.monohCombo['ww_cardname2HDM']
         tt_ = cc.monohCombo['tautaupath2HDM']+ cc.monohCombo['tautau_cardname2HDM']
@@ -42,28 +118,47 @@ def PrintAvailabilityStatus():
         gg_ = gg_.replace('XXX',x_).replace('YYY',y_)
         ggstatus_=True
         if not bool(os.path.exists(gg_)): 
-            print gg_, 'does not exist'
+            print gg_, '{red}does not exist{END}'.format(**formatters)
             ggstatus_ = False
+
+
     ## ww
         ww_ = ww_.replace('XXX',x_).replace('YYY',y_)
         wwstatus_=True
+
         if not bool(os.path.exists(ww_)): 
             wwstatus_= False
-            print ww_, 'does not exist'
+            print ww_, '{red}does not exist{end}'.format(**formatters)
+        
+        if bool(os.path.exists(ww_)): 
+        ## remove auto stats from WW cards from now. 
+            tmp_ww_ = ww_+'.bak'
+            os.system('cp '+ww_ + ' ' + tmp_ww_)
+            tmp_ww_card_ = open(tmp_ww_,'w')
+            for idline in open(ww_):
+                ## mc stats are not working with present setup 
+                idline = idline.replace("* autoMCStats", "#* autoMCStats")
+                tmp_ww_card_.write(idline)
+                
+            tmp_ww_card_.close()
+            os.system('cp '+tmp_ww_ + ' ' + ww_)
             
+
+
     ## tautu
         tt_ = tt_.replace('XXX',x_).replace('YYY',y_)
         ttstatus_=True
         if not bool(os.path.exists(tt_)):
             ttstatus_=False
-            print tt_, 'does not exist'
+            print tt_, '{red}does not exist{end}'.format(**formatters)
         
 
         bb_ = bb_.replace('XXX',x_).replace('YYY',y_)
         bbstatus_=True
         if not bool(os.path.exists(bb_)):
             bbstatus_=False
-            print bb_, 'does not exist'
+            print bb_, '{red}does not exist{end}'.format(**formatters)
+            #print bb_, '{red} does not exist {end}'.format(**formatters)
 
         iline = x_ + ' ' + y_ + ' '+ str(ggstatus_)  + ' ' + str(wwstatus_)  +' '+ str(ttstatus_)  +' '+ str(bbstatus_) + '\n'
         
@@ -72,7 +167,34 @@ def PrintAvailabilityStatus():
         ## if all final state has the datacards then create the combine datacard
         outCardname = cc.monohCombo['combocardname2HDM']
         outCardname = outCardname.replace('XXX',x_).replace('YYY',y_)
-        if (bool(ggstatus_) & bool(wwstatus_) & bool(ttstatus_) & bool(bbstatus_)):
+        ## general conditiona, combine irrespective of other final states, e.g. if only one of them is missing. But bb should be present. 
+        cond1 = (bool(ggstatus_) & bool(wwstatus_) & bool(ttstatus_) & bool(bbstatus_))
+        cond2 = (not (bool(ggstatus_))) & bool(wwstatus_) & bool(ttstatus_) & bool(bbstatus_)
+        cond3 = (bool(ggstatus_) & (not bool(wwstatus_)) & bool(ttstatus_) & bool(bbstatus_))
+        cond4 = (bool(ggstatus_) & bool(wwstatus_) & (not bool(ttstatus_)) & bool(bbstatus_))
+        
+        ## when mzp is < 800 then bb is not important 
+        cond5 = bool (float(x_)<800) & (bool(ggstatus_) & bool(wwstatus_) & bool(ttstatus_))
+        cond6 = bool (float(x_)<800) & (bool(ggstatus_) & bool(wwstatus_) & (not bool(ttstatus_)))
+        cond7 = bool (float(x_)<800) & (not bool(ggstatus_)) & bool(wwstatus_) & bool(ttstatus_)
+
+        ## for very high masses consider only bb
+        cond8 = bool (float(x_)>2500) &  (bool(bbstatus_))
+        cond9 = bool (float(y_)>800)  &  (bool(bbstatus_))
+
+        cond10 = bool (float(x_)<600) & (bool(ggstatus_) & bool(ttstatus_) & (not bool(wwstatus_) ) )
+        cond11 = bool (float(x_)<600) & (bool(ggstatus_) & (not bool(ttstatus_))  & (not bool(wwstatus_) ) )
+        cond12 = bool (float(x_)<600) & (not bool(ggstatus_)) & (bool(ttstatus_)  & (not bool(wwstatus_) ) )
+
+        ## adding WW also
+        cond13 = bool (float(x_)<600) & (bool(ggstatus_) & bool(ttstatus_)  & bool(wwstatus_)  )
+        cond14 = bool (float(x_)<600) & (bool(ggstatus_) & (not bool(ttstatus_))  & bool(wwstatus_) )
+        cond15 = bool (float(x_)<600) & (not bool(ggstatus_)) & (bool(ttstatus_)  & bool(wwstatus_) )
+
+        print cond1 , cond2 , cond3 , cond4 , cond5 , cond6 , cond7 , cond8 , cond9 , cond10 , cond11 , cond12 , cond13 , cond14 , cond15
+        
+        #if (bool(ggstatus_) & bool(wwstatus_) & bool(ttstatus_) & bool(bbstatus_)):
+        if cond1 | cond2 | cond3 | cond4 | cond5 | cond6 | cond7 | cond8 | cond9 | cond10 | cond11 | cond12 | cond13 | cond14 | cond15 :
             
             print 'status = ', bool(ggstatus_), bool(wwstatus_), bool(ttstatus_), bool(bbstatus_)
             ## write individual cards iff all of them are present, otherwise there is no use of running these cards. 
@@ -87,7 +209,28 @@ def PrintAvailabilityStatus():
             ttstr = 'tt=' + tt_ + ' '
             bbstr = 'bb=' + bb_ + ' '
             poststr = ' > '+ outCardname
-            comboStr = prestr + ggstr + wwstr + ttstr + bbstr + poststr
+            comboStr = ''
+            
+            if cond1:     comboStr = prestr + ggstr + wwstr + ttstr + bbstr + poststr
+            if cond2:     comboStr = prestr         + wwstr + ttstr + bbstr + poststr
+            if cond3:     comboStr = prestr + ggstr         + ttstr + bbstr + poststr
+            if cond4:     comboStr = prestr + ggstr + wwstr         + bbstr + poststr
+            if cond5:     comboStr = prestr + ggstr + wwstr + ttstr +         poststr
+            if cond6:     comboStr = prestr + ggstr + wwstr +                 poststr
+            if cond7:     comboStr = prestr +         wwstr + ttstr +         poststr
+            if cond8:     comboStr = prestr +                         bbstr + poststr
+            if cond9:     comboStr = prestr +                         bbstr + poststr
+            if cond10:    comboStr = prestr + ggstr +         ttstr         + poststr
+            if cond11:    comboStr = prestr + ggstr +                       + poststr
+            if cond12:    comboStr = prestr +       +         ttstr         + poststr
+            if cond13:    comboStr = prestr + ggstr + wwstr + ttstr         + poststr
+            if cond14:    comboStr = prestr + ggstr + wwstr                 + poststr
+            if cond15:    comboStr = prestr +         wwstr + ttstr         + poststr
+
+            
+            
+            #comboStr = prestr +  wwstr + ttstr +  poststr
+            print "comboStr ", comboStr
             os.system(comboStr)
             
         ## Fix the lines related to WW
@@ -95,13 +238,17 @@ def PrintAvailabilityStatus():
             os.system('cp '+outCardname + ' ' + tmp_outCardname)
             combocard = open(outCardname,'w')
             for idline in open(tmp_outCardname):
+                ## mc stats are not working with present setup 
+                #idline = idline.replace("* autoMCStats", "#* autoMCStats")
                 idline = idline.replace("combocards/datacards_combination/monoH_MVA_em/muccamva2HDMadaptFull_All_Bin800", "combocards/")
             ## File the line related to bb 2HDM 
                 idline = idline.replace("combocards/bb_2HDM/datacards/combocards/bb_2HDM/","combocards/bb_2HDM/")
+                idline = idline.replace("combocards/bb_2HDM/datacards/workspace/","combocards/bb_2HDM/workspace")
+                
+                
                 combocard.write(idline)
             combocard.close()
             comboCardstxt.write(outCardname+'\n')
-
 
     textOut.close() ## close if one line has been written. Close it outside for loop
     comboCardstxt.close()
@@ -139,7 +286,16 @@ def RunLimits(cardList):
             logfile = 'bin/temp_'+logfile+'.log'
             
             # prepare the command
-            command_  = 'combine -M Asymptotic '+icard.rstrip()+' | tee '+logfile
+            command_ = './scan.sh '+icard.rstrip()
+            if options.rungg:
+                command_ = command_.replace("scan.sh", "scan_gg.sh")
+            if options.runtt:
+                command_ = command_.replace("scan.sh", "scan_tt.sh")
+            if options.runww:
+                command_ = command_.replace("scan.sh", "scan_ww.sh")
+            if options.runbb:
+                command_ = command_.replace("scan.sh", "scan_bb.sh")
+            #command_  = 'combine -M Asymptotic '+icard.rstrip()+' | tee '+logfile
             
             # run it
             os.system(command_)
@@ -183,6 +339,16 @@ eval `scram runtime -sh`
 cd /afs/cern.ch/work/k/khurana/monoHSignalProduction/genproductions/bin/MadGraph5_aMCatNLO/testgridpack/CMSSW_7_4_5/src/MonoHCombination/
 /afs/cern.ch/work/k/khurana/monoHSignalProduction/genproductions/bin/MadGraph5_aMCatNLO/testgridpack/CMSSW_7_4_5/src/MonoHCombination/scan.sh DATACARDNAME
 '''
+    
+    if options.rungg:
+        tempshell = tempshell.replace("scan.sh", "scan_gg.sh")
+    if options.runtt:
+        tempshell = tempshell.replace("scan.sh", "scan_tt.sh")
+    if options.runww:
+        tempshell = tempshell.replace("scan.sh", "scan_ww.sh")
+    if options.runbb:
+        tempshell = tempshell.replace("scan.sh", "scan_bb.sh")
+    
     shellfilename = 'temporary_'+cardname.rstrip().split("/")[-1].replace(".txt",".sh")
     
     if bool(os.path.exists(shellfilename)):
@@ -203,10 +369,38 @@ cd /afs/cern.ch/work/k/khurana/monoHSignalProduction/genproductions/bin/MadGraph
     #os.chdir(pwd_)
     return 0
 
-
-        
+def ScaleLimits(limits):
+    xsec_dict={}
+    for iline in open(cc.monohCombo["xsec2HDM"]):
+        mzp = str(iline.rstrip().split()[0])
+        ma0 = str(iline.rstrip().split()[1])
+        xsec = str(iline.rstrip().split()[2])
+        key_ = mzp + '_'+ ma0
+        xsec_dict[key_] = xsec
+    print xsec_dict
     
+    limitsscaled = limits.replace(".txt","_scaled.txt")
 
+    
+    flimitout = open(limitsscaled, "w")
+    for ilimit in open(limits):
+        mzp = str(ilimit.rstrip().split()[0])
+        ma0 = str(ilimit.rstrip().split()[1])
+        key_ = mzp + '_'+ ma0
+        if key_ in xsec_dict:
+            xsec = float(xsec_dict[key_] )
+
+            twolo_ = str(float(ilimit.rstrip().split()[2])/xsec)
+            onelo_ = str(float(ilimit.rstrip().split()[3])/xsec)
+            mid_   = str(float(ilimit.rstrip().split()[4])/xsec)
+            onehi_ = str(float(ilimit.rstrip().split()[5])/xsec)
+            twohi_ = str(float(ilimit.rstrip().split()[6])/xsec)
+            obs_   = str(float(ilimit.rstrip().split()[7])/xsec)
+            
+            newlimit = mzp + ' '+ ma0 + ' '+ twolo_ + ' '+ onelo_ + ' '+ mid_ + ' '+ onehi_ + ' '+ twohi_ + ' '+ obs_ + '\n'
+            print newlimit
+            flimitout.write(newlimit)
+    flimitout.close()
 if __name__ == "__main__":
     
         
@@ -228,5 +422,21 @@ if __name__ == "__main__":
     if options.runbb:
         RunLimits(cc.monohCombo['bbcards2HDM'])
 
-                
+    if options.scalelimits:
+        ScaleLimits(cc.monohCombo["limits2HDM"])
+
+    if options.scalegglimits:
+        ScaleLimits("bin/limits_2hdm_gg.txt")
+
+    if options.scalebblimits:
+        ScaleLimits("bin/limits_2hdm_bb.txt")
+
+    if options.scalewwlimits:
+        ScaleLimits("bin/limits_2hdm_ww.txt")
+
+    if options.scalettlimits:
+        ScaleLimits("bin/limits_2hdm_tt.txt")
+
+        
+    
 # python  RunCombo.py -c -r -B -W -T -G -I -P 

@@ -12,6 +12,17 @@ monohCombo={
 'wwpathZPB':'combocards/datacards_combination/monoH_MVA_em/muccamvaZbaradaptFull_All_Bin100/',
 'bbpathZPB':'combocards/',
 
+## datacards names
+'gg_cardname2HDM':'dataCard_sig_2HDM_mZPXXX_mA0YYY_13TeV.txt',
+'tautau_cardname2HDM':'ZprimeXXXAYYY/cmb/YYY/DataCard_2HDM_MXXX_YYYGeV_MonoHTauTau_13TeV.txt',
+'ww_cardname2HDM':'datacard_XXX_YYY_combined.txt',
+'bb_cardname2HDM':'monoHnn_MZXXX_MAYYY.txt',
+
+'gg_cardnameZPB':'datacard_ntuples4fit_pho_allMC_woLepVetos_met50_met130_cic_default_shapes_lumi_35.9_MonoHgg_sig_ZpBaryonic_mZPXXX_mChiYYY_13TeV.txt',
+'tautau_cardnameZPB':'BaryonicXXXAYYY/cmb/YYY/DataCard_ZpB_MXXX_YYYGeV_MonoHTauTau_13TeV.txt',
+'ww_cardnameZPB':'',
+'bb_cardnameZPB':'',
+
 
 ## full sim samples mass point
 'FSmasspoints2HDM':'bin/FS2HDM.txt',
@@ -44,16 +55,10 @@ monohCombo={
 'wwcardsZPB':'bin/wwcardsZPB.txt',
 'bbcardsZPB':'bin/bbcardsZPB.txt',
 
-## datacards names
-'gg_cardname2HDM':'dataCard_sig_2HDM_mZPXXX_mA0YYY_13TeV.txt',
-'tautau_cardname2HDM':'ZprimeXXXAYYY/cmb/YYY/DataCard_2HDM_MXXX_YYYGeV_MonoHTauTau_13TeV.txt',
-'ww_cardname2HDM':'datacard_XXX_YYY_combined.txt',
-'bb_cardname2HDM':'monoHnn_MZXXX_MAYYY.txt',
+'xsec2HDM':'bin/crosssectionZp2HDM.txt',
+'limits2HDM': 'bin/limits_2hdm_combo.txt',
+'limits2HDMscaled':'bin/limits_2hdm_combo_xs_scaled.txt',
 
-'gg_cardnameZPB':'',
-'tautau_cardnameZPB':'',
-'ww_cardnameZPB':'',
-'bb_cardnameZPB':'',
 
 'combocardname2HDM':'combocards/combo_gg_ww_tt_bb_2HDM/Datacard_MZpXXXMa0YYYMonoHCombo2016FullData.txt',
 'combocardnameZpB':'combocards/combo_gg_ww_tt_bb_ZpB/Datacard_MZpXXXMa0YYYMonoHCombo2016FullData.txt',
