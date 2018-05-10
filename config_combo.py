@@ -10,7 +10,7 @@ monohCombo={
 'ggpathZPB':'combocards/gg_BARY/',
 'tautaupathZPB':'combocards/MB_ZpB_tt/',
 'wwpathZPB':'combocards/datacards_combination/monoH_MVA_em/muccamvaZbaradaptFull_All_Bin100/',
-'bbpathZPB':'combocards/',
+'bbpathZPB':'combocards/bb_Zpb/MonoXFit_Raman/datacards/',
 
 ## datacards names
 'gg_cardname2HDM':'dataCard_sig_2HDM_mZPXXX_mA0YYY_13TeV.txt',
@@ -20,8 +20,8 @@ monohCombo={
 
 'gg_cardnameZPB':'datacard_ntuples4fit_pho_allMC_woLepVetos_met50_met130_cic_default_shapes_lumi_35.9_MonoHgg_sig_ZpBaryonic_mZPXXX_mChiYYY_13TeV.txt',
 'tautau_cardnameZPB':'BaryonicXXXAYYY/cmb/YYY/DataCard_ZpB_MXXX_YYYGeV_MonoHTauTau_13TeV.txt',
-'ww_cardnameZPB':'',
-'bb_cardnameZPB':'',
+'ww_cardnameZPB':'datacard_ZB_XXX_YYY__combined.txt',
+'bb_cardnameZPB':'Datacards_zpb_monohbb_BarZp-XXX-YYY.txt',
 
 
 ## full sim samples mass point
@@ -61,6 +61,6 @@ monohCombo={
 
 
 'combocardname2HDM':'combocards/combo_gg_ww_tt_bb_2HDM/Datacard_MZpXXXMa0YYYMonoHCombo2016FullData.txt',
-'combocardnameZpB':'combocards/combo_gg_ww_tt_bb_ZpB/Datacard_MZpXXXMa0YYYMonoHCombo2016FullData.txt',
+'combocardnameZPB':'combocards/combo_gg_ww_tt_bb_ZpB/Datacard_MZpXXXMa0YYYMonoHCombo2016FullData.txt',
 
 }

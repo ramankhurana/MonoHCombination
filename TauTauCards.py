@@ -15,9 +15,22 @@ parser.add_option("-b", "--zpb", action="store_true", dest="zpb")
 (options, args) = parser.parse_args()
 
 
+#mzp_ = []
+#mdm_ = []
+#
+#for iline in open("bin/tautauZpBAll.txt"):
+#    mzp_.append(iline.rstrip().split()[0])
+#    mdm_.append(iline.rstrip().split()[1])
+#
+#    
+#print mzp_ 
+#print mdm_    
+#
 
-for imass in range(450,4050,50):
-    for ia0mass in range(300,1025,25):
+#for imass in range(450,4050,50):
+#    for ia0mass in range(300,1025,25):
+for imass in (1,10,20,50):
+    for ia0mass in (1, 10):
         basename=''
         if options.thdm:
             basename='combocards/MB_2HDM_tt/Zprime'+(str(imass))+'A'+str(ia0mass)+'/cmb/'+str(ia0mass)+'/'
