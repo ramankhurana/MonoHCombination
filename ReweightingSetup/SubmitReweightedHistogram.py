@@ -29,7 +29,7 @@ def SubmitJobfunc(mzp, ma0):
 
 time=0
 #for imass in open('refined.txt'):
-for imass in open('test.txt'):
+for imass in open('FSAllZPB.txt'):
 #for imass in open('zpbaryonicMass_private.txt'):
 #for imass in open('zpbaryonicMass_official.txt'):
     mzp = imass.rstrip().split(" ")[0]

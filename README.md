@@ -1,4 +1,4 @@
-## cards path: 
+# cards path: 
 
 bb 2hdm: https://github.com/zucchett/Combination
 
@@ -12,28 +12,31 @@ tautau: /afs/cern.ch/work/g/gfunk/public/datacards_monoh_combo_all/MB_tt_COMBO_U
 
 ZZ: 
 
-## Prepration of cards 
+# Prepration of cards 
 
-# for bb 2HDM 
+## for bb 2HDM 
 
 python BBCards.py
 
-# for bb ZpB 
+## for bb ZpB 
+### create datacards using
 
+###
 
-# for TauTau 
+## for TauTau 
 python TauTauCards.py -t
-python TauTauCards.py -b
+python TauTauCards_zpb.py -b
 
-# for WW 
+## for WW 
 
-# for ZZ 
+## for ZZ 
 
-# for gg 
+## for gg 
 
 
 
-## You can run various steps needed for the mono-H combination using the single macro: 
+
+# You can run various steps needed for the mono-H combination using the single macro: 
 
 python RunCombo.py 
 
@@ -58,7 +61,15 @@ python TauTauCards.py -b
 ## for ZZ setup 
 
 
+## Once the limit text file is there, you need to scale the limits and plot them. 
+### Limit can be rescaled using: 
+python RunLimits.py --rescale
 
+### Clean limits, this will remove those mass points for which limit has failed. 
+python CleanLimits.py
+
+### RemoveDuplicate, Just in case one point was ran twice, you can remove it using following: 
+python FindDuplicate.py
 
 
 

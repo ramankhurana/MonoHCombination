@@ -249,7 +249,7 @@ def PrintAvailabilityStatus():
             if cond8:     comboStr = prestr +                         bbstr + poststr
             if cond9:     comboStr = prestr +                         bbstr + poststr
             if cond10:    comboStr = prestr + ggstr +         ttstr         + poststr
-            if cond11:    comboStr = prestr + ggstr +                       + poststr
+            if cond11:    comboStr = prestr + ggstr                         + poststr
             if cond12:    comboStr = prestr +       +         ttstr         + poststr
             if cond13:    comboStr = prestr + ggstr + wwstr + ttstr         + poststr
             if cond14:    comboStr = prestr + ggstr + wwstr                 + poststr
@@ -257,7 +257,7 @@ def PrintAvailabilityStatus():
 
             
             if cond16:    comboStr = prestr + ggstr + wwstr + ttstr + bbstr + poststr
-            comboStr = prestr + ggstr + wwstr + ttstr + bbstr + poststr
+            #comboStr = prestr + ggstr + wwstr + ttstr + bbstr + poststr
             
             ''' various options in which this combination can run on ''' 
             ''' this will make the cards and then later can be run using -r option for any combination '''
@@ -295,7 +295,8 @@ def PrintAvailabilityStatus():
                     idline = idline.replace("combocards/bb_2HDM/datacards/combocards/bb_2HDM/","combocards/bb_2HDM/")
                     idline = idline.replace("combocards/bb_2HDM/datacards/workspace/","combocards/bb_2HDM/workspace/")
                 if options.zpb:
-                    idline = idline.replace("combocards/datacards_combination/monoH_MVA_em/muccamvaZbaradaptFull_All_Bin800", "combocards/")
+                    #combocards/datacards_combination/monoH_MVA_em/muccamvaZbaradaptFull_All_Bin100/datacards_combination
+                    idline = idline.replace("combocards/datacards_combination/monoH_MVA_em/muccamvaZbaradaptFull_All_Bin100/", "combocards/")
                                 
                 combocard.write(idline)
             combocard.close()
@@ -406,6 +407,9 @@ cd /afs/cern.ch/work/k/khurana/monoHSignalProduction/genproductions/bin/MadGraph
     if options.runbb:
         tempshell = tempshell.replace("scan.sh", "scan_bb.sh")
     
+    if options.zpb:
+        tempshell = tempshell.replace("scan.sh", "scan_zpb.sh")
+
     shellfilename = 'temporary_'+cardname.rstrip().split("/")[-1].replace(".txt",".sh")
     
     if bool(os.path.exists(shellfilename)):

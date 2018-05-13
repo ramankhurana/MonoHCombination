@@ -390,7 +390,7 @@ def SaveHisto(filename, mzp, ma0, postfix=""):
 
 # reweighted histograms are saved in this file
     #outputfilename = 'monoHReweightedSignalShapes.root'
-    outputfilename = 'weightfiles/monoHReweightedSignalShapes'+str(mzp)+'_'+str(ma0)+'.root'
+    outputfilename = 'weightfiles_combo/monoHReweightedSignalShapes'+str(mzp)+'_'+str(ma0)+'.root'
     
     massvalue = [mzp,ma0]
     isinOfficalSample = IsOfficialSample(massvalue)
@@ -452,8 +452,14 @@ def SaveHisto(filename, mzp, ma0, postfix=""):
 
 
 if __name__ == "__main__":
-    filename = 'limitForest_nominal.root'
-    ## loop over all the files and save the gen and reco histograms in same rootfile
+    ''' for actual cross-section '''
+    #filename = 'limitForest_nominal.root'
+    
+    ''' for 1 pb cross-section '''
+    filename = '/afs/cern.ch/work/k/khurana/monoHSignalProduction/genproductions/bin/MadGraph5_aMCatNLO/testgridpack/CMSSW_7_4_5/src/MonoHCombination/combocards/bb_Zpb/limitForest_all.root'
+    
+
+## loop over all the files and save the gen and reco histograms in same rootfile
     if options.savehisto:
         #for ifile in open('rootfiles.txt'):
         #filename = ifile.rstrip()

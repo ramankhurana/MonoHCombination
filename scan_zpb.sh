@@ -32,5 +32,5 @@ exp=`echo "scale=7 ; $exp / $branchingratio" | bc`
 onesigup=`echo "scale=7 ; $onesigup / $branchingratio" | bc`
 twosigup=`echo "scale=7 ; $twosigup / $branchingratio" | bc`
 
-echo "$mzp $ma0 ${mediator} ${dm} ${twosigdown} ${onesigdown} ${exp} ${onesigup} ${twosigup} ${observed}" >> bin/limits_2hdm_combo.txt
+echo "$mzp $ma0 ${mediator} ${dm} ${twosigdown} ${onesigdown} ${exp} ${onesigup} ${twosigup} ${observed}" >> bin/limits_zpb_combo.txt
 
