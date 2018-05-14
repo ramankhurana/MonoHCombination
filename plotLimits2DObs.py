@@ -126,6 +126,7 @@ def makePlot2D(filepath,foutname,medcfg,chicfg,header='',offshell=False):
         val = max(0.01,min(100,val))
         hs[h].SetBinContent(iX+1,iY+1,val)
 
+
   hs['obsclone'] = hs['obs'].Clone() # clone it so we can draw with different settings
   for h in ['exp','expup','expdown','obsclone','obsup','obsdown']:
     hs[h].SetContour(2)
@@ -135,6 +136,17 @@ def makePlot2D(filepath,foutname,medcfg,chicfg,header='',offshell=False):
         if hs[h].GetBinContent(iX,iY)<=0:
           hs[h].SetBinContent(iX,iY,100)
 
+  
+
+
+  graphroot = TFile("limitGraphs2HDMComboTanBeta.root","UPDATE")
+  graphroot.cd()
+  hs['exp'].Write()
+  hs['expup'].Write()
+  hs['expdown'].Write()
+  hs['obsclone'].Write()
+  hs['obsup'].Write()
+  hs['obsdown'].Write()
   global iC
   canvas = ROOT.TCanvas("canvas%i"%iC, '',  1000, 800)
   canvas.SetLogz()
