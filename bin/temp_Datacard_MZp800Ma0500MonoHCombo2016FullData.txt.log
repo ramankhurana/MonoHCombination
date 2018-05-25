@@ -1,0 +1,48 @@
+>>> including systematics
+>>> method used to compute upper limit is Asymptotic
+>>> random number generator seed is 123456
+[?1034h[#0] ERROR:Eval -- RooAbsReal::logEvalError(shapeBkg_ggh_gg_met130) evaluation error, 
+ origin       : RooHistPdf::shapeBkg_ggh_gg_met130[ pdfObs=(mgg) ]
+ message      : p.d.f normalization integral is zero or negative
+ server values: pdfObs=(mgg = 143)
+Computing limit starting from observation
+Will compute both limit(s) using minimizer Minuit2 with strategy 0 and tolerance 0.01
+  [WARNING] Found [rate_QCD_cr_inclusive_et] at boundary. 
+  [WARNING] Found [rate_QCD_cr_inclusive_mt] at boundary. 
+  [WARNING] Found [rate_QCD_cr_inclusive_tt] at boundary. 
+Constraints of type RooGaussian: 31
+Constraints of type SimpleGaussianConstraint: 622
+Median for expected limits: 0.151855
+Sigma  for expected limits: 0.0774787
+Constraints of type RooGaussian: 31
+Constraints of type SimpleGaussianConstraint: 622
+Constraints of type RooGaussian: 31
+Constraints of type SimpleGaussianConstraint: 622
+Restricting r to positive values.
+
+Make global fit of real data
+NLL at global minimum of data: -222.543 (r = 0.0417326)
+
+Make global fit of asimov data
+NLL at global minimum of asimov: -224.136 (r = 5.16639e-05)
+At r = 1.241733:	q_mu = 113.42333	q_A  = 122.44457	CLsb = 0.00000	CLb  = 0.66109	CLs  = 0.00000
+At r = 0.641733:	q_mu = 40.06286	q_A  = 46.67559	CLsb = 0.00000	CLb  = 0.69232	CLs  = 0.00000
+At r = 0.341733:	q_mu = 12.38560	q_A  = 16.61328	CLsb = 0.00022	CLb  = 0.71111	CLs  = 0.00030
+At r = 0.191733:	q_mu = 3.47006	q_A  = 5.94191	CLsb = 0.03124	CLb  = 0.71728	CLs  = 0.04356
+At r = 0.116733:	q_mu = 0.92478	q_A  = 2.35371	CLsb = 0.16811	CLb  = 0.71652	CLs  = 0.23462
+At r = 0.154233:	q_mu = 2.01114	q_A  = 3.97409	CLsb = 0.07807	CLb  = 0.71748	CLs  = 0.10882
+At r = 0.179714:	q_mu = 2.96404	q_A  = 5.27569	CLsb = 0.04257	CLb  = 0.71744	CLs  = 0.05933
+At r = 0.185039:	q_mu = 3.18387	q_A  = 5.56682	CLsb = 0.03718	CLb  = 0.71738	CLs  = 0.05183
+At r = 0.187486:	q_mu = 3.28723	q_A  = 5.70282	CLsb = 0.03491	CLb  = 0.71735	CLs  = 0.04867
+At r = 0.186157:	q_mu = 3.23088	q_A  = 5.62878	CLsb = 0.03613	CLb  = 0.71737	CLs  = 0.05037
+At r = 0.186649:	q_mu = 3.25167	q_A  = 5.65611	CLsb = 0.03568	CLb  = 0.71736	CLs  = 0.04973
+
+ -- Asymptotic -- 
+Observed Limit: r < 0.1866
+Expected  2.5%: r < 0.0798
+Expected 16.0%: r < 0.1071
+Expected 50.0%: r < 0.1519
+Expected 84.0%: r < 0.2166
+Expected 97.5%: r < 0.2980
+
+Done in 2.36 min (cpu), 2.36 min (real)

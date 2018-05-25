@@ -1,0 +1,10 @@
+mzp mdm gg ww tt bb 
+450 300 True True True False
+500 300 True True True False
+500 325 True True True False
+500 350 True True True False
+550 300 True True True False
+550 325 True True True False
+550 350 True True True False
+550 375 False True True False
+550 400 True True True False

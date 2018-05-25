@@ -1,0 +1,44 @@
+>>> including systematics
+>>> method used to compute upper limit is Asymptotic
+>>> random number generator seed is 123456
+[?1034h[#0] ERROR:Eval -- RooAbsReal::logEvalError(shapeBkg_ggh_gg_met130) evaluation error, 
+ origin       : RooHistPdf::shapeBkg_ggh_gg_met130[ pdfObs=(mgg) ]
+ message      : p.d.f normalization integral is zero or negative
+ server values: pdfObs=(mgg = 143)
+Computing limit starting from observation
+Will compute both limit(s) using minimizer Minuit2 with strategy 0 and tolerance 0.01
+  [WARNING] Found [rate_QCD_cr_inclusive_et] at boundary. 
+  [WARNING] Found [rate_QCD_cr_inclusive_mt] at boundary. 
+  [WARNING] Found [rate_QCD_cr_inclusive_tt] at boundary. 
+Constraints of type SimpleGaussianConstraint: 559
+Median for expected limits: 0.404297
+Sigma  for expected limits: 0.206278
+Constraints of type SimpleGaussianConstraint: 559
+Constraints of type SimpleGaussianConstraint: 559
+Restricting r to positive values.
+
+Make global fit of real data
+NLL at global minimum of data: -63.7533 (r = 7.12827e-07)
+
+Make global fit of asimov data
+NLL at global minimum of asimov: -61.8805 (r = 0.000160543)
+At r = 1.200001:	q_mu = 20.41542	q_A  = 22.14938	CLsb = 0.00000	CLb  = 0.57455	CLs  = 0.00001
+At r = 0.600001:	q_mu = 7.06431	q_A  = 7.40628	CLsb = 0.00393	CLb  = 0.52534	CLs  = 0.00748
+At r = 0.300001:	q_mu = 2.40166	q_A  = 2.27328	CLsb = 0.06053	CLb  = 0.48302	CLs  = 0.12532
+At r = 0.450001:	q_mu = 4.51505	q_A  = 4.58220	CLsb = 0.01680	CLb  = 0.50628	CLs  = 0.03318
+At r = 0.382974:	q_mu = 3.51139	q_A  = 3.47870	CLsb = 0.03047	CLb  = 0.49650	CLs  = 0.06137
+At r = 0.414250:	q_mu = 3.96844	q_A  = 3.98016	CLsb = 0.02318	CLb  = 0.50117	CLs  = 0.04625
+At r = 0.401103:	q_mu = 3.77387	q_A  = 3.76642	CLsb = 0.02603	CLb  = 0.49923	CLs  = 0.05214
+At r = 0.407410:	q_mu = 3.86676	q_A  = 3.86842	CLsb = 0.02463	CLb  = 0.50017	CLs  = 0.04923
+At r = 0.404791:	q_mu = 3.82809	q_A  = 3.82594	CLsb = 0.02520	CLb  = 0.49978	CLs  = 0.05042
+At r = 0.406055:	q_mu = 3.84673	q_A  = 3.84641	CLsb = 0.02492	CLb  = 0.49997	CLs  = 0.04985
+
+ -- Asymptotic -- 
+Observed Limit: r < 0.4061
+Expected  2.5%: r < 0.2029
+Expected 16.0%: r < 0.2792
+Expected 50.0%: r < 0.4043
+Expected 84.0%: r < 0.5993
+Expected 97.5%: r < 0.8528
+
+Done in 0.78 min (cpu), 0.78 min (real)
