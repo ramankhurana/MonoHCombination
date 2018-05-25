@@ -139,14 +139,6 @@ def makePlot2D(filepath,foutname,medcfg,chicfg,header='',offshell=False):
   
 
 
-  graphroot = TFile("limitGraphs2HDMComboTanBeta.root","UPDATE")
-  graphroot.cd()
-  hs['exp'].Write()
-  hs['expup'].Write()
-  hs['expdown'].Write()
-  hs['obsclone'].Write()
-  hs['obsup'].Write()
-  hs['obsdown'].Write()
   global iC
   canvas = ROOT.TCanvas("canvas%i"%iC, '',  1000, 800)
   canvas.SetLogz()
@@ -209,6 +201,10 @@ def makePlot2D(filepath,foutname,medcfg,chicfg,header='',offshell=False):
   hs['exp'].SetLineWidth(3)
   hs['exp'].SetLineColor(1)
   hs['exp'].Draw('CONT3 SAME')
+  
+  conts['exp'] = get_contours(hs['exp'], canvas)[0]
+  conts['obsclone'] = get_contours(hs['obsclone'], canvas)[0]
+
 
   hs['expup'].SetLineStyle(3)
   hs['expup'].SetLineWidth(2)
@@ -223,6 +219,29 @@ def makePlot2D(filepath,foutname,medcfg,chicfg,header='',offshell=False):
   conts['expdown'] = get_contours(hs['expdown'], canvas)[0]
   conts['expdown'].Draw('L SAME')
   #hs['expdown'].Draw('CONT3 SAME')
+
+
+  graphroot = TFile("limitGraphs2HDMComboTanBeta.root","RECREATE")
+  graphroot.cd()
+  h_exp = conts['exp']
+  h_exp.SetName("expected_curve")
+  h_exp.Write()  
+  #conts['exp'].Write()
+  
+  conts['expup'].Write()
+  conts['expdown'].Write()
+  #conts['obsclone'].Write()
+  
+  h_obs = conts['obsclone']
+  h_obs.SetName("observed_curve")
+  h_obs.Write()
+  
+  conts['obsup'].Write()
+  conts['obsdown'].Write()
+
+  
+
+
 
   if drawLegend:
     leg = root.TLegend(0.13,0.75,0.39,0.9);#,NULL,"brNDC");
@@ -324,5 +343,10 @@ plotsdir = plotConfig.plotDir
 #makePlot2D('limits_barzp_cleaned_NoDuplicate.txt',plotsdir+'/test',(100,0.011,2.0),(100,0.0011,0.7),"Z'-Baryonic",True)
 
 ''' for mono-h combination '''
-makePlot2D('bin/limits_2hdm_combo_scaled_cleaned_NoDuplicate.txt',plotsdir+'/test',(200,0.45,3.5),(100,0.301,1.002),'Z`-2HDM',True)
+if options.thdm:
+  makePlot2D('bin/limits_2hdm_combo_scaled_cleaned_NoDuplicate.txt',plotsdir+'/limit2d_2hdm_combo_',(200,0.45,3.5),(100,0.301,1.002),'Z`-2HDM',True)
+
+if options.zpb:
+  makePlot2D('bin/limits_zpb_combo_cleaned_NoDuplicate_scaled.txt',plotsdir+'/limit2d_zpb_combo_',(100,0.011,2.0),(100,0.0011,0.7),'Z`-Baryonic',True)
+
 #makePlot2D('/afs/cern.ch/work/k/khurana/monoHSignalProduction/genproductions/bin/MadGraph5_aMCatNLO/testgridpack/CMSSW_7_4_5/src/MonoHCombination/bin/limits_2hdm_combo_xs_scaled.txt',plotsdir+'/test',(100,0.601,3.5),(100,0.301,0.810),'Test',True)

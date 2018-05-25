@@ -1,8 +1,11 @@
 import os 
 import sys 
 
-initialFile = 'bin/limits_2hdm_combo_scaled_cleaned.txt'
-NewFile     = 'bin/limits_2hdm_combo_scaled_cleaned_NoDuplicate.txt'
+#initialFile = 'bin/limits_2hdm_combo_scaled_cleaned.txt'
+#NewFile     = 'bin/limits_2hdm_combo_scaled_cleaned_NoDuplicate.txt'
+
+initialFile = 'bin/limits_zpb_combo_cleaned.txt'
+NewFile     = 'bin/limits_zpb_combo_cleaned_NoDuplicate.txt'
 
 fout = open(NewFile, 'w')
 fulllist=[]

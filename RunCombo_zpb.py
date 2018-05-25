@@ -117,6 +117,8 @@ def PrintAvailabilityStatus():
     textOut = open(cc.monohCombo['statusAll'+model_],'w')
     firstline = 'mzp mdm gg ww tt bb \n'
     textOut.write(firstline)
+    
+    
     comboCardstxt = open(cc.monohCombo['combocards'+model_],'w')
     gg2hdmCardstxt = open(cc.monohCombo['ggcards'+model_],'w')
     tt2hdmCardstxt = open(cc.monohCombo['ttcards'+model_],'w')
@@ -359,8 +361,8 @@ def RunLimits(cardList):
             os.system(command_)
             
             # extract limit in oe line to fill the text file.
-            limits = ExtractLimits(logfile)
-            print icard, limits
+            #limits = ExtractLimits(logfile)
+            #print icard, limits
             
         
         ## if one ask to submit the job for a given datacard list. 
@@ -445,10 +447,13 @@ def ScaleLimits(limits):
     
     flimitout = open(limitsscaled, "w")
     for ilimit in open(limits):
+        print "scaling limits for ", ilimit
         mzp = str(ilimit.rstrip().split()[0])
         ma0 = str(ilimit.rstrip().split()[1])
         key_ = mzp + '_'+ ma0
+        print key_, (key_ in xsec_dict)
         if key_ in xsec_dict:
+            print "found match "
             xsec = float(xsec_dict[key_] )
 
             twolo_ = str(float(ilimit.rstrip().split()[2])/xsec)
@@ -480,9 +485,9 @@ if __name__ == "__main__":
         print " string_ = ", string_
         RunLimits(cc.monohCombo['combocards'+model_])
         
-    '''
+    '''        
     if options.rungg:
-        RunLimits(cc.monohCombo['ggcards'+model_])
+        RunLimits(cc.monohCombo['combocards'+model_])
 
     if options.runtt:
         RunLimits(cc.monohCombo['ttcards'+model_])
@@ -494,20 +499,27 @@ if __name__ == "__main__":
         RunLimits(cc.monohCombo['bbcards'+model_])
 
     '''
-    if options.scalelimits:
+    if options.scalelimits and not options.zpb:
         ScaleLimits(cc.monohCombo["limits"+model_])
 
+    if options.scalelimits and options.zpb:
+        ScaleLimits('bin/plotsLimitcombozpb/limits_zpb_combo_mchi1.txt')
+
     if options.scalegglimits:
-        ScaleLimits("bin/limits_"+model_+"_gg.txt")
+        #ScaleLimits("bin/limits_"+model_+"_gg.txt")
+        ScaleLimits("bin/plotsLimitcombozpb/limits_zpb_gg.txt")
 
     if options.scalebblimits:
-        ScaleLimits("bin/limits_"+model_+"_bb.txt")
+        #ScaleLimits("bin/limits_"+model_+"_bb.txt")
+        #ScaleLimits("bin/plotsLimitcombozpb/limits_zpb_bb.txt")
+        ScaleLimits("/afs/cern.ch/work/k/khurana/public/AnalysisStuff/plotsLimitZpBarApprovalMonoHbb/limits_barzp_monohbb_90C_cleaned.txt")
 
     if options.scalewwlimits:
-        ScaleLimits("bin/limits_"+model_+"_ww.txt")
+        #ScaleLimits("bin/limits_"+model_+"_ww.txt")
+        ScaleLimits("bin/plotsLimitcombozpb/limits_zpb_ww.txt")
 
     if options.scalettlimits:
-        ScaleLimits("bin/limits_"+model_+"_tt.txt")
+        ScaleLimits("bin/plotsLimitcombozpb/limits_zpb_tt.txt")
 
         
     

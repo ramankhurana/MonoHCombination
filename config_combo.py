@@ -56,6 +56,7 @@ monohCombo={
 'bbcardsZPB':'bin/bbcardsZPB.txt',
 
 'xsec2HDM':'bin/crosssectionZp2HDM.txt',
+'xsecZPB':'bin/crosssectionZpBaryonic.txt',
 'limits2HDM': 'bin/limits_2hdm_combo.txt',
 'limits2HDMscaled':'bin/limits_2hdm_combo_xs_scaled.txt',
 

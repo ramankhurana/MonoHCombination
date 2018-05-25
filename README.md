@@ -36,6 +36,17 @@ python TauTauCards_zpb.py -b
 
 
 
+## Run limits for one channel 
+### For gg : this will create datacards with all paths fixed. 
+python RunCombo_zpb.py -c -b --rungg
+
+change if you want to change the dtacards on which limit will be run. 
+### Following will run the limits on the points listed in the .txt file. 
+python RunCombo_zpb.py -r -b 
+
+### copy the limit.txt into anew file before running the next decay mode 
+
+
 # You can run various steps needed for the mono-H combination using the single macro: 
 
 python RunCombo.py 
@@ -124,3 +135,9 @@ python CombineDataCards.py Combination tt bb WW gg ZZ
 
 ## Run the combine cards 
 ## # ModelBiulder
+
+
+## get the SI limit plot 
+
+python makeDMnucleonXsecPlot.py  --tt --gg --cmb --dd --bb --plotxsec
+
