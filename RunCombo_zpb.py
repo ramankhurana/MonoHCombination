@@ -166,7 +166,7 @@ def PrintAvailabilityStatus():
             tmp_ww_card_ = open(tmp_ww_,'w')
             for idline in open(ww_):
                 ## mc stats are not working with present setup 
-                idline = idline.replace("* autoMCStats", "#* autoMCStats")
+                #idline = idline.replace("* autoMCStats", "#* autoMCStats")
                 tmp_ww_card_.write(idline)
                 
             tmp_ww_card_.close()
