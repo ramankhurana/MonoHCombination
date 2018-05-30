@@ -4,13 +4,10 @@
 branchingratio='1.0'
 dataardname=$1
 txtfilename=${dataardname}_limits.txt
-outputfilename=$2
-datestr=`echo $1 | sed -e "s/combocards\/combo_gg_ww_tt_bb_2HDM\/Datacard_MZp//g" | sed -e "s/Ma0//g" | sed -e "s/MonoHCombo2016FullData.txt//g"`
-echo $datestr
+mzp=`echo $1 | sed -e "s/combocards\/gg_2HDM\/dataCard_sig_2HDM_mZP//g"  | sed -e "s/_13TeV.txt//g" | sed 's/_mA0/ /g' | gawk '{print $1}'`
+ma0=`echo $1 | sed -e "s/combocards\/gg_2HDM\/dataCard_sig_2HDM_mZP//g"  | sed -e "s/_13TeV.txt//g" | sed 's/_mA0/ /g' | gawk '{print $2}'`
 
-mzp=`echo $1 | sed -e "s/combocards\/combo_gg_ww_tt_bb_2HDM\/Datacard_MZp//g"  | sed -e "s/MonoHCombo2016FullData.txt//g" | sed 's/Ma0/ /g' | gawk '{print $1}'`
-ma0=`echo $1 | sed -e "s/combocards\/combo_gg_ww_tt_bb_2HDM\/Datacard_MZp//g"  | sed -e "s/MonoHCombo2016FullData.txt//g" | sed 's/Ma0/ /g' | gawk '{print $2}'`
-
+datestr=${mzp}${ma0}
 echo $mzp
 echo $ma0
 #`date +%s%3`
@@ -33,5 +30,5 @@ exp=`echo "scale=7 ; $exp / $branchingratio" | bc`
 onesigup=`echo "scale=7 ; $onesigup / $branchingratio" | bc`
 twosigup=`echo "scale=7 ; $twosigup / $branchingratio" | bc`
 
-echo "$mzp $ma0 ${mediator} ${dm} ${twosigdown} ${onesigdown} ${exp} ${onesigup} ${twosigup} ${observed}" >> 
+echo "$mzp $ma0 ${mediator} ${dm} ${twosigdown} ${onesigdown} ${exp} ${onesigup} ${twosigup} ${observed}" >> bin/limits_2hdm_gg.txt
 

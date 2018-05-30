@@ -34,6 +34,22 @@ python TauTauCards_zpb.py -b
 ## for gg 
 
 
+## Create WW cards 
+python RunCombo_zpb.py  --runww -c -t 
+
+
+## Run WW cards
+python RunCombo_zpb.py  -S -t -r
+
+## Create gg cards 
+python RunCombo_zpb.py  --rungg -c -t
+
+## Run gg cards 
+python RunCombo_zpb.py  -S -t -r
+
+
+
+
 
 
 ## Run limits for one channel 

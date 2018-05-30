@@ -4,16 +4,15 @@
 branchingratio='1.0'
 dataardname=$1
 txtfilename=${dataardname}_limits.txt
-outputfilename=$2
-datestr=`echo $1 | sed -e "s/combocards\/combo_gg_ww_tt_bb_2HDM\/Datacard_MZp//g" | sed -e "s/Ma0//g" | sed -e "s/MonoHCombo2016FullData.txt//g"`
-echo $datestr
 
-mzp=`echo $1 | sed -e "s/combocards\/combo_gg_ww_tt_bb_2HDM\/Datacard_MZp//g"  | sed -e "s/MonoHCombo2016FullData.txt//g" | sed 's/Ma0/ /g' | gawk '{print $1}'`
-ma0=`echo $1 | sed -e "s/combocards\/combo_gg_ww_tt_bb_2HDM\/Datacard_MZp//g"  | sed -e "s/MonoHCombo2016FullData.txt//g" | sed 's/Ma0/ /g' | gawk '{print $2}'`
+
+mzp=`echo $1 | sed -e "s/combocards\/bb_2HDM\/datacards\/monoHnn_MZ//g"  | sed -e "s/.txt//g" | sed 's/_MA/ /g' | gawk '{print $1}'`
+ma0=`echo $1 | sed -e "s/combocards\/bb_2HDM\/datacards\/monoHnn_MZ//g"  | sed -e "s/.txt//g" | sed 's/_MA/ /g' | gawk '{print $2}'`
 
 echo $mzp
 echo $ma0
-#`date +%s%3`
+datestr=${mzp}${ma0}
+
 combine -M Asymptotic $dataardname --rAbsAcc 0 --rMax 30 --mass $datestr | tee ${txtfilename}
     #Parsing results into textfile
 observed=`cat ${txtfilename} | grep 'Observed Limit: r < ' | awk '{print $5}'`
@@ -33,5 +32,5 @@ exp=`echo "scale=7 ; $exp / $branchingratio" | bc`
 onesigup=`echo "scale=7 ; $onesigup / $branchingratio" | bc`
 twosigup=`echo "scale=7 ; $twosigup / $branchingratio" | bc`
 
-echo "$mzp $ma0 ${mediator} ${dm} ${twosigdown} ${onesigdown} ${exp} ${onesigup} ${twosigup} ${observed}" >> 
+echo "$mzp $ma0 ${mediator} ${dm} ${twosigdown} ${onesigdown} ${exp} ${onesigup} ${twosigup} ${observed}" >> bin/limits_2hdm_bb.txt
 

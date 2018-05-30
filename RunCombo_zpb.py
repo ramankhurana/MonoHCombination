@@ -37,6 +37,10 @@ parser.add_option("--scalebblimits", action="store_true", dest="scalebblimits")
 parser.add_option("--scalewwlimits", action="store_true", dest="scalewwlimits")
 parser.add_option("--scalettlimits", action="store_true", dest="scalettlimits")
 
+parser.add_option("--oned", action="store_true", dest="oned")
+parser.add_option("--SI", action="store_true", dest="SI")
+
+
 (options, args) = parser.parse_args()
 
 
@@ -347,6 +351,9 @@ def RunLimits(cardList):
             if options.zpb:
                 command_ = './scan_zpb.sh '+icard.rstrip()
             print 'command_ = ', command_
+
+            ''' following command_ is not needed, just check and remove them if not needed'''
+            
             if options.rungg:
                 command_ = command_.replace("scan.sh", "scan_gg.sh")
             if options.runtt:
@@ -390,7 +397,7 @@ def SubmitBatchJobs(cardname):
 
 
 def SubmitJobfunc(cardname):
-    tempshell='''
+    tempshell7='''
 #!/bin/sh                                                                                                                                                                           
 export SCRAM_ARCH=slc6_amd64_gcc491
 currentpath=$PWD
@@ -399,7 +406,19 @@ eval `scram runtime -sh`
 cd /afs/cern.ch/work/k/khurana/monoHSignalProduction/genproductions/bin/MadGraph5_aMCatNLO/testgridpack/CMSSW_7_4_5/src/MonoHCombination/
 /afs/cern.ch/work/k/khurana/monoHSignalProduction/genproductions/bin/MadGraph5_aMCatNLO/testgridpack/CMSSW_7_4_5/src/MonoHCombination/scan.sh DATACARDNAME
 '''
+
+    tempshell='''
+#!/bin/sh                                                                                                                                                                           
+export SCRAM_ARCH=slc6_amd64_gcc530
+currentpath=$PWD
+cd /afs/cern.ch/work/k/khurana/monoHSignalProduction/genproductions/bin/MadGraph5_aMCatNLO/testgridpack/CMSSW_8_1_0/src/
+eval `scram runtime -sh`
+cd /afs/cern.ch/work/k/khurana/monoHSignalProduction/genproductions/bin/MadGraph5_aMCatNLO/testgridpack/CMSSW_8_1_0/src/MonoHCombination/
+/afs/cern.ch/work/k/khurana/monoHSignalProduction/genproductions/bin/MadGraph5_aMCatNLO/testgridpack/CMSSW_8_1_0/src/MonoHCombination/scan.sh DATACARDNAME
+'''
+
     
+    ''' following might not be needed '''
     if options.rungg:
         tempshell = tempshell.replace("scan.sh", "scan_gg.sh")
     if options.runtt:
@@ -408,7 +427,9 @@ cd /afs/cern.ch/work/k/khurana/monoHSignalProduction/genproductions/bin/MadGraph
         tempshell = tempshell.replace("scan.sh", "scan_ww.sh")
     if options.runbb:
         tempshell = tempshell.replace("scan.sh", "scan_bb.sh")
-    
+    ''' upto this might not be needed '''
+
+
     if options.zpb:
         tempshell = tempshell.replace("scan.sh", "scan_zpb.sh")
 
@@ -499,27 +520,70 @@ if __name__ == "__main__":
         RunLimits(cc.monohCombo['bbcards'+model_])
 
     '''
-    if options.scalelimits and not options.zpb:
+
+    
+    ''' Followinf function calls are for scaling the limits text files'''
+    ''' Once the text files are scaled, one can remove the duplicate elements from them'''
+    
+    ## for one limits of 2HDM 
+    if options.scalelimits and options.thdm and options.oned:
+        ScaleLimits('bin/plotsLimitcombo2hdm/limits_2hdm_combo.txt')
+    
+    
+    ## for 2d limits of 2HDM and ZPB both models 
+    if options.scalelimits and (not options.oned) :
         ScaleLimits(cc.monohCombo["limits"+model_])
 
-    if options.scalelimits and options.zpb:
+
+    ## for 2d limits of ZPB both models for SI limits 
+    if options.scalelimits and (not options.oned) and options.SI and options.thdm :
+        ScaleLimits(cc.monohCombo["limits"+model_])
+
+    ## for one limits of ZPB
+    if options.scalelimits and options.zpb and options.oned :
         ScaleLimits('bin/plotsLimitcombozpb/limits_zpb_combo_mchi1.txt')
 
-    if options.scalegglimits:
-        #ScaleLimits("bin/limits_"+model_+"_gg.txt")
+    #@ for one d limits of gg for ZPB model
+    if options.scalegglimits and options.zpb:
         ScaleLimits("bin/plotsLimitcombozpb/limits_zpb_gg.txt")
-
-    if options.scalebblimits:
+    
+    ## for one d limits of gg for 2HDM model
+    if options.scalegglimits and options.thdm:
+        ScaleLimits("bin/plotsLimitcombo2hdm/limits_2hdm_gg.txt")
+        
+    ## for two d limits of bb for spin independednt results
+    if options.scalebblimits and options.zpb and options.SI:
         #ScaleLimits("bin/limits_"+model_+"_bb.txt")
         #ScaleLimits("bin/plotsLimitcombozpb/limits_zpb_bb.txt")
         ScaleLimits("/afs/cern.ch/work/k/khurana/public/AnalysisStuff/plotsLimitZpBarApprovalMonoHbb/limits_barzp_monohbb_90C_cleaned.txt")
+    
+    ## for one d limits of bb for 2hdm
+    if options.scalebblimits and options.thdm:
+        #ScaleLimits("bin/limits_"+model_+"_bb.txt")
+        ScaleLimits("bin/plotsLimitcombo2hdm/limits_2hdm_bb.txt")
 
-    if options.scalewwlimits:
+    ## for one d limits of bb for zpb
+    if options.scalebblimits and options.zpb:
+        #ScaleLimits("bin/limits_"+model_+"_bb.txt")
+        ScaleLimits("bin/plotsLimitcombozpb/limits_zpb_bb.txt")
+
+    ## for one d limits of ww for zpb
+    if options.scalewwlimits and options.zpb:
         #ScaleLimits("bin/limits_"+model_+"_ww.txt")
         ScaleLimits("bin/plotsLimitcombozpb/limits_zpb_ww.txt")
 
-    if options.scalettlimits:
+    ## for one d limits of ww for 2hdm
+    if options.scalewwlimits and options.thdm:
+        #ScaleLimits("bin/limits_"+model_+"_ww.txt")
+        ScaleLimits("bin/plotsLimitcombo2hdm/limits_2hdm_ww.txt")
+    
+    ## for one d limits of tt for zpb
+    if options.scalettlimits and options.zpb:
         ScaleLimits("bin/plotsLimitcombozpb/limits_zpb_tt.txt")
+    
+    ## for one d limits of tt for 2HDM
+    if options.scalettlimits and options.thdm:
+        ScaleLimits("bin/plotsLimitcombo2hdm/limits_2hdm_tt.txt")
 
         
     
