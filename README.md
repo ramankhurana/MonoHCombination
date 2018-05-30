@@ -37,16 +37,34 @@ python TauTauCards_zpb.py -b
 ## Create WW cards 
 python RunCombo_zpb.py  --runww -c -t 
 
-
 ## Run WW cards
-python RunCombo_zpb.py  -S -t -r
+python RunCombo_zpb.py  -S -t -r --runww --oned
 
 ## Create gg cards 
 python RunCombo_zpb.py  --rungg -c -t
 
 ## Run gg cards 
-python RunCombo_zpb.py  -S -t -r
+python RunCombo_zpb.py  -S -t -r --rungg --oned
 
+## Create bb cards 
+python RunCombo_zpb.py  --runbb -c -t
+
+## Run bb cards 
+python RunCombo_zpb.py  -S -t -r --runbb --oned
+
+
+## Create tt cards 
+python RunCombo_zpb.py  --runtt -c -t
+
+## Run tt cards 
+python RunCombo_zpb.py  -S -t -r --runtt --oned
+
+
+## Create combo cards 
+python RunCombo_zpb.py  -c -t
+
+## Run combo cards 
+python RunCombo_zpb.py  -S -t -r --oned
 
 
 

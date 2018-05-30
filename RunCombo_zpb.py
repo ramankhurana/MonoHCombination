@@ -330,7 +330,7 @@ def ExtractLimits(logfile):
     return [expected25_, expected16_, expected50_, expected84_, expected975_]
 
     
-def RunLimits(cardList):
+def RunLimits(cardList, outputfilename):
     
     ## if code has to be run locally
     ## no jobs will be submitted 
@@ -353,7 +353,7 @@ def RunLimits(cardList):
             print 'command_ = ', command_
 
             ''' following command_ is not needed, just check and remove them if not needed'''
-            
+            '''
             if options.rungg:
                 command_ = command_.replace("scan.sh", "scan_gg.sh")
             if options.runtt:
@@ -362,6 +362,7 @@ def RunLimits(cardList):
                 command_ = command_.replace("scan.sh", "scan_ww.sh")
             if options.runbb:
                 command_ = command_.replace("scan.sh", "scan_bb.sh")
+            '''
             #command_  = 'combine -M Asymptotic '+icard.rstrip()+' | tee '+logfile
             
             # run it
@@ -375,7 +376,7 @@ def RunLimits(cardList):
         ## if one ask to submit the job for a given datacard list. 
         if options.submitJobs:
             print "submitting batch jobs for cards listed in ", cardList
-            SubmitBatchJobs(icard.rstrip())
+            SubmitBatchJobs(icard.rstrip(), outputfilename)
             
             ## impact willl be run only in the batch mode
             if options.runImpact:
@@ -387,24 +388,24 @@ def RunLimits(cardList):
 
 
 
-def SubmitBatchJobs(cardname):
+def SubmitBatchJobs(cardname, outputfilename):
     print "routine to submit batch job has been called. "
     print "one job for each data card will be submitted now"
     print "submitting jobs for ", cardname 
-    SubmitJobfunc(cardname)
+    SubmitJobfunc(cardname, outputfilename)
     
 
 
 
-def SubmitJobfunc(cardname):
-    tempshell7='''
+def SubmitJobfunc(cardname, outputfilename):
+    tempshell747='''
 #!/bin/sh                                                                                                                                                                           
 export SCRAM_ARCH=slc6_amd64_gcc491
 currentpath=$PWD
 cd /afs/cern.ch/work/k/khurana/monoHSignalProduction/genproductions/bin/MadGraph5_aMCatNLO/testgridpack/CMSSW_7_4_7/src/
 eval `scram runtime -sh`
 cd /afs/cern.ch/work/k/khurana/monoHSignalProduction/genproductions/bin/MadGraph5_aMCatNLO/testgridpack/CMSSW_7_4_5/src/MonoHCombination/
-/afs/cern.ch/work/k/khurana/monoHSignalProduction/genproductions/bin/MadGraph5_aMCatNLO/testgridpack/CMSSW_7_4_5/src/MonoHCombination/scan.sh DATACARDNAME
+/afs/cern.ch/work/k/khurana/monoHSignalProduction/genproductions/bin/MadGraph5_aMCatNLO/testgridpack/CMSSW_7_4_5/src/MonoHCombination/scan.sh DATACARDNAME OUTPUTFILENAME
 '''
 
     tempshell='''
@@ -414,11 +415,12 @@ currentpath=$PWD
 cd /afs/cern.ch/work/k/khurana/monoHSignalProduction/genproductions/bin/MadGraph5_aMCatNLO/testgridpack/CMSSW_8_1_0/src/
 eval `scram runtime -sh`
 cd /afs/cern.ch/work/k/khurana/monoHSignalProduction/genproductions/bin/MadGraph5_aMCatNLO/testgridpack/CMSSW_8_1_0/src/MonoHCombination/
-/afs/cern.ch/work/k/khurana/monoHSignalProduction/genproductions/bin/MadGraph5_aMCatNLO/testgridpack/CMSSW_8_1_0/src/MonoHCombination/scan.sh DATACARDNAME
+/afs/cern.ch/work/k/khurana/monoHSignalProduction/genproductions/bin/MadGraph5_aMCatNLO/testgridpack/CMSSW_8_1_0/src/MonoHCombination/scan.sh DATACARDNAME OUTPUTFILENAME
 '''
 
     
     ''' following might not be needed '''
+    '''
     if options.rungg:
         tempshell = tempshell.replace("scan.sh", "scan_gg.sh")
     if options.runtt:
@@ -427,8 +429,9 @@ cd /afs/cern.ch/work/k/khurana/monoHSignalProduction/genproductions/bin/MadGraph
         tempshell = tempshell.replace("scan.sh", "scan_ww.sh")
     if options.runbb:
         tempshell = tempshell.replace("scan.sh", "scan_bb.sh")
+    ''' 
     ''' upto this might not be needed '''
-
+    
 
     if options.zpb:
         tempshell = tempshell.replace("scan.sh", "scan_zpb.sh")
@@ -440,6 +443,7 @@ cd /afs/cern.ch/work/k/khurana/monoHSignalProduction/genproductions/bin/MadGraph
         
     fileshell = open(shellfilename,'w')
     tempshell = tempshell.replace("DATACARDNAME",cardname)
+    tempshell = tempshell.replace("OUTPUTFILENAME",outputfilename)
     fileshell.write(tempshell)
     
     #pwd_ = os.getcwd()
@@ -504,7 +508,26 @@ if __name__ == "__main__":
     if options.runcombo:
         string_ = 'combocards'+ model_
         print " string_ = ", string_
-        RunLimits(cc.monohCombo['combocards'+model_])
+
+        ''' find which text file will be used for the limits writing'''
+        channel = 'combo'
+        
+        if options.runbb:            channel = 'bb'
+        if options.rungg:            channel = 'gg'
+        if options.runtt:            channel = 'tt'
+        if options.runww:            channel = 'ww'
+        if options.runzz:            channel = 'zz'
+
+        filename = ''
+        if options.oned:
+            if options.thdm:
+                filename = 'bin/plotsLimitcombo2hdm/imits_2hdm_'+channel+'.txt'
+            if options.zpb:
+                filename = 'bin/plotsLimitcombozpb/imits_2hdm_'+channel+'.txt'
+        
+        ''' Now the file name is already saved in the filename, we can call the function with file name which will be sent to scan.sh at the end and hence limits file will be written'''
+        
+        RunLimits(cc.monohCombo['combocards'+model_], filename)
         
     '''        
     if options.rungg:

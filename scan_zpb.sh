@@ -4,6 +4,7 @@
 branchingratio='1.0'
 dataardname=$1
 txtfilename=${dataardname}_limits.txt
+outputfilename=$2
 datestr=`echo $1 | sed -e "s/combocards\/combo_gg_ww_tt_bb_ZpB\/Datacard_MZp//g" | sed -e "s/Ma0//g" | sed -e "s/MonoHCombo2016FullData.txt//g"`
 echo $datestr
 
@@ -32,5 +33,5 @@ exp=`echo "scale=7 ; $exp / $branchingratio" | bc`
 onesigup=`echo "scale=7 ; $onesigup / $branchingratio" | bc`
 twosigup=`echo "scale=7 ; $twosigup / $branchingratio" | bc`
 
-echo "$mzp $ma0 ${mediator} ${dm} ${twosigdown} ${onesigdown} ${exp} ${onesigup} ${twosigup} ${observed}" >> bin/limits_zpb_combo.txt
+echo "$mzp $ma0 ${mediator} ${dm} ${twosigdown} ${onesigdown} ${exp} ${onesigup} ${twosigup} ${observed}" >> $outputfilename
 
