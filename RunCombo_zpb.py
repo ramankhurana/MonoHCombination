@@ -522,7 +522,7 @@ if __name__ == "__main__":
         filename = ''
         if options.oned:
             if options.thdm:
-                filename = 'bin/plotsLimitcombo2hdm/imits_2hdm_'+channel+'.txt'
+                filename = 'bin/plotsLimitcombo2hdm/limits_2hdm_'+channel+'.txt'
             if options.zpb:
                 filename = 'bin/plotsLimitcombozpb/limits_zpb_'+channel+'.txt'
         
@@ -551,7 +551,7 @@ if __name__ == "__main__":
     
     ## for one limits of 2HDM 
     if options.scalelimits and options.thdm and options.oned:
-        ScaleLimits('bin/plotsLimitcombo2hdm/limits_2hdm_combo.txt')
+        ScaleLimits('bin/plotsLimitcombo2hdm/limits_2hdm_combo_sorted.txt')
     
     
     ## for 2d limits of 2HDM and ZPB both models 
@@ -565,7 +565,7 @@ if __name__ == "__main__":
 
     ## for one limits of ZPB
     if options.scalelimits and options.zpb and options.oned :
-        ScaleLimits('bin/plotsLimitcombozpb/limits_zpb_combo_mchi1.txt')
+        ScaleLimits('bin/plotsLimitcombozpb/limits_zpb_combo_mchi1_sorted.txt')
 
 
     ## for two d limits of bb for spin independednt results
@@ -580,12 +580,12 @@ if __name__ == "__main__":
     ## for one d limits of bb for 2hdm
     if options.scalebblimits and options.thdm and options.oned:
         #ScaleLimits("bin/limits_"+model_+"_bb.txt")
-        ScaleLimits("bin/plotsLimitcombo2hdm/limits_2hdm_bb.txt")
+        ScaleLimits("bin/plotsLimitcombo2hdm/limits_2hdm_bb_sorted.txt")
 
     ## for one d limits of bb for zpb
     if options.scalebblimits and options.zpb and options.oned:
         #ScaleLimits("bin/limits_"+model_+"_bb.txt")
-        ScaleLimits("bin/plotsLimitcombozpb/limits_zpb_bb.txt")
+        ScaleLimits("bin/plotsLimitcombozpb/limits_zpb_bb_sorted.txt")
 
 
 
@@ -594,22 +594,22 @@ if __name__ == "__main__":
 
     ## for one d limits of gg for ZPB model
     if options.scalegglimits and options.zpb and options.oned:
-        ScaleLimits("bin/plotsLimitcombozpb/limits_zpb_gg.txt")
+        ScaleLimits("bin/plotsLimitcombozpb/limits_zpb_gg_sorted.txt")
     
     ## for one d limits of gg for 2HDM model
     if options.scalegglimits and options.thdm and options.oned:
-        ScaleLimits("bin/plotsLimitcombo2hdm/limits_2hdm_gg.txt")
+        ScaleLimits("bin/plotsLimitcombo2hdm/limits_2hdm_gg_sorted.txt")
         
     
 
 
     ## for one d limits of tt for zpb
     if options.scalettlimits and options.zpb and options.oned:
-        ScaleLimits("bin/plotsLimitcombozpb/limits_zpb_tt.txt")
+        ScaleLimits("bin/plotsLimitcombozpb/limits_zpb_tt_sorted.txt")
     
     ## for one d limits of tt for 2HDM
     if options.scalettlimits and options.thdm and options.oned:
-        ScaleLimits("bin/plotsLimitcombo2hdm/limits_2hdm_tt.txt")
+        ScaleLimits("bin/plotsLimitcombo2hdm/limits_2hdm_tt_sorted.txt")
 
 
 
@@ -618,12 +618,12 @@ if __name__ == "__main__":
     ## for one d limits of ww for zpb
     if options.scalewwlimits and options.zpb and options.oned:
         #ScaleLimits("bin/limits_"+model_+"_ww.txt")
-        ScaleLimits("bin/plotsLimitcombozpb/limits_zpb_ww.txt")
+        ScaleLimits("bin/plotsLimitcombozpb/limits_zpb_ww_sorted.txt")
 
     ## for one d limits of ww for 2hdm
     if options.scalewwlimits and options.thdm and options.oned:
         #ScaleLimits("bin/limits_"+model_+"_ww.txt")
-        ScaleLimits("bin/plotsLimitcombo2hdm/limits_2hdm_ww.txt")
+        ScaleLimits("bin/plotsLimitcombo2hdm/limits_2hdm_ww_sorted.txt")
     
     
         
@@ -631,14 +631,11 @@ if __name__ == "__main__":
     ## for one d limits of zz for zpb
     if options.scalezzlimits and options.zpb and options.oned:
         #ScaleLimits("bin/limits_"+model_+"_zz.txt")
-        ScaleLimits("bin/plotsLimitcombozpb/limits_zpb_zz.txt")
+        ScaleLimits("bin/plotsLimitcombozpb/limits_zpb_zz_sorted.txt")
 
     ## for one d limits of zz for 2hdm
     if options.scalezzlimits and options.thdm and options.oned:
         #ScaleLimits("bin/limits_"+model_+"_zz.txt")
-        ScaleLimits("bin/plotsLimitcombo2hdm/limits_2hdm_zz.txt")
+        ScaleLimits("bin/plotsLimitcombo2hdm/limits_2hdm_zz_sorted.txt")
     
     
-        
-    
-# python  RunCombo.py -c -r -B -W -T -G -I -P 
