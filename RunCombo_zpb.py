@@ -34,8 +34,9 @@ parser.add_option("-S", "--submitJobs", action="store_true",  dest="submitJobs")
 parser.add_option("--scalelimits", action="store_true", dest="scalelimits")
 parser.add_option("--scalegglimits", action="store_true", dest="scalegglimits")
 parser.add_option("--scalebblimits", action="store_true", dest="scalebblimits")
-parser.add_option("--scalewwlimits", action="store_true", dest="scalewwlimits")
 parser.add_option("--scalettlimits", action="store_true", dest="scalettlimits")
+parser.add_option("--scalewwlimits", action="store_true", dest="scalewwlimits")
+parser.add_option("--scalezzlimits", action="store_true", dest="scalezzlimits")
 
 parser.add_option("--oned", action="store_true", dest="oned")
 parser.add_option("--SI", action="store_true", dest="SI")
@@ -566,48 +567,78 @@ if __name__ == "__main__":
     if options.scalelimits and options.zpb and options.oned :
         ScaleLimits('bin/plotsLimitcombozpb/limits_zpb_combo_mchi1.txt')
 
-    #@ for one d limits of gg for ZPB model
-    if options.scalegglimits and options.zpb:
-        ScaleLimits("bin/plotsLimitcombozpb/limits_zpb_gg.txt")
-    
-    ## for one d limits of gg for 2HDM model
-    if options.scalegglimits and options.thdm:
-        ScaleLimits("bin/plotsLimitcombo2hdm/limits_2hdm_gg.txt")
-        
+
     ## for two d limits of bb for spin independednt results
     if options.scalebblimits and options.zpb and options.SI:
         #ScaleLimits("bin/limits_"+model_+"_bb.txt")
         #ScaleLimits("bin/plotsLimitcombozpb/limits_zpb_bb.txt")
         ScaleLimits("/afs/cern.ch/work/k/khurana/public/AnalysisStuff/plotsLimitZpBarApprovalMonoHbb/limits_barzp_monohbb_90C_cleaned.txt")
+
+
+
     
     ## for one d limits of bb for 2hdm
-    if options.scalebblimits and options.thdm:
+    if options.scalebblimits and options.thdm and options.oned:
         #ScaleLimits("bin/limits_"+model_+"_bb.txt")
         ScaleLimits("bin/plotsLimitcombo2hdm/limits_2hdm_bb.txt")
 
     ## for one d limits of bb for zpb
-    if options.scalebblimits and options.zpb:
+    if options.scalebblimits and options.zpb and options.oned:
         #ScaleLimits("bin/limits_"+model_+"_bb.txt")
         ScaleLimits("bin/plotsLimitcombozpb/limits_zpb_bb.txt")
 
+
+
+
+
+
+    ## for one d limits of gg for ZPB model
+    if options.scalegglimits and options.zpb and options.oned:
+        ScaleLimits("bin/plotsLimitcombozpb/limits_zpb_gg.txt")
+    
+    ## for one d limits of gg for 2HDM model
+    if options.scalegglimits and options.thdm and options.oned:
+        ScaleLimits("bin/plotsLimitcombo2hdm/limits_2hdm_gg.txt")
+        
+    
+
+
+    ## for one d limits of tt for zpb
+    if options.scalettlimits and options.zpb and options.oned:
+        ScaleLimits("bin/plotsLimitcombozpb/limits_zpb_tt.txt")
+    
+    ## for one d limits of tt for 2HDM
+    if options.scalettlimits and options.thdm and options.oned:
+        ScaleLimits("bin/plotsLimitcombo2hdm/limits_2hdm_tt.txt")
+
+
+
+
+
     ## for one d limits of ww for zpb
-    if options.scalewwlimits and options.zpb:
+    if options.scalewwlimits and options.zpb and options.oned:
         #ScaleLimits("bin/limits_"+model_+"_ww.txt")
         ScaleLimits("bin/plotsLimitcombozpb/limits_zpb_ww.txt")
 
     ## for one d limits of ww for 2hdm
-    if options.scalewwlimits and options.thdm:
+    if options.scalewwlimits and options.thdm and options.oned:
         #ScaleLimits("bin/limits_"+model_+"_ww.txt")
         ScaleLimits("bin/plotsLimitcombo2hdm/limits_2hdm_ww.txt")
     
-    ## for one d limits of tt for zpb
-    if options.scalettlimits and options.zpb:
-        ScaleLimits("bin/plotsLimitcombozpb/limits_zpb_tt.txt")
     
-    ## for one d limits of tt for 2HDM
-    if options.scalettlimits and options.thdm:
-        ScaleLimits("bin/plotsLimitcombo2hdm/limits_2hdm_tt.txt")
+        
+    
+    ## for one d limits of zz for zpb
+    if options.scalezzlimits and options.zpb and options.oned:
+        #ScaleLimits("bin/limits_"+model_+"_zz.txt")
+        ScaleLimits("bin/plotsLimitcombozpb/limits_zpb_zz.txt")
 
+    ## for one d limits of zz for 2hdm
+    if options.scalezzlimits and options.thdm and options.oned:
+        #ScaleLimits("bin/limits_"+model_+"_zz.txt")
+        ScaleLimits("bin/plotsLimitcombo2hdm/limits_2hdm_zz.txt")
+    
+    
         
     
 # python  RunCombo.py -c -r -B -W -T -G -I -P 

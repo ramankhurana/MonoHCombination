@@ -34,6 +34,8 @@ python TauTauCards_zpb.py -b
 ## for gg 
 
 
+# Create the combine cards for each final state 
+
 ## Create WW cards 
 python RunCombo_zpb.py  --runww -c -t 
 
@@ -73,7 +75,50 @@ python SortLimit.py
 This will sort all the file in listed in the script. Add more if you wish. 
 
 
+# Scale limits 1D
 
+## For 2HDM 
+
+### bb
+python RunCombo_zpb.py -t --scalebblimits --oned
+
+### gg
+
+python RunCombo_zpb.py -t --scalegglimits --oned	
+
+### tt
+
+python RunCombo_zpb.py -t --scalettlimits --oned	
+
+### ww
+
+python RunCombo_zpb.py -t --scalewwlimits --oned
+
+### zz
+
+python RunCombo_zpb.py -t --scalezzlimits --oned
+
+## For ZpB  
+
+### bb
+
+python RunCombo_zpb.py -b --scalebblimits --oned 
+
+### gg
+
+python RunCombo_zpb.py -b --scalegglimits --oned 
+
+### tt
+
+python RunCombo_zpb.py -b --scalettlimits --oned 
+
+### ww
+
+python RunCombo_zpb.py -b --scalewwlimits --oned 
+
+### zz
+
+python RunCombo_zpb.py -b --scalezzlimits --oned 
 
 
 ## Run limits for one channel 
