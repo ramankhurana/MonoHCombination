@@ -29,9 +29,15 @@ python TauTauCards_zpb.py -b
 
 ## for WW 
 
+not applicable: done in the RunCombo_zpb.py
+
 ## for ZZ 
 
+not applicable 
+
 ## for gg 
+
+not applicable
 
 
 # Create the combine cards for each final state 
