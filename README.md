@@ -67,6 +67,12 @@ python RunCombo_zpb.py  -c -t
 python RunCombo_zpb.py  -S -t -r --oned
 
 
+# Once the limit is run for each of them, you can now sort the one d limits, this is needed to make the graphs directly from the text file. 
+python SortLimit.py 
+
+This will sort all the file in listed in the script. Add more if you wish. 
+
+
 
 
 

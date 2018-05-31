@@ -523,7 +523,7 @@ if __name__ == "__main__":
             if options.thdm:
                 filename = 'bin/plotsLimitcombo2hdm/imits_2hdm_'+channel+'.txt'
             if options.zpb:
-                filename = 'bin/plotsLimitcombozpb/imits_2hdm_'+channel+'.txt'
+                filename = 'bin/plotsLimitcombozpb/limits_zpb_'+channel+'.txt'
         
         ''' Now the file name is already saved in the filename, we can call the function with file name which will be sent to scan.sh at the end and hence limits file will be written'''
         
