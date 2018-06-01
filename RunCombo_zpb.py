@@ -23,7 +23,8 @@ parser.add_option(      "--runggtt", action="store_true",  dest="runggtt")
 parser.add_option(      "--runggww", action="store_true",  dest="runggww")
 parser.add_option(      "--runttww", action="store_true",  dest="runttww")
 parser.add_option(      "--runbbggtt", action="store_true",  dest="runbbggtt")
-parser.add_option(      "--runbbggttww", action="store_true",  dest="runbbggttww")
+parser.add_option(      "--runbbggww", action="store_true",  dest="runbbggww")
+parser.add_option(      "--runggttww", action="store_true",  dest="runggttww")
 
 
 parser.add_option("-I", "--runImpact", action="store_true",  dest="runImpact")
@@ -281,7 +282,8 @@ def PrintAvailabilityStatus():
             if options.runggww:                 comboStr = prestr + ggstr +  wwstr +  poststr
             if options.runttww:                 comboStr = prestr + ttstr +  wwstr +  poststr
             if options.runbbggtt:               comboStr = prestr + bbstr +  ggstr +  ttstr +  poststr
-            if options.runbbggttww:             comboStr = prestr + bbstr +  ggstr +  ttstr + wwstr +  poststr
+            if options.runbbggww:               comboStr = prestr + bbstr +  ggstr +  wwstr +  poststr
+            if options.runggttww:             comboStr = prestr +          ggstr +  ttstr + wwstr +  poststr
             
             
             
