@@ -33,6 +33,16 @@ textfiles.append("bin/plotsLimitcombo2hdm/limits_2hdm_bb.txt")
 textfiles.append("bin/plotsLimitcombo2hdm/limits_2hdm_gg.txt")
 textfiles.append("bin/plotsLimitcombo2hdm/limits_2hdm_tt.txt")
 textfiles.append("bin/plotsLimitcombo2hdm/limits_2hdm_ww.txt")
+
+textfiles.append("bin/plotsLimitcombozpb/limits_zpb_combo.txt")
+textfiles.append("bin/plotsLimitcombozpb/limits_zpb_bb.txt")
+textfiles.append("bin/plotsLimitcombozpb/limits_zpb_gg.txt")
+textfiles.append("bin/plotsLimitcombozpb/limits_zpb_tt.txt")
+textfiles.append("bin/plotsLimitcombozpb/limits_zpb_ww.txt")
+
+textfiles.append("bin/plotsLimitcombozpb/limits2D_zpb_combo.txt")
+
+
 '''
 #textfiles.append("bin/plotsLimitcombo2hdm/limits_2hdm_zz.txt") this is for ZZ
 textfiles.append("bin/plotsLimitcombozpb/limits_zpb_combo.txt")

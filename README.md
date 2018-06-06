@@ -113,6 +113,8 @@ python RunCombo_zpb.py  -c -b
 ## Run combo cards 
 python RunCombo_zpb.py  -S -b -r --oned
 
+## Run combo cards for SI Limits
+python RunCombo_zpb.py -S -b -r --SI 
 
 
 # Once the limit is run for each of them, you can now sort the one d limits, this is needed to make the graphs directly from the text file. 
@@ -309,3 +311,12 @@ python CombineDataCards.py Combination tt bb WW gg ZZ
 
 python makeDMnucleonXsecPlot.py  --tt --gg --cmb --dd --bb --plotxsec
 
+
+
+
+
+## Additional 
+
+combine -M Asymptotic roostats-all.root  --freezeParameters zjetsScale
+
+nuisance edit  rename * ww CMS_2016_eff_b CMS2016_eff_b

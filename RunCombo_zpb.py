@@ -265,6 +265,29 @@ def PrintAvailabilityStatus():
 
             
             if cond16:    comboStr = prestr + ggstr + wwstr + ttstr + bbstr + poststr
+
+            status_={'bb': bool(bbstatus_),
+                     'gg': bool(ggstatus_),
+                     'tt': bool(ttstatus_),
+                     'ww': bool(wwstatus_) 
+                     }
+            
+            channelstr_ = {'bb':bbstr,
+                           'gg':ggstr, 
+                           'tt':ttstr,
+                           'ww':wwstr
+                           }
+            str_ = prestr 
+            print 'list of keys', status_.keys()
+            for key, values in status_.iteritems():
+                if values: 
+                    str_ = str_ + channelstr_[key]
+            str_ = str_ + poststr
+
+            print "combination string for the zpb model is: ", str_
+            if cond16: comboStr = str_ 
+            
+            
             #comboStr = prestr + ggstr + wwstr + ttstr + bbstr + poststr
             
             ''' various options in which this combination can run on ''' 
@@ -308,6 +331,11 @@ def PrintAvailabilityStatus():
                     idline = idline.replace("combocards/datacards_combination/monoH_MVA_em/muccamvaZbaradaptFull_All_Bin100/", "combocards/")
                                 
                 combocard.write(idline)
+                
+            combocard.write("nuisance edit  rename * bb sf_ele CMS2016_eff_e \n")
+            combocard.write("nuisance edit  rename * bb sf_mu CMS2016_eff_m \n")
+            combocard.write("nuisance edit  rename * bb lumi CMS2016_lumi \n")
+
             combocard.close()
             comboCardstxt.write(outCardname+'\n')
 
@@ -353,6 +381,11 @@ def RunLimits(cardList, outputfilename):
                 command_ = './scan.sh '+icard.rstrip()
             if options.zpb:
                 command_ = './scan_zpb.sh '+icard.rstrip()
+
+            if options.zpb and options.SI:
+                command_ = './scan_zpb_SI.sh '+icard.rstrip()
+                outputfilename = outputfilename.replace(".txt", "_SI.txt")
+                
             print 'command_ = ', command_
 
             ''' following command_ is not needed, just check and remove them if not needed'''
@@ -521,7 +554,11 @@ if __name__ == "__main__":
         if options.runww:            channel = 'ww'
         if options.runzz:            channel = 'zz'
 
-        filename = ''
+
+        model_small_ = ''
+
+        filename = 'bin/plotsLimitcombo'+model_.lower()+'/limits2D_'+model_.lower()+'_'+channel+'.txt'
+        
         if options.oned:
             if options.thdm:
                 filename = 'bin/plotsLimitcombo2hdm/limits_2hdm_'+channel+'.txt'
@@ -562,7 +599,7 @@ if __name__ == "__main__":
 
 
     ## for 2d limits of ZPB both models for SI limits 
-    if options.scalelimits and (not options.oned) and options.SI and options.thdm :
+    if options.scalelimits and (not options.oned) and options.SI and options.zpb :
         ScaleLimits(cc.monohCombo["limits"+model_])
 
     ## for one limits of ZPB

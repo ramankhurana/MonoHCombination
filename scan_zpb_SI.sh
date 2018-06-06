@@ -14,7 +14,7 @@ ma0=`echo $1 | sed -e "s/combocards\/combo_gg_ww_tt_bb_ZpB\/Datacard_MZp//g"  | 
 echo $mzp
 echo $ma0
 #`date +%s%3`
-combine -M Asymptotic $dataardname --rAbsAcc 0 --rMax 30 --mass $datestr  | tee ${txtfilename}
+combine -M Asymptotic $dataardname --rAbsAcc 0 --rMax 30 --mass $datestr -C 0.90  | tee ${txtfilename}
 
     #Parsing results into textfile
 observed=`cat ${txtfilename} | grep 'Observed Limit: r < ' | awk '{print $5}'`
