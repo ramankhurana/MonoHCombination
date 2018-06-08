@@ -385,6 +385,7 @@ def RunLimits(cardList, outputfilename):
             if options.zpb and options.SI:
                 command_ = './scan_zpb_SI.sh '+icard.rstrip()
                 outputfilename = outputfilename.replace(".txt", "_SI.txt")
+            print 'outputfilename = ', outputfilename
                 
             print 'command_ = ', command_
 
@@ -509,6 +510,7 @@ def ScaleLimits(limits):
     flimitout = open(limitsscaled, "w")
     for ilimit in open(limits):
         print "scaling limits for ", ilimit
+        if not ilimit.strip(): continue 
         mzp = str(ilimit.rstrip().split()[0])
         ma0 = str(ilimit.rstrip().split()[1])
         key_ = mzp + '_'+ ma0
@@ -592,7 +594,7 @@ if __name__ == "__main__":
     if options.scalelimits and options.thdm and options.oned:
         ScaleLimits('bin/plotsLimitcombo2hdm/limits_2hdm_combo_sorted.txt')
     
-    
+    '''
     ## for 2d limits of 2HDM and ZPB both models 
     if options.scalelimits and (not options.oned) :
         ScaleLimits(cc.monohCombo["limits"+model_])
@@ -601,10 +603,20 @@ if __name__ == "__main__":
     ## for 2d limits of ZPB both models for SI limits 
     if options.scalelimits and (not options.oned) and options.SI and options.zpb :
         ScaleLimits(cc.monohCombo["limits"+model_])
-
+    
+    '''
     ## for one limits of ZPB
     if options.scalelimits and options.zpb and options.oned :
         ScaleLimits('bin/plotsLimitcombozpb/limits_zpb_combo_mchi1_sorted.txt')
+
+
+    ## for one limits of ZPB
+    if options.scalelimits and options.zpb and (not options.oned ) and options.SI :
+        ScaleLimits('bin/plotsLimitcombozpb/limits2D_zpb_combo_SI_sorted.txt')
+
+
+    if options.scalelimits and options.zpb and (not options.oned ):
+        ScaleLimits('bin/plotsLimitcombozpb/limits2D_zpb_combo_sorted.txt')
 
 
     ## for two d limits of bb for spin independednt results

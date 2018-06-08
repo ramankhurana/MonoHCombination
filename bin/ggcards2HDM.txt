@@ -1,0 +1,4 @@
+combocards/gg_2HDM/dataCard_sig_2HDM_mZP450_mA0300_13TeV.txt
+combocards/gg_2HDM/dataCard_sig_2HDM_mZP500_mA0300_13TeV.txt
+combocards/gg_2HDM/dataCard_sig_2HDM_mZP550_mA0300_13TeV.txt
+combocards/gg_2HDM/dataCard_sig_2HDM_mZP600_mA0300_13TeV.txt
