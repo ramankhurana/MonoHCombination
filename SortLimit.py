@@ -43,6 +43,7 @@ textfiles.append("bin/plotsLimitcombozpb/limits_zpb_ww.txt")
 textfiles.append("bin/plotsLimitcombozpb/limits2D_zpb_bb.txt")
 textfiles.append("bin/plotsLimitcombozpb/limits2D_zpb_combo.txt")
 textfiles.append("bin/plotsLimitcombozpb/limits2D_zpb_combo_SI.txt")
+textfiles.append("bin/FSAllZPB.txt")
 
 
 '''

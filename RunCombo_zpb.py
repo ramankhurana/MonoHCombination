@@ -638,6 +638,11 @@ if __name__ == "__main__":
         #ScaleLimits("bin/limits_"+model_+"_bb.txt")
         ScaleLimits("bin/plotsLimitcombozpb/limits_zpb_bb_sorted.txt")
 
+    ## for one d limits of bb for zpb
+    if options.scalebblimits and options.zpb and not options.oned:
+        #ScaleLimits("bin/limits_"+model_+"_bb.txt")
+        ScaleLimits("bin/plotsLimitcombozpb/limits2D_zpb_bb_sorted.txt")
+
 
 
 
