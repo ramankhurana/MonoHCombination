@@ -1,4 +1,1 @@
-combocards/bb_2HDM/datacards/monoHnn_MZ450_MA300.txt
-combocards/bb_2HDM/datacards/monoHnn_MZ500_MA300.txt
-combocards/bb_2HDM/datacards/monoHnn_MZ550_MA300.txt
-combocards/bb_2HDM/datacards/monoHnn_MZ600_MA300.txt
+combocards/bb_2HDM/datacards/monoHnn_MZ1400_MA300.txt

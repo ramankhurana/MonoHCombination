@@ -383,8 +383,9 @@ def RunLimits(cardList, outputfilename):
                 command_ = './scan_zpb.sh '+icard.rstrip()
 
             if options.zpb and options.SI:
-                command_ = './scan_zpb_SI.sh '+icard.rstrip()
                 outputfilename = outputfilename.replace(".txt", "_SI.txt")
+                command_ = './scan_zpb_SI.sh '+icard.rstrip()+ ' '+ outputfilename
+                
             print 'outputfilename = ', outputfilename
                 
             print 'command_ = ', command_

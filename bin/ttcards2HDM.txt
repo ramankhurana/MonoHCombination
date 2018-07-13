@@ -1,4 +1,1 @@
-combocards/MB_2HDM_tt/Zprime450A300/cmb/300/DataCard_2HDM_M450_300GeV_MonoHTauTau_13TeV.txt
-combocards/MB_2HDM_tt/Zprime500A300/cmb/300/DataCard_2HDM_M500_300GeV_MonoHTauTau_13TeV.txt
-combocards/MB_2HDM_tt/Zprime550A300/cmb/300/DataCard_2HDM_M550_300GeV_MonoHTauTau_13TeV.txt
-combocards/MB_2HDM_tt/Zprime600A300/cmb/300/DataCard_2HDM_M600_300GeV_MonoHTauTau_13TeV.txt
+combocards/MB_2HDM_tt/Zprime1400A300/cmb/300/DataCard_2HDM_M1400_300GeV_MonoHTauTau_13TeV.txt

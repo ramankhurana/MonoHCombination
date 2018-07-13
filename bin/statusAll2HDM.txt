@@ -1,5 +1,2 @@
 mzp mdm gg ww tt bb 
-450 300 True True True False
-500 300 True True True False
-550 300 True True True False
-600 300 True True True False
+1400 300 True True True True
