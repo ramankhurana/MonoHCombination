@@ -29,9 +29,179 @@ python TauTauCards_zpb.py -b
 
 ## for WW 
 
+not applicable: done in the RunCombo_zpb.py
+
 ## for ZZ 
 
+not applicable 
+
 ## for gg 
+
+not applicable
+
+
+# Create the combine cards for each final state 
+
+# For 2HDM Model
+
+## Create WW cards 
+python RunCombo_zpb.py  --runww -c -t 
+
+## Run WW cards
+python RunCombo_zpb.py  -S -t -r --runww --oned
+
+## Create gg cards 
+python RunCombo_zpb.py  --rungg -c -t
+
+## Run gg cards 
+python RunCombo_zpb.py  -S -t -r --rungg --oned
+
+## Create bb cards 
+python RunCombo_zpb.py  --runbb -c -t
+
+## Run bb cards 
+python RunCombo_zpb.py  -S -t -r --runbb --oned
+
+
+## Create tt cards 
+python RunCombo_zpb.py  --runtt -c -t
+
+## Run tt cards 
+python RunCombo_zpb.py  -S -t -r --runtt --oned
+
+
+## Create combo cards 
+python RunCombo_zpb.py  -c -t
+
+## Run combo cards 
+python RunCombo_zpb.py  -S -t -r --oned
+
+
+
+
+# For Z'-Baryonic Model 
+
+## Create WW cards 
+python RunCombo_zpb.py  --runww -c -b 
+
+## Run WW cards
+python RunCombo_zpb.py  -S -b -r --runww --oned
+
+## Create gg cards 
+python RunCombo_zpb.py  --rungg -c -b
+
+## Run gg cards 
+python RunCombo_zpb.py  -S -b -r --rungg --oned
+
+## Create bb cards 
+python RunCombo_zpb.py  --runbb -c -b
+
+## Run bb cards 
+python RunCombo_zpb.py  -S -b -r --runbb --oned
+
+
+## Create tt cards 
+python RunCombo_zpb.py  --runtt -c -b
+
+## Run tt cards 
+python RunCombo_zpb.py  -S -b -r --runtt --oned
+
+
+## Create combo cards 
+python RunCombo_zpb.py  -c -b
+
+## Run combo cards 
+python RunCombo_zpb.py  -S -b -r --oned
+
+## Run combo cards for SI Limits
+python RunCombo_zpb.py -S -b -r --SI 
+
+
+# Once the limit is run for each of them, you can now sort the one d limits, this is needed to make the graphs directly from the text file. 
+python SortLimit.py 
+
+This will sort all the file in listed in the script. Add more if you wish. 
+
+
+# Scale limits 1D
+
+## For 2HDM 
+
+### bb
+python RunCombo_zpb.py -t --scalebblimits --oned
+
+### gg
+
+python RunCombo_zpb.py -t --scalegglimits --oned	
+
+### tt
+
+python RunCombo_zpb.py -t --scalettlimits --oned	
+
+### ww
+
+python RunCombo_zpb.py -t --scalewwlimits --oned
+
+### zz
+
+python RunCombo_zpb.py -t --scalezzlimits --oned
+
+### combo 
+
+python RunCombo_zpb.py -t --scalelimits  --oned
+
+
+## For ZpB  
+
+### bb
+
+python RunCombo_zpb.py -b --scalebblimits --oned 
+
+### gg
+
+python RunCombo_zpb.py -b --scalegglimits --oned 
+
+### tt
+
+python RunCombo_zpb.py -b --scalettlimits --oned 
+
+### ww
+
+python RunCombo_zpb.py -b --scalewwlimits --oned 
+
+### zz
+
+python RunCombo_zpb.py -b --scalezzlimits --oned 
+
+### python RunCombo_zpb.py -b --scalelimits  --oned
+
+
+# Run the pulls 
+
+## to run the pulls and obtain the .root file
+source runpull.sh   combocards/combo_gg_ww_tt_bb_ZpB/Datacard_MZp10Ma01MonoHCombo2016FullData.txt bbtt
+
+## to print the result from rootfile
+python  diffNuisances.py  fitDiagnostics.root
+
+
+# Various combinations 
+
+## gg + tautau
+python  RunCombo_zpb.py  --runggtt -b -c
+
+python  RunCombo_zpb.py  --runggtt -b -r
+
+
+## bb + WW
+python  RunCombo_zpb.py  --runbbww -b -c 
+
+python  RunCombo_zpb.py  --runbbww -b -r
+
+## gg + tt + WW
+python  RunCombo_zpb.py  --runggttww -b -c
+
+python  RunCombo_zpb.py  --runggttww -b -r
 
 
 
@@ -141,3 +311,12 @@ python CombineDataCards.py Combination tt bb WW gg ZZ
 
 python makeDMnucleonXsecPlot.py  --tt --gg --cmb --dd --bb --plotxsec
 
+
+
+
+
+## Additional 
+
+combine -M Asymptotic roostats-all.root  --freezeParameters zjetsScale
+
+nuisance edit  rename * ww CMS_2016_eff_b CMS2016_eff_b

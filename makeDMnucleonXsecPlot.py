@@ -251,8 +251,12 @@ class PlotMaker(pyapp):
         leg1.AddEntry(tgraph_exp_new[channel],text[channel]+" Expected","FL")
       else:  
         #leg1.AddEntry(tgraph_obs_new[channel],text[channel]+"","L")
-        #leg1.AddEntry(tgraph_obs_new[channel],"bb + #gamma#gamma + #tau #tau + WW + ZZ"+"","L") ## combo
-        leg1.AddEntry(tgraph_obs_new[channel],"DM + h(bb)"+"","L") ## bb 
+#<<<<<<< HEAD
+#        #leg1.AddEntry(tgraph_obs_new[channel],"bb + #gamma#gamma + #tau #tau + WW + ZZ"+"","L") ## combo
+#        leg1.AddEntry(tgraph_obs_new[channel],"DM + h(bb)"+"","L") ## bb 
+#=======
+        leg1.AddEntry(tgraph_obs_new[channel],"bb + #gamma#gamma + #tau #tau + WW + ZZ"+"","L")
+#>>>>>>> 6d7b800b5a2c8f31bc74a296872f8cc35ef5035f
     for dd_channel in dd_channels:
         if dd_channel == "LUX"        : leg2.AddEntry(tgraph_obs_new[dd_channel],"#splitline{"+text[dd_channel]+"}{#it{[arXiv:1608.07648]}}","L") 
         elif dd_channel == "PandaX"   : leg2.AddEntry(tgraph_obs_new[dd_channel],"#splitline{"+text[dd_channel]+"}{#it{[arXiv:1708.06917]}}","L")

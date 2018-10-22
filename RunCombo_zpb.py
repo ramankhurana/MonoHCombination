@@ -23,7 +23,8 @@ parser.add_option(      "--runggtt", action="store_true",  dest="runggtt")
 parser.add_option(      "--runggww", action="store_true",  dest="runggww")
 parser.add_option(      "--runttww", action="store_true",  dest="runttww")
 parser.add_option(      "--runbbggtt", action="store_true",  dest="runbbggtt")
-parser.add_option(      "--runbbggttww", action="store_true",  dest="runbbggttww")
+parser.add_option(      "--runbbggww", action="store_true",  dest="runbbggww")
+parser.add_option(      "--runggttww", action="store_true",  dest="runggttww")
 
 
 parser.add_option("-I", "--runImpact", action="store_true",  dest="runImpact")
@@ -34,8 +35,13 @@ parser.add_option("-S", "--submitJobs", action="store_true",  dest="submitJobs")
 parser.add_option("--scalelimits", action="store_true", dest="scalelimits")
 parser.add_option("--scalegglimits", action="store_true", dest="scalegglimits")
 parser.add_option("--scalebblimits", action="store_true", dest="scalebblimits")
-parser.add_option("--scalewwlimits", action="store_true", dest="scalewwlimits")
 parser.add_option("--scalettlimits", action="store_true", dest="scalettlimits")
+parser.add_option("--scalewwlimits", action="store_true", dest="scalewwlimits")
+parser.add_option("--scalezzlimits", action="store_true", dest="scalezzlimits")
+
+parser.add_option("--oned", action="store_true", dest="oned")
+parser.add_option("--SI", action="store_true", dest="SI")
+
 
 (options, args) = parser.parse_args()
 
@@ -166,7 +172,7 @@ def PrintAvailabilityStatus():
             tmp_ww_card_ = open(tmp_ww_,'w')
             for idline in open(ww_):
                 ## mc stats are not working with present setup 
-                idline = idline.replace("* autoMCStats", "#* autoMCStats")
+                #idline = idline.replace("* autoMCStats", "#* autoMCStats")
                 tmp_ww_card_.write(idline)
                 
             tmp_ww_card_.close()
@@ -259,6 +265,29 @@ def PrintAvailabilityStatus():
 
             
             if cond16:    comboStr = prestr + ggstr + wwstr + ttstr + bbstr + poststr
+
+            status_={'bb': bool(bbstatus_),
+                     'gg': bool(ggstatus_),
+                     'tt': bool(ttstatus_),
+                     'ww': bool(wwstatus_) 
+                     }
+            
+            channelstr_ = {'bb':bbstr,
+                           'gg':ggstr, 
+                           'tt':ttstr,
+                           'ww':wwstr
+                           }
+            str_ = prestr 
+            print 'list of keys', status_.keys()
+            for key, values in status_.iteritems():
+                if values: 
+                    str_ = str_ + channelstr_[key]
+            str_ = str_ + poststr
+
+            print "combination string for the zpb model is: ", str_
+            if cond16: comboStr = str_ 
+            
+            
             #comboStr = prestr + ggstr + wwstr + ttstr + bbstr + poststr
             
             ''' various options in which this combination can run on ''' 
@@ -276,7 +305,8 @@ def PrintAvailabilityStatus():
             if options.runggww:                 comboStr = prestr + ggstr +  wwstr +  poststr
             if options.runttww:                 comboStr = prestr + ttstr +  wwstr +  poststr
             if options.runbbggtt:               comboStr = prestr + bbstr +  ggstr +  ttstr +  poststr
-            if options.runbbggttww:             comboStr = prestr + bbstr +  ggstr +  ttstr + wwstr +  poststr
+            if options.runbbggww:               comboStr = prestr + bbstr +  ggstr +  wwstr +  poststr
+            if options.runggttww:             comboStr = prestr +          ggstr +  ttstr + wwstr +  poststr
             
             
             
@@ -301,6 +331,11 @@ def PrintAvailabilityStatus():
                     idline = idline.replace("combocards/datacards_combination/monoH_MVA_em/muccamvaZbaradaptFull_All_Bin100/", "combocards/")
                                 
                 combocard.write(idline)
+                
+            combocard.write("nuisance edit  rename * bb sf_ele CMS2016_eff_e \n")
+            combocard.write("nuisance edit  rename * bb sf_mu CMS2016_eff_m \n")
+            combocard.write("nuisance edit  rename * bb lumi CMS2016_lumi \n")
+
             combocard.close()
             comboCardstxt.write(outCardname+'\n')
 
@@ -326,7 +361,7 @@ def ExtractLimits(logfile):
     return [expected25_, expected16_, expected50_, expected84_, expected975_]
 
     
-def RunLimits(cardList):
+def RunLimits(cardList, outputfilename):
     
     ## if code has to be run locally
     ## no jobs will be submitted 
@@ -346,7 +381,17 @@ def RunLimits(cardList):
                 command_ = './scan.sh '+icard.rstrip()
             if options.zpb:
                 command_ = './scan_zpb.sh '+icard.rstrip()
+
+            if options.zpb and options.SI:
+                outputfilename = outputfilename.replace(".txt", "_SI.txt")
+                command_ = './scan_zpb_SI.sh '+icard.rstrip()+ ' '+ outputfilename
+                
+            print 'outputfilename = ', outputfilename
+                
             print 'command_ = ', command_
+
+            ''' following command_ is not needed, just check and remove them if not needed'''
+            '''
             if options.rungg:
                 command_ = command_.replace("scan.sh", "scan_gg.sh")
             if options.runtt:
@@ -355,6 +400,7 @@ def RunLimits(cardList):
                 command_ = command_.replace("scan.sh", "scan_ww.sh")
             if options.runbb:
                 command_ = command_.replace("scan.sh", "scan_bb.sh")
+            '''
             #command_  = 'combine -M Asymptotic '+icard.rstrip()+' | tee '+logfile
             
             # run it
@@ -368,7 +414,7 @@ def RunLimits(cardList):
         ## if one ask to submit the job for a given datacard list. 
         if options.submitJobs:
             print "submitting batch jobs for cards listed in ", cardList
-            SubmitBatchJobs(icard.rstrip())
+            SubmitBatchJobs(icard.rstrip(), outputfilename)
             
             ## impact willl be run only in the batch mode
             if options.runImpact:
@@ -380,26 +426,39 @@ def RunLimits(cardList):
 
 
 
-def SubmitBatchJobs(cardname):
+def SubmitBatchJobs(cardname, outputfilename):
     print "routine to submit batch job has been called. "
     print "one job for each data card will be submitted now"
     print "submitting jobs for ", cardname 
-    SubmitJobfunc(cardname)
+    SubmitJobfunc(cardname, outputfilename)
     
 
 
 
-def SubmitJobfunc(cardname):
-    tempshell='''
+def SubmitJobfunc(cardname, outputfilename):
+    tempshell747='''
 #!/bin/sh                                                                                                                                                                           
 export SCRAM_ARCH=slc6_amd64_gcc491
 currentpath=$PWD
 cd /afs/cern.ch/work/k/khurana/monoHSignalProduction/genproductions/bin/MadGraph5_aMCatNLO/testgridpack/CMSSW_7_4_7/src/
 eval `scram runtime -sh`
 cd /afs/cern.ch/work/k/khurana/monoHSignalProduction/genproductions/bin/MadGraph5_aMCatNLO/testgridpack/CMSSW_7_4_5/src/MonoHCombination/
-/afs/cern.ch/work/k/khurana/monoHSignalProduction/genproductions/bin/MadGraph5_aMCatNLO/testgridpack/CMSSW_7_4_5/src/MonoHCombination/scan.sh DATACARDNAME
+/afs/cern.ch/work/k/khurana/monoHSignalProduction/genproductions/bin/MadGraph5_aMCatNLO/testgridpack/CMSSW_7_4_5/src/MonoHCombination/scan.sh DATACARDNAME OUTPUTFILENAME
 '''
+
+    tempshell='''
+#!/bin/sh                                                                                                                                                                           
+export SCRAM_ARCH=slc6_amd64_gcc530
+currentpath=$PWD
+cd /afs/cern.ch/work/k/khurana/monoHSignalProduction/genproductions/bin/MadGraph5_aMCatNLO/testgridpack/CMSSW_8_1_0/src/
+eval `scram runtime -sh`
+cd /afs/cern.ch/work/k/khurana/monoHSignalProduction/genproductions/bin/MadGraph5_aMCatNLO/testgridpack/CMSSW_8_1_0/src/MonoHCombination/
+/afs/cern.ch/work/k/khurana/monoHSignalProduction/genproductions/bin/MadGraph5_aMCatNLO/testgridpack/CMSSW_8_1_0/src/MonoHCombination/scan.sh DATACARDNAME OUTPUTFILENAME
+'''
+
     
+    ''' following might not be needed '''
+    '''
     if options.rungg:
         tempshell = tempshell.replace("scan.sh", "scan_gg.sh")
     if options.runtt:
@@ -408,7 +467,10 @@ cd /afs/cern.ch/work/k/khurana/monoHSignalProduction/genproductions/bin/MadGraph
         tempshell = tempshell.replace("scan.sh", "scan_ww.sh")
     if options.runbb:
         tempshell = tempshell.replace("scan.sh", "scan_bb.sh")
+    ''' 
+    ''' upto this might not be needed '''
     
+
     if options.zpb:
         tempshell = tempshell.replace("scan.sh", "scan_zpb.sh")
 
@@ -419,6 +481,7 @@ cd /afs/cern.ch/work/k/khurana/monoHSignalProduction/genproductions/bin/MadGraph
         
     fileshell = open(shellfilename,'w')
     tempshell = tempshell.replace("DATACARDNAME",cardname)
+    tempshell = tempshell.replace("OUTPUTFILENAME",outputfilename)
     fileshell.write(tempshell)
     
     #pwd_ = os.getcwd()
@@ -448,6 +511,7 @@ def ScaleLimits(limits):
     flimitout = open(limitsscaled, "w")
     for ilimit in open(limits):
         print "scaling limits for ", ilimit
+        if not ilimit.strip(): continue 
         mzp = str(ilimit.rstrip().split()[0])
         ma0 = str(ilimit.rstrip().split()[1])
         key_ = mzp + '_'+ ma0
@@ -483,7 +547,30 @@ if __name__ == "__main__":
     if options.runcombo:
         string_ = 'combocards'+ model_
         print " string_ = ", string_
-        RunLimits(cc.monohCombo['combocards'+model_])
+
+        ''' find which text file will be used for the limits writing'''
+        channel = 'combo'
+        
+        if options.runbb:            channel = 'bb'
+        if options.rungg:            channel = 'gg'
+        if options.runtt:            channel = 'tt'
+        if options.runww:            channel = 'ww'
+        if options.runzz:            channel = 'zz'
+
+
+        model_small_ = ''
+
+        filename = 'bin/plotsLimitcombo'+model_.lower()+'/limits2D_'+model_.lower()+'_'+channel+'.txt'
+        
+        if options.oned:
+            if options.thdm:
+                filename = 'bin/plotsLimitcombo2hdm/limits_2hdm_'+channel+'.txt'
+            if options.zpb:
+                filename = 'bin/plotsLimitcombozpb/limits_zpb_'+channel+'.txt'
+        
+        ''' Now the file name is already saved in the filename, we can call the function with file name which will be sent to scan.sh at the end and hence limits file will be written'''
+        
+        RunLimits(cc.monohCombo['combocards'+model_], filename)
         
     '''        
     if options.rungg:
@@ -499,28 +586,113 @@ if __name__ == "__main__":
         RunLimits(cc.monohCombo['bbcards'+model_])
 
     '''
-    if options.scalelimits and not options.zpb:
+
+    
+    ''' Followinf function calls are for scaling the limits text files'''
+    ''' Once the text files are scaled, one can remove the duplicate elements from them'''
+    
+    ## for one limits of 2HDM 
+    if options.scalelimits and options.thdm and options.oned:
+        ScaleLimits('bin/plotsLimitcombo2hdm/limits_2hdm_combo_sorted.txt')
+    
+    '''
+    ## for 2d limits of 2HDM and ZPB both models 
+    if options.scalelimits and (not options.oned) :
         ScaleLimits(cc.monohCombo["limits"+model_])
 
-    if options.scalelimits and options.zpb:
-        ScaleLimits('bin/plotsLimitcombozpb/limits_zpb_combo_mchi1.txt')
 
-    if options.scalegglimits:
-        #ScaleLimits("bin/limits_"+model_+"_gg.txt")
-        ScaleLimits("bin/plotsLimitcombozpb/limits_zpb_gg.txt")
+    ## for 2d limits of ZPB both models for SI limits 
+    if options.scalelimits and (not options.oned) and options.SI and options.zpb :
+        ScaleLimits(cc.monohCombo["limits"+model_])
+    
+    '''
+    ## for one limits of ZPB
+    if options.scalelimits and options.zpb and options.oned :
+        ScaleLimits('bin/plotsLimitcombozpb/limits_zpb_combo_mchi1_sorted.txt')
 
-    if options.scalebblimits:
+
+    ## for one limits of ZPB
+    if options.scalelimits and options.zpb and (not options.oned ) and options.SI :
+        ScaleLimits('bin/plotsLimitcombozpb/limits2D_zpb_combo_SI_sorted.txt')
+
+
+    if options.scalelimits and options.zpb and (not options.oned ):
+        ScaleLimits('bin/plotsLimitcombozpb/limits2D_zpb_combo_sorted.txt')
+
+
+    ## for two d limits of bb for spin independednt results
+    if options.scalebblimits and options.zpb and options.SI:
         #ScaleLimits("bin/limits_"+model_+"_bb.txt")
         #ScaleLimits("bin/plotsLimitcombozpb/limits_zpb_bb.txt")
         ScaleLimits("/afs/cern.ch/work/k/khurana/public/AnalysisStuff/plotsLimitZpBarApprovalMonoHbb/limits_barzp_monohbb_90C_cleaned.txt")
 
-    if options.scalewwlimits:
-        #ScaleLimits("bin/limits_"+model_+"_ww.txt")
-        ScaleLimits("bin/plotsLimitcombozpb/limits_zpb_ww.txt")
 
-    if options.scalettlimits:
-        ScaleLimits("bin/plotsLimitcombozpb/limits_zpb_tt.txt")
 
+    
+    ## for one d limits of bb for 2hdm
+    if options.scalebblimits and options.thdm and options.oned:
+        #ScaleLimits("bin/limits_"+model_+"_bb.txt")
+        ScaleLimits("bin/plotsLimitcombo2hdm/limits_2hdm_bb_sorted.txt")
+
+    ## for one d limits of bb for zpb
+    if options.scalebblimits and options.zpb and options.oned:
+        #ScaleLimits("bin/limits_"+model_+"_bb.txt")
+        ScaleLimits("bin/plotsLimitcombozpb/limits_zpb_bb_sorted.txt")
+
+    ## for one d limits of bb for zpb
+    if options.scalebblimits and options.zpb and not options.oned:
+        #ScaleLimits("bin/limits_"+model_+"_bb.txt")
+        ScaleLimits("bin/plotsLimitcombozpb/limits2D_zpb_bb_sorted.txt")
+
+
+
+
+
+
+    ## for one d limits of gg for ZPB model
+    if options.scalegglimits and options.zpb and options.oned:
+        ScaleLimits("bin/plotsLimitcombozpb/limits_zpb_gg_sorted.txt")
+    
+    ## for one d limits of gg for 2HDM model
+    if options.scalegglimits and options.thdm and options.oned:
+        ScaleLimits("bin/plotsLimitcombo2hdm/limits_2hdm_gg_sorted.txt")
         
     
-# python  RunCombo.py -c -r -B -W -T -G -I -P 
+
+
+    ## for one d limits of tt for zpb
+    if options.scalettlimits and options.zpb and options.oned:
+        ScaleLimits("bin/plotsLimitcombozpb/limits_zpb_tt_sorted.txt")
+    
+    ## for one d limits of tt for 2HDM
+    if options.scalettlimits and options.thdm and options.oned:
+        ScaleLimits("bin/plotsLimitcombo2hdm/limits_2hdm_tt_sorted.txt")
+
+
+
+
+
+    ## for one d limits of ww for zpb
+    if options.scalewwlimits and options.zpb and options.oned:
+        #ScaleLimits("bin/limits_"+model_+"_ww.txt")
+        ScaleLimits("bin/plotsLimitcombozpb/limits_zpb_ww_sorted.txt")
+
+    ## for one d limits of ww for 2hdm
+    if options.scalewwlimits and options.thdm and options.oned:
+        #ScaleLimits("bin/limits_"+model_+"_ww.txt")
+        ScaleLimits("bin/plotsLimitcombo2hdm/limits_2hdm_ww_sorted.txt")
+    
+    
+        
+    
+    ## for one d limits of zz for zpb
+    if options.scalezzlimits and options.zpb and options.oned:
+        #ScaleLimits("bin/limits_"+model_+"_zz.txt")
+        ScaleLimits("bin/plotsLimitcombozpb/limits_zpb_zz_sorted.txt")
+
+    ## for one d limits of zz for 2hdm
+    if options.scalezzlimits and options.thdm and options.oned:
+        #ScaleLimits("bin/limits_"+model_+"_zz.txt")
+        ScaleLimits("bin/plotsLimitcombo2hdm/limits_2hdm_zz_sorted.txt")
+    
+    

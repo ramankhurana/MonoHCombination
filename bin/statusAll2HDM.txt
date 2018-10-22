@@ -1,4 +1,5 @@
 mzp mdm gg ww tt bb 
+<<<<<<< HEAD
 450 300 False False False False
 500 300 False False False False
 550 300 False False False False
@@ -70,3 +71,6 @@ mzp mdm gg ww tt bb
 3850 300 False False False False
 3900 300 False False False False
 3950 300 False False False False
+=======
+1400 300 True True True True
+>>>>>>> 6d7b800b5a2c8f31bc74a296872f8cc35ef5035f
