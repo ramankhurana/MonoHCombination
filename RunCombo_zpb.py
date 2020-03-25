@@ -32,6 +32,7 @@ parser.add_option("-P", "--runPull", action="store_true",  dest="runPull")
 parser.add_option("-S", "--submitJobs", action="store_true",  dest="submitJobs")
 
 
+parser.add_option("--scaleExtra", action="store_true", dest="scaleExtra")
 parser.add_option("--scalelimits", action="store_true", dest="scalelimits")
 parser.add_option("--scalegglimits", action="store_true", dest="scalegglimits")
 parser.add_option("--scalebblimits", action="store_true", dest="scalebblimits")
@@ -144,6 +145,7 @@ def PrintAvailabilityStatus():
         ww_ = cc.monohCombo['wwpath'+model_]+ cc.monohCombo['ww_cardname'+model_]
         tt_ = cc.monohCombo['tautaupath'+model_]+ cc.monohCombo['tautau_cardname'+model_]
         bb_ = cc.monohCombo['bbpath'+model_]+ cc.monohCombo['bb_cardname'+model_]
+        zz_ = cc.monohCombo['zzpath'+model_]+ cc.monohCombo['zz_cardname'+model_]
         
         x_ = imass.rstrip().split()[0]
         y_ = imass.rstrip().split()[1]
@@ -244,6 +246,8 @@ def PrintAvailabilityStatus():
             wwstr = 'ww=' + ww_ + ' '
             ttstr = 'tt=' + tt_ + ' '
             bbstr = 'bb=' + bb_ + ' '
+            zzstr = 'zz=' + zz_ + ' '
+            
             poststr = ' > '+ outCardname
             comboStr = ''
             
@@ -265,6 +269,7 @@ def PrintAvailabilityStatus():
 
             
             if cond16:    comboStr = prestr + ggstr + wwstr + ttstr + bbstr + poststr
+            
 
             status_={'bb': bool(bbstatus_),
                      'gg': bool(ggstatus_),
@@ -286,6 +291,7 @@ def PrintAvailabilityStatus():
 
             print "combination string for the zpb model is: ", str_
             if cond16: comboStr = str_ 
+            #if cond16:    comboStr = prestr + ttstr + bbstr + wwstr + ggstr + poststr
             
             
             #comboStr = prestr + ggstr + wwstr + ttstr + bbstr + poststr
@@ -297,6 +303,7 @@ def PrintAvailabilityStatus():
             if options.runww:                   comboStr = prestr + wwstr +  poststr
             if options.runtt:                   comboStr = prestr + ttstr +  poststr
             if options.runbb:                   comboStr = prestr + bbstr +  poststr
+            if options.runzz:                   comboStr = prestr + zzstr +  poststr
             
             if options.runbbgg:                 comboStr = prestr + bbstr +  ggstr +  poststr
             if options.runbbtt:                 comboStr = prestr + bbstr +  ttstr +  poststr
@@ -311,6 +318,7 @@ def PrintAvailabilityStatus():
             
             
             print "comboStr ", comboStr
+            
             os.system(comboStr)
             
         ## Fix the lines related to WW
@@ -335,6 +343,11 @@ def PrintAvailabilityStatus():
             combocard.write("nuisance edit  rename * bb sf_ele CMS2016_eff_e \n")
             combocard.write("nuisance edit  rename * bb sf_mu CMS2016_eff_m \n")
             combocard.write("nuisance edit  rename * bb lumi CMS2016_lumi \n")
+            combocard.write("nuisance edit  rename * gg CMS_lumi CMS2016_lumi \n")
+            combocard.write("nuisance edit rename * ww CMS_scale_j CMS2016_scale_j \n")
+            combocard.write("nuisance edit rename * ww pdf_theo h_pdf_theo \n")
+            combocard.write("nuisance edit rename * ww br_htt BR_htt_THU \n")
+            combocard.write("nuisance edit rename * ww CMS_2016_eff_e CMS2016_eff_e \n")
 
             combocard.close()
             comboCardstxt.write(outCardname+'\n')
@@ -595,6 +608,9 @@ if __name__ == "__main__":
     if options.scalelimits and options.thdm and options.oned:
         ScaleLimits('bin/plotsLimitcombo2hdm/limits_2hdm_combo_sorted.txt')
     
+    if options.scaleExtra:
+        ScaleLimits('bin/limit_800_300_2hdm_forARCConvenor.txt')
+        
     '''
     ## for 2d limits of 2HDM and ZPB both models 
     if options.scalelimits and (not options.oned) :
@@ -632,7 +648,8 @@ if __name__ == "__main__":
     ## for one d limits of bb for 2hdm
     if options.scalebblimits and options.thdm and options.oned:
         #ScaleLimits("bin/limits_"+model_+"_bb.txt")
-        ScaleLimits("bin/plotsLimitcombo2hdm/limits_2hdm_bb_sorted.txt")
+        #ScaleLimits("bin/plotsLimitcombo2hdm/limits_2hdm_bb_sorted.txt")
+        ScaleLimits("2HDMcombopointsfrombbLimitsDividedBy588.txt")
 
     ## for one d limits of bb for zpb
     if options.scalebblimits and options.zpb and options.oned:

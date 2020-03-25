@@ -10,15 +10,16 @@ import config_combo as cc
 
 
 cardspath = 'combocards/bb_2HDM/datacards/'
-os.system('ls -1 combocards/bb_2HDM/datacards/*.txt | grep monoHnn_MZ > ' + cc.monohCombo['bbcards2HDM'])
+#os.system('ls -1 combocards/bb_2HDM/datacards/*.txt | grep monoHnn_MZ > ' + cc.monohCombo['bbcards2HDM'])
 
 bbcardsfilename=cc.monohCombo['bbcards2HDM']
-for icard in open (cc.monohCombo['bbcards2HDM']):
+#for icard in open (cc.monohCombo['bbcards2HDM']):
+for icard in open ("bin/bbcards2HDM_bbforcombo.txt"):
     ## take a backup of the cards
-    os.system('cp '+icard.rstrip()+ ' '+ icard.rstrip()+'.bak')
+    os.system('cp '+icard.rstrip()+ ' '+ icard.rstrip()+'.bak.1')
     
     ## change the rate line from 1.000  to 1000.0 
-    newcard= icard.rstrip()+'.bak'
+    newcard= icard.rstrip()+'.bak.1'
     finalcard = icard.rstrip() ## same name as initial card
     fout_ = open(finalcard,'w')
     for iline in open(newcard):
@@ -26,7 +27,7 @@ for icard in open (cc.monohCombo['bbcards2HDM']):
         if 'rate' in iline:
             #b_  = iline.rstrip().split()[1]
             #bb_ = iline.rstrip().split()[5]
-            iline =  iline.replace('1.0000','588.0')
+            iline =  iline.replace('588.0', '0.588')
 
         ## change the rootfile path
         iline = iline.replace('combocards/bb_2HDM/combocards/bb_2HDM/','combocards/bb_2HDM/')

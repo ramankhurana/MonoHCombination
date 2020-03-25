@@ -5,24 +5,26 @@ monohCombo={
 'tautaupath2HDM':'combocards/MB_2HDM_tt/',
 'wwpath2HDM':'combocards/datacards_combination/monoH_MVA_em/muccamva2HDMadaptFull_All_Bin800/',#combocards/muccamva2HDMadaptFull_All_Bin800/',
 'bbpath2HDM':'combocards/bb_2HDM/datacards/',
+'zzpath2HDM':'',
 
 ## Z' Baryonic 
 'ggpathZPB':'combocards/gg_BARY/',
 'tautaupathZPB':'combocards/MB_ZpB_tt/',
 'wwpathZPB':'combocards/datacards_combination/monoH_MVA_em/muccamvaZbaradaptFull_All_Bin100/',
 'bbpathZPB':'combocards/bb_Zpb/MonoXFit_Raman/datacards/',
-
+'zzpathZPB':'combocards/zz/datacards_4l/',
 ## datacards names
 'gg_cardname2HDM':'dataCard_sig_2HDM_mZPXXX_mA0YYY_13TeV.txt',
 'tautau_cardname2HDM':'ZprimeXXXAYYY/cmb/YYY/DataCard_2HDM_MXXX_YYYGeV_MonoHTauTau_13TeV.txt',
 'ww_cardname2HDM':'datacard_XXX_YYY_combined.txt',
 'bb_cardname2HDM':'monoHnn_MZXXX_MAYYY.txt',
+'zz_cardname2HDM':'',
 
 'gg_cardnameZPB':'datacard_ntuples4fit_pho_allMC_woLepVetos_met50_met130_cic_default_shapes_lumi_35.9_MonoHgg_sig_ZpBaryonic_mZPXXX_mChiYYY_13TeV.txt',
 'tautau_cardnameZPB':'BaryonicXXXAYYY/cmb/YYY/DataCard_ZpB_MXXX_YYYGeV_MonoHTauTau_13TeV.txt',
 'ww_cardnameZPB':'datacard_ZB_XXX_YYY__combined.txt',
 'bb_cardnameZPB':'Datacards_zpb_monohbb_BarZp-XXX-YYY.txt',
-
+'zz_cardnameZPB':'hhxx_Spring16_card_4l_MonoHZZ4l_ZpBaryonic_13TeV-madgraph_Target_MZp-10_MChi-1_Ref_10_1_reweighted.txt',
 
 ## full sim samples mass point
 'FSmasspoints2HDM':'bin/FS2HDM.txt',
