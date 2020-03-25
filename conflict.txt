@@ -1,0 +1,16 @@
+   6d7b800..82bced0  branch-2016Dataset -> origin/branch-2016Dataset
+Auto-merging bin/wwcards2HDM.txt
+CONFLICT (content): Merge conflict in bin/wwcards2HDM.txt
+Auto-merging bin/ttcards2HDM.txt
+CONFLICT (content): Merge conflict in bin/ttcards2HDM.txt
+Auto-merging bin/statusAll2HDM.txt
+CONFLICT (content): Merge conflict in bin/statusAll2HDM.txt
+Auto-merging bin/ggcards2HDM.txt
+CONFLICT (content): Merge conflict in bin/ggcards2HDM.txt
+Auto-merging bin/combocardsName2HDM.txt
+CONFLICT (content): Merge conflict in bin/combocardsName2HDM.txt
+Auto-merging bin/bbcards2HDM.txt
+CONFLICT (content): Merge conflict in bin/bbcards2HDM.txt
+Auto-merging bin/FSAll2HDM.txt
+CONFLICT (content): Merge conflict in bin/FSAll2HDM.txt
+Automatic merge failed; fix conflicts and then commit the result.

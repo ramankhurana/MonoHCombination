@@ -390,7 +390,7 @@ def SaveHisto(filename, mzp, ma0, postfix=""):
 
 # reweighted histograms are saved in this file
     #outputfilename = 'monoHReweightedSignalShapes.root'
-    outputfilename = 'weightfiles_combo/monoHReweightedSignalShapes'+str(mzp)+'_'+str(ma0)+'.root'
+    outputfilename = 'weightfiles_combo/monoHReweightedSignalShapes_1pb_'+str(mzp)+'_'+str(ma0)+'.root'
     
     massvalue = [mzp,ma0]
     isinOfficalSample = IsOfficialSample(massvalue)
@@ -438,6 +438,8 @@ def SaveHisto(filename, mzp, ma0, postfix=""):
     xs_target_ = xsobj.xs(int(mzp), int(ma0))
     xs_ratio_ = float(xs_target_/xs_base_)
         
+    print "xs_ratio_ = ", xs_ratio_
+    xs_ratio_ = 1.0
     fillhisto = FillTrueHistograms (filename, treename, recohistname, outputfilename, weightfilename, xs_ratio_, weighthistname)
     
 ## Deifne histograms 
@@ -456,7 +458,8 @@ if __name__ == "__main__":
     #filename = 'limitForest_nominal.root'
     
     ''' for 1 pb cross-section '''
-    filename = '/afs/cern.ch/work/k/khurana/monoHSignalProduction/genproductions/bin/MadGraph5_aMCatNLO/testgridpack/CMSSW_7_4_5/src/MonoHCombination/combocards/bb_Zpb/limitForest_all.root'
+    #filename = '/afs/cern.ch/work/k/khurana/monoHSignalProduction/genproductions/bin/MadGraph5_aMCatNLO/testgridpack/CMSSW_7_4_5/src/MonoHCombination/combocards/bb_Zpb/limitForest_all.root'
+    filename = 'limitForest_all_1pb.root'
     
 
 ## loop over all the files and save the gen and reco histograms in same rootfile

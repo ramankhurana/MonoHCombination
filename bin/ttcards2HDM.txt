@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 combocards/MB_2HDM_tt/Zprime1700A300/cmb/300/DataCard_2HDM_M1700_300GeV_MonoHTauTau_13TeV.txt
 combocards/MB_2HDM_tt/Zprime1800A300/cmb/300/DataCard_2HDM_M1800_300GeV_MonoHTauTau_13TeV.txt
 combocards/MB_2HDM_tt/Zprime1850A300/cmb/300/DataCard_2HDM_M1850_300GeV_MonoHTauTau_13TeV.txt
@@ -16,3 +17,9 @@ combocards/MB_2HDM_tt/Zprime3700A300/cmb/300/DataCard_2HDM_M3700_300GeV_MonoHTau
 combocards/MB_2HDM_tt/Zprime3800A300/cmb/300/DataCard_2HDM_M3800_300GeV_MonoHTauTau_13TeV.txt
 combocards/MB_2HDM_tt/Zprime3850A300/cmb/300/DataCard_2HDM_M3850_300GeV_MonoHTauTau_13TeV.txt
 combocards/MB_2HDM_tt/Zprime4000A300/cmb/300/DataCard_2HDM_M4000_300GeV_MonoHTauTau_13TeV.txt
+=======
+<<<<<<< HEAD
+=======
+combocards/MB_2HDM_tt/Zprime1400A300/cmb/300/DataCard_2HDM_M1400_300GeV_MonoHTauTau_13TeV.txt
+>>>>>>> 6d7b800b5a2c8f31bc74a296872f8cc35ef5035f
+>>>>>>> 82bced07203f36d6f5a54b19289d30f6f88a434e

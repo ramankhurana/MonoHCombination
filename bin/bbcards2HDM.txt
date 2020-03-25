@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 combocards/bb_2HDM/datacards/monoHnn_MZ800_MA300.txt
 combocards/bb_2HDM/datacards/monoHnn_MZ1700_MA300.txt
 combocards/bb_2HDM/datacards/monoHnn_MZ1800_MA300.txt
@@ -17,3 +18,9 @@ combocards/bb_2HDM/datacards/monoHnn_MZ3700_MA300.txt
 combocards/bb_2HDM/datacards/monoHnn_MZ3800_MA300.txt
 combocards/bb_2HDM/datacards/monoHnn_MZ3850_MA300.txt
 combocards/bb_2HDM/datacards/monoHnn_MZ4000_MA300.txt
+=======
+<<<<<<< HEAD
+=======
+combocards/bb_2HDM/datacards/monoHnn_MZ1400_MA300.txt
+>>>>>>> 6d7b800b5a2c8f31bc74a296872f8cc35ef5035f
+>>>>>>> 82bced07203f36d6f5a54b19289d30f6f88a434e

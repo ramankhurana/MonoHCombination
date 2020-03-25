@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 combocards/gg_2HDM/dataCard_sig_2HDM_mZP1700_mA0300_13TeV.txt
 combocards/gg_2HDM/dataCard_sig_2HDM_mZP1800_mA0300_13TeV.txt
 combocards/gg_2HDM/dataCard_sig_2HDM_mZP1850_mA0300_13TeV.txt
@@ -16,3 +17,9 @@ combocards/gg_2HDM/dataCard_sig_2HDM_mZP3700_mA0300_13TeV.txt
 combocards/gg_2HDM/dataCard_sig_2HDM_mZP3800_mA0300_13TeV.txt
 combocards/gg_2HDM/dataCard_sig_2HDM_mZP3850_mA0300_13TeV.txt
 combocards/gg_2HDM/dataCard_sig_2HDM_mZP4000_mA0300_13TeV.txt
+=======
+<<<<<<< HEAD
+=======
+combocards/gg_2HDM/dataCard_sig_2HDM_mZP1400_mA0300_13TeV.txt
+>>>>>>> 6d7b800b5a2c8f31bc74a296872f8cc35ef5035f
+>>>>>>> 82bced07203f36d6f5a54b19289d30f6f88a434e
